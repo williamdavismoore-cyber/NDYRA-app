@@ -1,0 +1,49 @@
+HIIT56 QA SMOKE — CP08
+Root: /mnt/data/_cp08_work/kit
+Site: /mnt/data/_cp08_work/kit/site
+
+[1] Page presence
+  OK: site/index.html
+  OK: site/login.html
+  OK: site/pricing.html
+  OK: site/for-gyms/index.html
+  OK: site/for-gyms/pricing.html
+  OK: site/workouts/index.html
+  OK: site/workouts/category.html
+  OK: site/workouts/workout.html
+  OK: site/app/index.html
+  OK: site/app/workouts/index.html
+  OK: site/app/workouts/category.html
+  OK: site/app/workouts/workout.html
+  OK: site/app/timer/index.html
+  OK: site/biz/index.html
+  OK: site/biz/moves/index.html
+  OK: site/biz/moves/move.html
+  OK: site/biz/gym-timer/index.html
+  OK: site/admin/index.html
+
+[2] Data manifest presence
+  OK: site/assets/data/categories_v1.json
+  OK: site/assets/data/categories_draft.json
+  OK: site/assets/data/videos_classes.json
+  OK: site/assets/data/videos_moves.json
+  OK: site/assets/data/videos_all.json
+  OK: site/assets/data/videos_marketing.json
+  OK: site/assets/data/videos_category_samples.json
+  OK: site/assets/data/timer_demos.json
+  OK: site/assets/data/tenants_demo.json
+  OK: site/assets/data/pricing_v1.json
+
+[3] JSON parsing
+  OK: categories=15, classes=619, moves=71
+
+[4] Category teasers + hero IDs exist in class list
+  OK: missing_teasers=0, missing_heroes=0
+
+[5] CP string consistency
+  OK
+
+[6] JS syntax check
+  PASS
+
+PASS ✅

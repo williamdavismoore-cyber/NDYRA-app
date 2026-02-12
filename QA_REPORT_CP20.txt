@@ -1,0 +1,43 @@
+HIIT56 Online Timer — QA Report — CP20
+Date: 2026-02-11
+
+Scope (CP20)
+- Member Timer Builder: Randomize moves from selectable muscle-group pools (Upper, Lower, Total, Cardio, Abs/Core) with multi-select combos.
+- Member Timer: Default "If under cap" behavior uses finisher block.
+- Service worker cache bumped to CP20.
+
+Build/Artifacts changed
+- site/app/timer/builder/index.html
+- site/assets/js/site.js
+- site/app/timer/index.html
+- site/sw.js
+
+QA Checklist
+
+1) Member Timer Builder — Random Filters
+PASS - UI shows Random move filters section.
+PASS - "All moves (no filter)" is ON by default.
+PASS - Selecting any muscle group automatically turns OFF "All moves".
+PASS - Clearing all muscle group selections automatically turns "All moves" back ON.
+PASS - Balance mode (round-robin) is ON by default and cycles through selected groups.
+PASS - Strict mode (Require ALL selected groups) filters the pool as intersection.
+PASS - Avoid Words still applies before group filtering.
+PASS - No Repeats still prevents duplicates across the full generated workout (best-effort when pool is small).
+
+Notes
+- If filters are overly strict (small pool) the randomizer falls back to the base pool (avoid-words only) so the builder never "dead ends".
+
+2) Member Timer — Time Cap Default Under-Cap Behavior
+PASS - On /app/timer/, "If under cap" default selection is "Add finisher block".
+PASS - Applying a cap larger than the workout total appends a single WORK finisher block to match the cap exactly.
+PASS - Time cap pools still include transitions (and "Adjust All" remains default pool).
+
+3) Regression Sanity
+PASS - Timer beeps still fire on segment changes (work/rest/move transition/stage transition).
+PASS - Beep volume slider still controls volume (requires user gesture on mobile browsers).
+PASS - Builder still generates preview and exports JSON.
+PASS - Service worker cache name updated to hiit56-cp20-static-v1.
+
+Known Limitations (expected, pre-Supabase)
+- Move tags are heuristic/title-based for now (good enough to start; can be refined once move tagging lives in Supabase).
+- Saved workouts remain localStorage-only.

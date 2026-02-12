@@ -1,0 +1,34 @@
+HIIT56 — QA Report (CP18)
+Checkpoint tag: 2026-02-10_18
+
+What changed in CP18
+- Stripe Customer Portal now works WITHOUT Supabase by accepting a Stripe Checkout Session ID (cs_...) and resolving the customer server-side.
+- /login.html captures session_id={CHECKOUT_SESSION_ID} on successful checkout and stores it per tier:
+    - Member: hiit56_stripe_checkout_session_member
+    - Business: hiit56_stripe_checkout_session_biz_{tenant}
+- Member + Business Account pages gained a "Manage Billing" button (plus Clear link).
+- Service worker cache bumped to hiit56-cp18-static-v1
+
+Automated checks
+- node --check on site/assets/js/site.js (syntax OK)
+- JSON parse validation for all site/assets/data/*.json (OK)
+
+Manual smoke checks (local QA preview)
+- Member Account:
+    - Coupon apply/clear still works
+    - Billing card renders; Manage Billing disabled until a stored cs_... exists
+- Business Account:
+    - Tenant pill + plan shows
+    - Billing card renders; Manage Billing disabled until a stored cs_... exists
+- Login Stripe return simulation:
+    - Manually visit: /login.html?checkout=success&tier=member&plan=monthly&session_id=cs_test_123
+      -> Member role set + session stored
+    - Manually visit: /login.html?checkout=success&tier=business&plan=monthly&biz_tier=pro&locations=1&tenant=demo-gym&session_id=cs_test_123
+      -> Biz admin role set + session stored for demo-gym
+
+Expected behavior notes
+- Billing portal does NOT open in local static QA preview (no Netlify Functions). Button will show a banner.
+- Billing portal DOES work on the deployed Netlify build when STRIPE_SECRET_KEY is set.
+
+Known limitations
+- We are using Checkout Session ID as the pre-Supabase "link". Once Supabase is live, we should store Stripe customer_id + subscription_id in DB and stop relying on localStorage.

@@ -1,0 +1,25 @@
+category_slug,category_title,needed,spec,status
+__GLOBAL__,App Icon Set,app_icons,"iOS + Android + PWA: 1024x1024 master, plus exports or allow us to generate from master.",pending_owner
+__GLOBAL__,Brand Wordmark (SVG preferred),logo_svg,Clean vector logo for crisp scaling on desktop/mobile/tablet.,pending_owner
+__GLOBAL__,OpenGraph / Social Share Image,og_image,1200x630 image for link previews.,pending_owner
+__GLOBAL__,Thumbnail Overrides (optional but ideal),thumb_overrides,"CSV mapping video_id -> preferred thumbnail URL or timecode/frame note. This lets us guarantee: move visible, face/muscle visible, no motion blur.",pending_owner
+__GLOBAL__,Branded Beep Sound Pack (optional),beep_audio,Optional: provide WAV/MP3 beeps if you want brand-specific sound instead of oscillator tones.,optional
+__GLOBAL__,Business Tenant Logo Guidelines,tenant_branding,"Per-tenant logo (min 512px wide, transparent PNG preferred) + optional hero graphic.",pending_owner
+__GLOBAL__,Move Library Tagging Rules (Admin),move_tags,"For each move: tags (upper/lower/abs/cardio etc), equipment, impact, difficulty. Minimal set is fine to start.",pending_owner
+__BUSINESS__,Business Portal Hero Graphic,biz_hero,Image/video to represent business product on /for-gyms/ (can be mockup).,placeholder_ok
+hiit,HIIT,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit-beginner,HIIT Beginner,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit-upper-body,HIIT Upper Body,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit-lower-body,HIIT Lower Body,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit-total-body,HIIT Total Body,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+max-cardio-hiit,Max Cardio HIIT,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+heavy-hiit,Heavy HIIT,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit-kickboxing,HIIT Kickboxing,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit-21,HIIT 21,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+challenges,Challenges,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+stretch-recovery,Stretch & Recovery,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+ab-lab,Ab Lab,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit-yoga,HIIT Yoga,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+yoga-flow,Yoga Flow,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+kids-hiit-funhouse,Kids HIIT Funhouse,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing
+hiit56-specials,HIIT56 Specials/Mash-Ups,hero_loop_video,"MP4, 6–12s loop, muted, 16:9 (desktop) + 9:16 (mobile). Peloton-style category hero loop.",missing

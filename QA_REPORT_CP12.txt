@@ -1,0 +1,32 @@
+HIIT56 QA REPORT — CHECKPOINT 2026-02-08_12 (CP12)
+
+Scope (from Adjustments_2-8-23_2.docx):
+- Logo size: ensure top-left logo is ~30% bigger (no distortion)
+- Video volume control across the app (Vimeo embeds)
+- Video load speed + fail-safe fallback
+- Fold “HIIT56 Specials/Mash-Ups” under HIIT (listed last), not a standalone category
+
+Automated / Script Checks
+- node --check assets/js/site.js : PASS
+- JSON parse check: categories_v1.json, categories_draft.json, videos_classes.json : PASS
+
+Functional Checks (manual expectations)
+- Header: logo visibly larger vs CP10 (CSS height set to 73px; width auto; object-fit contain)
+- Category list: no standalone “HIIT56 Specials/Mash-Ups” tile
+- HIIT category page: shows Specials/Mash-Ups section at bottom (only on HIIT)
+- Video playback:
+  - Cards open modal instantly
+  - Poster shows immediately while iframe loads
+  - If Vimeo iframe doesn't load within ~8s, fallback banner appears w/ “Open in Vimeo”
+  - Custom volume slider + mute toggle overlay shown on modal + workout detail + move detail
+
+Performance / UX improvements implemented
+- Preconnect + DNS-prefetch injected for player.vimeo.com and i.vimeocdn.com
+- Vimeo iframe src assignment deferred by requestAnimationFrame to reduce “blank” flash
+
+Known constraints
+- Programmatic volume control may be restricted on some mobile browsers (iOS often forces device-volume). UI remains visible; user can always use device volume or Vimeo controls.
+
+Next QA focus (CP13)
+- Thumbnail selection pipeline (William will circle back)
+- Stripe/Supabase wiring (once credentials/deliverables are ready)

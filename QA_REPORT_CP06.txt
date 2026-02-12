@@ -1,0 +1,51 @@
+HIIT56 QA SMOKE — CP06
+Root: /mnt/data/HIIT56_CP06_WORK/kit
+Site: /mnt/data/HIIT56_CP06_WORK/kit/site
+
+[1] Page presence
+  OK: site/index.html
+  OK: site/login.html
+  OK: site/workouts/index.html
+  OK: site/workouts/category.html
+  OK: site/workouts/workout.html
+  OK: site/app/index.html
+  OK: site/app/workouts/index.html
+  OK: site/app/workouts/category.html
+  OK: site/app/workouts/workout.html
+  OK: site/app/timer/index.html
+  OK: site/biz/index.html
+  OK: site/biz/moves/index.html
+  OK: site/biz/moves/move.html
+  OK: site/biz/gym-timer/index.html
+
+[2] Data manifest presence
+  OK: site/assets/data/categories_draft.json
+  OK: site/assets/data/videos_classes.json
+  OK: site/assets/data/videos_moves.json
+  OK: site/assets/data/videos_all.json
+  OK: site/assets/data/videos_marketing.json
+  OK: site/assets/data/videos_category_samples.json
+  OK: site/assets/data/timer_demos.json
+
+[3] JSON parsing
+  OK: categories=20, classes=619, moves=71
+
+[3b] Timer demos sanity
+  OK: demos=3
+
+[4] Category slugs + posters
+  OK: 20 categories, 60 total teaser IDs
+
+[5] Classes reference known category slugs
+  OK
+
+[6] Teaser IDs exist in class list
+  OK
+
+[7] Basic internal asset refs
+  OK
+
+[8] CP string consistency
+  OK
+
+PASS ✅

@@ -1,0 +1,42 @@
+HIIT56 QA SMOKE — CP09
+Root: /mnt/data/_cp09_work/kit/kit
+Site: /mnt/data/_cp09_work/kit/kit/site
+
+[1] Page presence
+  OK: site/index.html
+  OK: site/login.html
+  OK: site/pricing.html
+  OK: site/join.html
+  OK: site/for-gyms/index.html
+  OK: site/for-gyms/pricing.html
+  OK: site/for-gyms/start.html
+  OK: site/workouts/index.html
+  OK: site/workouts/category.html
+  OK: site/workouts/workout.html
+  OK: site/app/index.html
+  OK: site/app/account/index.html
+  OK: site/app/workouts/index.html
+  OK: site/app/workouts/category.html
+  OK: site/app/workouts/workout.html
+  OK: site/app/timer/index.html
+  OK: site/biz/index.html
+  OK: site/biz/account/index.html
+  OK: site/biz/onboarding/index.html
+  OK: site/biz/moves/index.html
+  OK: site/biz/moves/move.html
+  OK: site/biz/gym-timer/index.html
+  OK: site/admin/index.html
+  OK: site/admin/tenants/index.html
+  OK: site/admin/coupons/index.html
+  OK: site/admin/comps/index.html
+
+[2] JSON parsing
+  OK: categories=15, classes=619, moves=71
+
+[3] Category teasers + hero IDs exist in class list
+  OK: missing_teasers=0, missing_heroes=0
+
+[4] JS syntax check
+  PASS
+
+PASS ✅
