@@ -1,227 +1,244 @@
+// netlify/functions/stripe_create_checkout_session.js
 const Stripe = require('stripe');
 
-// Stripe Checkout session creator (Subscriptions).
-// CP16: adds dynamic price resolution by Product ID (helps when price IDs aren't copied yet).
-// CP15: Business tiering (Starter/Pro) + per-location quantity support.
-
-const DEFAULTS = {
-  // Member
-  MEMBER_MONTHLY: process.env.PRICE_ID_MEMBER_MONTHLY || "price_1SydGhLuJBXNyJuKSEXZYxYr",
-  MEMBER_ANNUAL:  process.env.PRICE_ID_MEMBER_ANNUAL  || "price_1SydJ5LuJBXNyJuKDybmOTYv",
-
-  // Business Pro (back-compat: PRICE_ID_BIZ_MONTHLY/ANNUAL)
-  BIZ_PRO_MONTHLY: process.env.PRICE_ID_BIZ_PRO_MONTHLY || process.env.PRICE_ID_BIZ_MONTHLY || "price_1SydHkLuJBXNyJuKs9GnEYSd",
-  BIZ_PRO_ANNUAL:  process.env.PRICE_ID_BIZ_PRO_ANNUAL  || process.env.PRICE_ID_BIZ_ANNUAL  || "price_1SyhXPLuJBXNyJuK9vdqeAaw",
-
-  // Business Starter (can be empty; we can resolve dynamically via product -> price lookup)
-  BIZ_STARTER_MONTHLY: process.env.PRICE_ID_BIZ_STARTER_MONTHLY || "",
-  BIZ_STARTER_ANNUAL:  process.env.PRICE_ID_BIZ_STARTER_ANNUAL  || "",
-};
-
-// Product IDs are NOT secret. These enable auto-discovery of monthly/annual prices.
-// You can override them via Netlify env vars if you switch to Live mode products.
-const PRODUCTS = {
-  MEMBER:      process.env.PRODUCT_ID_MEMBER      || 'prod_TwWJwYY76fkVFo',
-  BIZ_STARTER: process.env.PRODUCT_ID_BIZ_STARTER || 'prod_TwtJ8gIGEync96',
-  BIZ_PRO:     process.env.PRODUCT_ID_BIZ_PRO     || 'prod_TwWKZ6q9JYkINH',
-};
-
-function json(statusCode, obj){
+function json(statusCode, obj) {
   return {
     statusCode,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
     body: JSON.stringify(obj),
   };
 }
 
-function clampInt(value, min, max, fallback){
-  let n = parseInt(value, 10);
-  if(Number.isNaN(n)) n = fallback;
-  if(n < min) n = min;
-  if(n > max) n = max;
-  return n;
+function getOrigin(event) {
+  const h = event.headers || {};
+  const proto = h['x-forwarded-proto'] || h['X-Forwarded-Proto'] || 'https';
+  const host = h.host || h.Host;
+  if (!host) return 'https://hiit56online.netlify.app'; // fallback
+  return `${proto}://${host}`;
 }
 
-function getOrigin(headers){
-  const origin = headers?.origin;
-  if(origin) return origin;
-  const ref = headers?.referer || headers?.referrer;
-  if(ref){
-    try{ return new URL(ref).origin; }catch(e){}
-  }
-  return process.env.URL || process.env.DEPLOY_PRIME_URL || 'https://hiit56online.com';
-}
+// ---- Price resolution helpers (auto-discover by Product + interval)
+async function findRecurringPriceId(stripe, { productId, interval, hint = '' }) {
+  if (!productId) return null;
 
-async function findRecurringPriceId(stripe, {productId, interval, hint=''}){
-  if(!productId) return null;
   const res = await stripe.prices.list({
     product: productId,
     active: true,
     limit: 100,
-    expand: ['data.product'],
   });
 
-  const candidates = (res.data || []).filter(p => {
-    return p && p.recurring && p.recurring.interval === interval;
+  const prices = (res.data || []).filter((p) => {
+    return (
+      p &&
+      p.type === 'recurring' &&
+      p.recurring &&
+      p.recurring.interval === interval
+    );
   });
 
-  if(candidates.length === 0) return null;
+  if (!prices.length) return null;
 
-  // Prefer nickname matches if available (helps if multiple prices exist)
-  const lowerHint = String(hint||'').toLowerCase();
-  const scored = candidates.map(p => {
-    const nick = (p.nickname || '').toLowerCase();
-    const nickScore = lowerHint && nick.includes(lowerHint) ? 10 : 0;
-    const created = p.created || 0;
-    const amount = p.unit_amount || 0;
-    return {p, score: nickScore, created, amount};
-  });
+  // Prefer prices that match hint in nickname/lookup_key, otherwise pick first.
+  const hintLower = String(hint || '').toLowerCase();
+  const preferred =
+    prices.find((p) => String(p.nickname || '').toLowerCase().includes(hintLower)) ||
+    prices.find((p) => String(p.lookup_key || '').toLowerCase().includes(hintLower)) ||
+    prices[0];
 
-  scored.sort((a,b)=>{
-    if(b.score !== a.score) return b.score - a.score;
-    if(b.created !== a.created) return b.created - a.created;
-    return (b.amount||0) - (a.amount||0);
-  });
-
-  return scored[0].p.id;
+  return preferred.id || null;
 }
 
-async function resolvePriceId(stripe, {tier, plan, biz_tier}){
-  const interval = (plan === 'annual') ? 'year' : 'month';
+function getConfiguredPriceId({ tier, plan, biz_tier }) {
+  // Optional explicit overrides via env vars (if you want to pin exact price IDs)
+  const p = String(plan || 'monthly').toLowerCase();
+  const isAnnual = p === 'annual' || p === 'year' || p === 'yearly';
 
-  if(tier === 'member'){
-    const configured = (plan === 'annual') ? DEFAULTS.MEMBER_ANNUAL : DEFAULTS.MEMBER_MONTHLY;
-    if(configured) return configured;
-    return await findRecurringPriceId(stripe, {productId: PRODUCTS.MEMBER, interval, hint: plan});
+  if (tier === 'member') {
+    return isAnnual ? process.env.PRICE_ID_MEMBER_ANNUAL : process.env.PRICE_ID_MEMBER_MONTHLY;
   }
 
-  if(tier === 'business'){
-    if(biz_tier === 'starter'){
-      const configured = (plan === 'annual') ? DEFAULTS.BIZ_STARTER_ANNUAL : DEFAULTS.BIZ_STARTER_MONTHLY;
-      if(configured) return configured;
-      return await findRecurringPriceId(stripe, {productId: PRODUCTS.BIZ_STARTER, interval, hint: plan});
+  if (tier === 'business') {
+    const bt = String(biz_tier || 'pro').toLowerCase();
+    if (bt === 'starter') {
+      return isAnnual ? process.env.PRICE_ID_BIZ_STARTER_ANNUAL : process.env.PRICE_ID_BIZ_STARTER_MONTHLY;
     }
-    // pro
-    const configured = (plan === 'annual') ? DEFAULTS.BIZ_PRO_ANNUAL : DEFAULTS.BIZ_PRO_MONTHLY;
-    if(configured) return configured;
-    return await findRecurringPriceId(stripe, {productId: PRODUCTS.BIZ_PRO, interval, hint: plan});
+    return isAnnual ? process.env.PRICE_ID_BIZ_PRO_ANNUAL : process.env.PRICE_ID_BIZ_PRO_MONTHLY;
   }
 
   return null;
 }
 
-exports.handler = async (event) => {
-  if(event.httpMethod !== 'POST'){
-    return json(405, {error: 'Method not allowed'});
+async function resolvePriceId(stripe, { tier, plan, biz_tier, products }) {
+  const configured = getConfiguredPriceId({ tier, plan, biz_tier });
+  if (configured) return configured;
+
+  const interval = (String(plan || 'monthly').toLowerCase() === 'annual') ? 'year' : 'month';
+
+  if (tier === 'member') {
+    return await findRecurringPriceId(stripe, { productId: products.MEMBER, interval, hint: plan });
   }
 
-  const secret = process.env.STRIPE_SECRET_KEY;
-  if(!secret){
-    return json(500, {error: 'Missing STRIPE_SECRET_KEY env var.'});
+  if (tier === 'business') {
+    const bt = String(biz_tier || 'pro').toLowerCase();
+    if (bt === 'starter') {
+      return await findRecurringPriceId(stripe, { productId: products.BIZ_STARTER, interval, hint: plan });
+    }
+    return await findRecurringPriceId(stripe, { productId: products.BIZ_PRO, interval, hint: plan });
   }
+
+  return null;
+}
+
+// ---- Main handler
+exports.handler = async (event) => {
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      },
+      body: '',
+    };
+  }
+
+  if (event.httpMethod !== 'POST') {
+    return json(405, { error: 'Method not allowed' });
+  }
+
+  const stripeSecret = process.env.STRIPE_SECRET_KEY;
+  if (!stripeSecret) {
+    return json(500, { error: 'Missing STRIPE_SECRET_KEY env var.' });
+  }
+
+  // Product IDs are stored in public config (stripe_public_test.json), but functions should
+  // read from env for safety/clarity. If you only have them in JSON right now, copy them into env.
+  const PRODUCTS = {
+    MEMBER: process.env.STRIPE_PRODUCT_MEMBER || (process.env.PRODUCT_ID_MEMBER || null),
+    BIZ_STARTER: process.env.STRIPE_PRODUCT_BIZ_STARTER || (process.env.PRODUCT_ID_BIZ_STARTER || null),
+    BIZ_PRO: process.env.STRIPE_PRODUCT_BIZ_PRO || (process.env.PRODUCT_ID_BIZ_PRO || null),
+  };
+
+  // NOTE: In your repo, products are also present in site/assets/data/stripe_public_test.json.
+  // Keeping env vars here is best practice for server code, but if you haven’t set them yet,
+  // checkout can still work if your PRICE_ID_* overrides are set, or if you add the product ids.
 
   let payload = {};
-  try{
+  try {
     payload = JSON.parse(event.body || '{}');
-  }catch(e){
-    return json(400, {error: 'Invalid JSON body.'});
+  } catch (err) {
+    return json(400, { error: 'Invalid JSON body.' });
   }
 
-  const tier = String(payload.tier || 'member');
-  const plan = String(payload.plan || 'monthly'); // monthly | annual
+  const origin = getOrigin(event);
 
-  // Business-only:
-  const bizTierRaw = String(payload.biz_tier || payload.business_tier || 'pro');
-  const biz_tier = (bizTierRaw === 'starter') ? 'starter' : 'pro';
-  const locations = clampInt(payload.locations, 1, 50, 1); // per-location billing; hard-cap for safety
+  const tier = String(payload.tier || '').toLowerCase(); // 'member' | 'business'
+  const plan = String(payload.plan || 'monthly').toLowerCase(); // 'monthly' | 'annual'
+  const biz_tier = String(payload.biz_tier || 'pro').toLowerCase(); // 'starter' | 'pro'
+  const email = (payload.email ? String(payload.email).trim() : '');
+  const tenant_slug = (payload.tenant_slug ? String(payload.tenant_slug).trim() : '');
+  const tenant_name = (payload.tenant_name ? String(payload.tenant_name).trim() : '');
+  const locations = Math.max(1, Math.min(50, parseInt(payload.locations || 1, 10) || 1));
 
-  const email = String(payload.email || '').trim();
-  const tenant_slug = String(payload.tenant_slug || '').trim();
-  const tenant_name = String(payload.tenant_name || '').trim();
+  // This is the key for later: it should be the Supabase auth user id (uuid).
+  const subject_id = payload.subject_id ? String(payload.subject_id).trim() : '';
 
-  const origin = getOrigin(event.headers);
+  if (!tier || (tier !== 'member' && tier !== 'business')) {
+    return json(400, { error: 'tier is required ("member" or "business").' });
+  }
 
-  let quantity = 1;
-  if(tier === 'business') quantity = locations;
+  // Build a plan_key for later entitlement sync
+  const plan_key = tier === 'business'
+    ? `business_${biz_tier}_${plan}`
+    : `member_${plan}`;
 
-  const stripe = Stripe(secret, { apiVersion: process.env.STRIPE_API_VERSION || undefined });
+  const stripe = Stripe(stripeSecret, { apiVersion: process.env.STRIPE_API_VERSION || undefined });
 
+  // Resolve price id
   let priceId = null;
-  try{
-    priceId = await resolvePriceId(stripe, {tier, plan, biz_tier});
-  }catch(err){
+  try {
+    priceId = await resolvePriceId(stripe, { tier, plan, biz_tier, products: PRODUCTS });
+  } catch (err) {
     console.error('Stripe price resolve error:', err);
     return json(500, { error: 'Could not resolve Stripe price ID.' });
   }
 
-  if(!priceId){
+  if (!priceId) {
     const hint = (tier === 'business' && biz_tier === 'starter')
       ? 'Create Business Starter monthly + annual prices in Stripe, or set PRICE_ID_BIZ_STARTER_MONTHLY / PRICE_ID_BIZ_STARTER_ANNUAL.'
       : 'Create prices in Stripe for this tier/plan, or set the appropriate PRICE_ID_* env vars.';
-
-    return json(500, {
-      error: 'Price ID not configured and could not be auto-discovered.',
-      tier, plan, biz_tier: tier === 'business' ? biz_tier : undefined,
-      hint,
-    });
+    return json(400, { error: 'No matching price found.', hint });
   }
 
-  try{
-    const successParams = new URLSearchParams({
-      checkout: 'success',
-      tier,
-      plan,
-    });
+  // Success params (the site uses these)
+  const successParams = new URLSearchParams();
+  successParams.set('checkout', 'success');
+  successParams.set('tier', tier);
+  successParams.set('plan', plan);
 
-    if(tier === 'business'){
-      successParams.set('biz_tier', biz_tier);
-      successParams.set('locations', String(locations));
-      if(tenant_slug){
-        successParams.set('tenant', tenant_slug);
-      }
-    }
+  if (tier === 'business') {
+    successParams.set('biz_tier', biz_tier);
+    successParams.set('locations', String(locations));
+    if (tenant_slug) successParams.set('tenant', tenant_slug);
+    if (tenant_name) successParams.set('tenant_name', tenant_name);
+  }
 
-    const cancelUrl = tier === 'business'
-      ? `${origin}/for-gyms/pricing.html?checkout=cancelled`
-      : `${origin}/pricing.html?checkout=cancelled`;
+  // IMPORTANT: Do NOT encode {CHECKOUT_SESSION_ID}; Stripe replaces it only when literal.
+  const successUrl = `${origin}/login.html?${successParams.toString()}&session_id={CHECKOUT_SESSION_ID}`;
+  const cancelUrl = `${origin}/${tier === 'business' ? 'for-gyms/pricing.html' : 'pricing.html'}`;
 
-    // NOTE: Do NOT URL-encode {CHECKOUT_SESSION_ID}. Stripe replaces it only when literal.
-    const successUrl = `${origin}/login.html?${successParams.toString()}&session_id={CHECKOUT_SESSION_ID}`;
+  // Metadata we want to propagate into webhook events
+  const sessionMetadata = {
+    subject_type: 'profile',
+    subject_id: subject_id || '', // may be empty until Supabase auth is live
+    tier,
+    plan_key,
+    tenant_slug,
+    tenant_name,
+    biz_tier,
+  };
 
+  // Subscription metadata is useful for subscription.* events too
+  const subscriptionMetadata = {
+    ...sessionMetadata,
+    locations: String(locations),
+  };
+
+  try {
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
-      line_items: [{ price: priceId, quantity }],
+      line_items: [
+        {
+          price: priceId,
+          quantity: tier === 'business' ? locations : 1,
+        },
+      ],
       allow_promotion_codes: true,
       success_url: successUrl,
       cancel_url: cancelUrl,
-      customer_email: email || undefined,
-      client_reference_id: tenant_slug || email || undefined,
-      metadata: {
-        tier,
-        plan,
-        biz_tier: tier === 'business' ? biz_tier : '',
-        locations: tier === 'business' ? String(locations) : '1',
-        tenant_slug: tenant_slug || '',
-        tenant_name: tenant_name || '',
+
+      // Prefill + receipts (optional)
+      ...(email ? { customer_email: email } : {}),
+
+      // ✅ Canonical linkage
+      metadata: sessionMetadata,
+
+      // ✅ Also stamp subscription for easier subscription.* event interpretation
+      subscription_data: {
+        metadata: subscriptionMetadata,
       },
     });
 
-    // Optional debug response (never enabled by default)
-    const debug = payload && payload.debug ? {
-      priceId,
-      quantity,
-      tier,
-      plan,
-      biz_tier,
-      products: PRODUCTS,
-      used_env: {
-        PRICE_ID_BIZ_STARTER_MONTHLY: !!DEFAULTS.BIZ_STARTER_MONTHLY,
-        PRICE_ID_BIZ_STARTER_ANNUAL: !!DEFAULTS.BIZ_STARTER_ANNUAL,
-      }
-    } : undefined;
-
-    return json(200, { url: session.url, id: session.id, debug });
-  }catch(err){
+    return json(200, {
+      ok: true,
+      url: session.url,
+      id: session.id,
+    });
+  } catch (err) {
     console.error('Stripe create-checkout-session error:', err);
     return json(500, { error: 'Stripe error creating checkout session.' });
   }
