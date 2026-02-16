@@ -1120,85 +1120,61 @@ function isLocalPreview(){
   return h === 'localhost' || h === '127.0.0.1' || h === '' || location.protocol === 'file:';
 }
 
-async function startStripeCheckout({tier, plan, email, tenant_slug='', tenant_name='', biz_tier='', locations=1}){
+async function startStripeCheckout({tier, plan, email, tenant_slug='', tenant_name='', biz_tier='', locations=1, subject_id=''}){
   const cfg = await loadStripePublicConfig();
   if(!cfg) throw new Error('Stripe config missing (stripe_public_test.json).');
-  const endpoint = (cfg.endpoints && cfg.endpoints.create_checkout_session)
-    ? cfg.endpoints.create_checkout_session
-    : '/api/stripe/create-checkout-session';
+  const endpoint = (cfg.endpoints && cfg.endpoints.create_checkout_session) ? cfg.endpoints.create_checkout_session : '/api/stripe/create-checkout-session';
 
-  // Require real Supabase session when available; otherwise fall back to legacy behavior.
-  let subject_id = '';
-  let subject_type = 'user';
-  let userEmail = '';
+  const normTier = (tier === 'business') ? 'business' : 'member';
+  const normPlan = (plan === 'annual') ? 'annual' : 'monthly';
+  const normBizTier = (biz_tier === 'starter') ? 'starter' : 'pro';
+  const normLocations = Math.max(1, Math.min(1000, parseInt(locations, 10) || 1));
+  const normEmail = (email || '').trim();
 
-  try{
-    if(window.supabase && window.supabase.createClient){
-      const r = await fetch('/assets/data/supabase_public_test.json', {cache:'no-store'});
-      if(r.ok){
-        const scfg = await r.json();
-        const sUrl = String(scfg.supabase_url || '').trim();
-        const sKey = String(scfg.supabase_anon_key || '').trim();
-        if(sUrl && sKey){
-          const s = window.supabase.createClient(sUrl, sKey);
-          const { data: { session } } = await s.auth.getSession();
+  const subject_type = (normTier === 'business') ? 'tenant' : 'user';
+  const plan_key = (normTier === 'business')
+    ? (normBizTier === 'starter' ? 'biz_starter' : 'biz_pro')
+    : (normPlan === 'annual' ? 'member_annual' : 'member_monthly');
 
-          if(!session?.user){
-            const next = encodeURIComponent(location.pathname + location.search);
-            location.href = `/login.html?next=${next}`;
-            return;
-          }
+  const payload = {
+    tier: normTier,
+    plan: normPlan,
+    plan_key,
+    subject_type,
+    subject_id: (subject_id || '').trim(),
+    biz_tier: normBizTier,
+    locations: normLocations,
+    email: normEmail,
+    tenant_slug: (tenant_slug || '').trim(),
+    tenant_name: (tenant_name || '').trim()
+  };
 
-          subject_id = session.user.id;
-          userEmail = session.user.email || '';
-
-          // Best-effort profile upsert (RLS policies already in place)
-          try{
-            await s.from('profiles').upsert({
-              user_id: session.user.id,
-              email: session.user.email ?? null,
-              full_name: session.user.user_metadata?.full_name ?? null,
-            }, { onConflict: 'user_id' });
-          }catch(e){
-            console.warn('[ensureProfile] upsert failed:', e?.message || e);
-          }
-        }
-      }
-    }
-  }catch(e){
-    console.warn('Supabase session check skipped:', e?.message || e);
-  }
-
-  const finalEmail = String(userEmail || email || '').trim();
+  // Keep request clean (Stripe metadata values must be strings; server will coerce)
+  if(!payload.subject_id) delete payload.subject_id;
+  if(!payload.email) delete payload.email;
+  if(!payload.tenant_slug) delete payload.tenant_slug;
+  if(!payload.tenant_name) delete payload.tenant_name;
 
   const res = await fetch(endpoint, {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      tier,
-      plan,
-      biz_tier,
-      locations,
-      email: finalEmail,
-      tenant_slug,
-      tenant_name,
-      subject_id: subject_id || '',
-      subject_type
-    })
+    body: JSON.stringify(payload)
   });
 
+  let data = null;
+  try { data = await res.json(); } catch(e) { /* ignore */ }
+
   if(!res.ok){
-    const text = await res.text().catch(()=> '');
-    throw new Error('Checkout session failed: ' + text);
+    const msg = data && (data.error || data.message) ? (data.error || data.message) : (res.statusText || 'Request failed');
+    throw new Error(`Checkout session failed (${res.status}): ${msg}`);
   }
-  const data = await res.json();
+
   if(data && data.url){
     location.href = data.url;
     return true;
   }
   throw new Error('No checkout URL returned.');
 }
-
 
 function injectBanner(html){
   const c = qs('.container');
@@ -4986,42 +4962,45 @@ function pageJoin(){
   const plan = qs('[data-join-plan]');
   const coupon = qs('[data-join-coupon]');
   const btn = qs('[data-join-submit]');
-
-  // Keep email field populated, but don't require it (Supabase session email will win)
   if(email) email.value = getEmail();
+
+  // Preselect plan from URL (?plan=monthly|annual)
+  try{
+    const sp = new URLSearchParams(location.search);
+    const qp = sp.get('plan');
+    if(plan && (qp === 'monthly' || qp === 'annual')) plan.value = qp;
+  }catch(e){ /* ignore */ }
 
   if(btn){
     btn.addEventListener('click', async ()=>{
-      const chosenPlan = String(plan?.value || 'monthly');
-
-      // Optional: store whatever is typed, but do NOT block if blank
       const e = String(email?.value || '').trim();
-      if(e) setEmail(e);
-
+      if(!e) return alert('Email required.');
+      setEmail(e);
+      const chosenPlan = String(plan?.value || 'monthly');
       if(coupon && coupon.value) setAppliedCoupon('member', coupon.value);
 
-      // Deployed Netlify: Stripe must either open OR show real error (no more demo redirect)
-      if(!isLocalPreview()){
-        try{
-          btn.disabled = true;
-          btn.textContent = 'Redirecting�';
-          await startStripeCheckout({ tier:'member', plan: chosenPlan, email: e });
-          return; // redirected to Stripe
-        }catch(err){
-          console.warn('Stripe checkout failed:', err);
-          btn.disabled = false;
-          btn.textContent = 'Continue';
+      btn.disabled = true;
+      btn.textContent = 'Redirecting…';
 
-          const msg = (err && err.message) ? err.message : String(err);
-          injectBanner(
-            <strong>Stripe checkout failed.</strong><div class="small" style="margin-top:6px"></div>
-          );
-          return;
-        }
+      // Local / file preview: demo access only
+      if(isLocalPreview()){
+        injectBanner('<strong>Local preview:</strong> Stripe Checkout is disabled here. Sending you to demo member access.');
+        setRole('member');
+        localStorage.setItem('hiit56_plan', chosenPlan);
+        localStorage.setItem('hiit56_status', 'active');
+        location.href = '/app/';
+        return;
       }
 
-      // Local preview only: tell the truth and stop
-      injectBanner('<strong>Local preview mode.</strong> Stripe requires a deployed Netlify site with Functions. Demo access stays available for local QA.');
+      // Production / hosted: Stripe checkout only
+      try{
+        await startStripeCheckout({tier:'member', plan: chosenPlan, email: e});
+      }catch(err){
+        console.error('Stripe checkout failed:', err);
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+        injectBanner('<strong>Stripe checkout failed.</strong> Please try again. If this keeps happening, contact support.');
+      }
     });
   }
 }
@@ -5079,24 +5058,25 @@ function pageBizStart(){
       localStorage.setItem('hiit56_biz_tier_demo_' + s, chosenTier);
       localStorage.setItem('hiit56_biz_locations_demo_' + s, String(locQty));
 
-      // Try Stripe on deployed Netlify (Functions). Local preview uses demo fallback.
-      if(!isLocalPreview()){
-        try{
-          btn.disabled = true;
-          btn.textContent = 'Redirecting…';
-          await startStripeCheckout({tier:'business', plan: chosenPlan, biz_tier: chosenTier, locations: locQty, email: e, tenant_slug: s, tenant_name: n});
-          return; // redirected
-        }catch(err){
-          console.warn('Stripe checkout unavailable, falling back to demo:', err);
-          btn.disabled = false;
-          btn.textContent = 'Create business portal';
-          injectBanner('<strong>Stripe checkout unavailable in this preview.</strong> Using demo tenant so you can keep QA testing.');
-        }
+      // Local / file preview: demo portal only
+      if(isLocalPreview()){
+        injectBanner('<strong>Local preview:</strong> Stripe Checkout is disabled here. Creating demo business portal.');
+        setRole('biz_admin');
+        location.href = '/biz/onboarding/';
+        return;
       }
 
-      // Demo fallback login
-      setRole('biz_admin');
-      location.href = '/biz/onboarding/';
+      // Production / hosted: Stripe checkout only
+      try{
+        btn.disabled = true;
+        btn.textContent = 'Redirecting…';
+        await startStripeCheckout({tier:'business', plan: chosenPlan, biz_tier: chosenTier, locations: locQty, email: e, tenant_slug: s, tenant_name: n});
+      }catch(err){
+        console.error('Stripe checkout failed:', err);
+        btn.disabled = false;
+        btn.textContent = 'Create business portal';
+        injectBanner('<strong>Stripe checkout failed.</strong> Please try again. If this keeps happening, contact support.');
+      }
     });
   }
 }

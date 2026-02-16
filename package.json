@@ -7,7 +7,6 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.95.3",
     "stripe": "^16.0.0"
   },
   "scripts": {
@@ -20,8 +19,8 @@
     "qa:all": "npm run qa:smoke && npm run qa:e2e && npm run qa:lighthouse"
   },
   "devDependencies": {
-    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.58.2",
+    "@lhci/cli": "^0.15.1",
     "serve": "^14.2.5"
   }
 }

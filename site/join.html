@@ -33,19 +33,13 @@
 <div class="container">
   <div class="section-title">
     <h2>Join HIIT56 Online</h2>
-    <div class="small">Stripe Checkout wired (test). Local QA uses demo fallback.</div>
+    <div class="small">Secure checkout powered by Stripe.</div>
   </div>
-
-  <div class="banner">
-    <strong>Checkpoint note</strong>
-    On a deployed Netlify site (with Functions), Continue will open Stripe Checkout. In local QA preview, Continue uses demo fallback so you can keep testing the app.
-  </div>
-
   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
     <div class="card" style="min-height:auto">
       <div class="meta">
         <div class="title">Your email</div>
-        <p class="small">Used for demo entitlements + comps.</p>
+        <p class="small">Used for receipts and account access.</p>
         <input class="input" placeholder="you@example.com" data-join-email>
       </div>
     </div>
@@ -53,10 +47,10 @@
     <div class="card" style="min-height:auto">
       <div class="meta">
         <div class="title">Plan</div>
-        <p class="small">Best-practice pricing will be finalized in Stripe.</p>
+        <p class="small">You’ll be redirected to Stripe to complete checkout.</p>
         <select class="select" data-join-plan>
-          <option value="monthly">Monthly (demo)</option>
-          <option value="annual">Annual (demo)</option>
+          <option value="monthly">Monthly</option>
+          <option value="annual">Annual</option>
         </select>
       </div>
     </div>
@@ -64,7 +58,7 @@
     <div class="card" style="min-height:auto">
       <div class="meta">
         <div class="title">Promo code</div>
-        <p class="small">Optional. You can manage codes as Master Admin.</p>
+        <p class="small">Optional. Enter a promo code if you have one.</p>
         <input class="input" placeholder="CODE" data-join-coupon>
       </div>
     </div>
@@ -73,8 +67,7 @@
   <div class="btn-row" style="margin-top:14px">
     <button class="btn primary" data-join-submit>Continue</button>
     <a class="btn" href="/pricing.html">View pricing</a>
-    <a class="btn" href="/login.html">Demo role switcher</a>
-  </div>
+      </div>
 </div>
 
 
@@ -91,7 +84,7 @@
 
   <div class="footer">
     <div class="container">
-      <div>HIIT56 Online — build preview (CP26). Member join scaffold added.</div>
+      <div>HIIT56 Online</div>
     </div>
   </div>
 
@@ -101,27 +94,6 @@
       window.addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-<!-- Supabase browser SDK (local copy) -->
-<script src="/assets/vendor/supabase/supabase.js"></script>
-
-<!-- Ensure profile exists if session exists (so checkout can send subject_id) -->
-<script type="module">
-  import { getSupabase } from "/assets/js/supabaseClient.js";
-  import { ensureProfile } from "/assets/js/ensureProfile.js";
-
-  try {
-    const supabase = await getSupabase();
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
-      await ensureProfile(session.user);
-      // Auto-fill email input if present
-      const emailInput = document.querySelector('[data-join-email]');
-      if (emailInput && !emailInput.value) emailInput.value = session.user.email || '';
-    }
-  } catch (e) {
-    console.warn('Supabase join boot skipped:', e?.message || e);
-  }
-</script>
 
   <script src="/assets/js/site.js" defer></script>
 </body>
