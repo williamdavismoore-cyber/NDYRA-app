@@ -1157,6 +1157,22 @@ async function startStripeCheckout({tier, plan, email, tenant_slug='', tenant_na
     return !!(window.supabase && window.supabase.createClient);
   }
 
+  async function loadSupabaseCfg(){
+    // 1) Deployed env (Netlify): dynamic config from env vars
+    try{
+      const r = await fetch('/api/public-config', { cache: 'no-store' });
+      if(r.ok){
+        const j = await r.json();
+        if(j?.supabase_url && j?.supabase_anon_key) return j;
+      }
+    }catch(e){}
+
+    // 2) Local preview: static file fallback
+    const r2 = await fetch('/assets/data/supabase_public_test.json', { cache: 'no-store' });
+    if(!r2.ok) throw new Error('Missing /assets/data/supabase_public_test.json');
+    return await r2.json();
+  }
+
   let subject_id = '';
   const subject_type = 'user';
   let userEmail = '';
@@ -1166,10 +1182,7 @@ async function startStripeCheckout({tier, plan, email, tenant_slug='', tenant_na
     const ok = await ensureSupabaseSDK();
     if(!ok) throw new Error('Supabase SDK not available');
 
-    const r = await fetch('/assets/data/supabase_public_test.json', {cache:'no-store'});
-    if(!r.ok) throw new Error('Missing /assets/data/supabase_public_test.json');
-
-    const scfg = await r.json();
+    const scfg = await loadSupabaseCfg();
     const sUrl = String(scfg.supabase_url || '').trim();
     const sKey = String(scfg.supabase_anon_key || '').trim();
     if(!sUrl || !sKey) throw new Error('Supabase public config invalid');
@@ -1210,6 +1223,15 @@ async function startStripeCheckout({tier, plan, email, tenant_slug='', tenant_na
 
   const finalEmail = String(userEmail || email || '').trim();
 
+  // Redirect targets (avoid non-existent default success/cancel URLs)
+  const origin = window.location.origin;
+  const success_url = (tier === 'business')
+    ? `${origin}/biz/account/?checkout=success`
+    : `${origin}/app/account/?checkout=success`;
+  const cancel_url = (tier === 'business')
+    ? `${origin}/for-gyms/?checkout=cancel`
+    : `${origin}/join.html?checkout=cancel`;
+
   const res = await fetch(endpoint, {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
@@ -1219,6 +1241,8 @@ async function startStripeCheckout({tier, plan, email, tenant_slug='', tenant_na
       biz_tier,
       locations,
       email: finalEmail,
+      success_url,
+      cancel_url,
       tenant_slug,
       tenant_name,
       subject_id,

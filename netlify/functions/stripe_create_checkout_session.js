@@ -263,8 +263,25 @@ exports.handler = async (event) => {
     tenant_name: tier === 'business' ? tenant_name : ''
   };
 
-  const successUrl = `${origin}/login.html?checkout=success&tier=${encodeURIComponent(tier)}&plan=${encodeURIComponent(plan)}&session_id={CHECKOUT_SESSION_ID}`;
-  const cancelUrl = `${origin}/join.html?checkout=cancel&tier=${encodeURIComponent(tier)}&plan=${encodeURIComponent(plan)}`;
+  const isBiz = tier === 'business';
+
+  // Allow caller to provide explicit return URLs, but keep them same-origin.
+  const sanitizeReturnUrl = (maybeUrl) => {
+    if(!maybeUrl) return null;
+    try{
+      const u = new URL(maybeUrl, origin);
+      if(u.origin !== origin) return null;
+      return u.toString();
+    }catch(e){
+      return null;
+    }
+  };
+
+  const defaultSuccessUrl = `${origin}${isBiz ? '/biz/account/' : '/app/account/'}?checkout=success&tier=${encodeURIComponent(tier)}&plan=${encodeURIComponent(plan)}&session_id={CHECKOUT_SESSION_ID}`;
+  const defaultCancelUrl = `${origin}${isBiz ? '/for-gyms/' : '/join.html'}?checkout=cancel&tier=${encodeURIComponent(tier)}&plan=${encodeURIComponent(plan)}`;
+
+  const successUrl = sanitizeReturnUrl(payload.success_url) || defaultSuccessUrl;
+  const cancelUrl  = sanitizeReturnUrl(payload.cancel_url)  || defaultCancelUrl;
 
   try{
     const session = await stripe.checkout.sessions.create({

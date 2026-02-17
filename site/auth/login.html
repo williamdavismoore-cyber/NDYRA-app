@@ -48,9 +48,19 @@
   <script src="/assets/vendor/supabase/supabase.js"></script>
   <script>
     async function loadSupabaseCfg(){
-      const r = await fetch('/assets/data/supabase_public_test.json', {cache:'no-store'});
-      if(!r.ok) throw new Error('Missing supabase_public_test.json');
-      return await r.json();
+      // 1) Deployed env (Netlify): dynamic config from env vars
+      try{
+        const r = await fetch('/api/public-config', { cache: 'no-store' });
+        if(r.ok){
+          const j = await r.json();
+          if(j?.supabase_url && j?.supabase_anon_key) return j;
+        }
+      }catch(e){}
+
+      // 2) Local preview: static file fallback
+      const r2 = await fetch('/assets/data/supabase_public_test.json', { cache: 'no-store' });
+      if(!r2.ok) throw new Error('Missing supabase_public_test.json');
+      return await r2.json();
     }
 
     async function ensureProfile(supabase, user){
