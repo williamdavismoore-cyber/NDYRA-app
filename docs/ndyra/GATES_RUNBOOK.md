@@ -50,7 +50,7 @@ You need `psql` installed.
 
 Then from repo root:
 
-psql "<SUPABASE_DB_URL_STAGING>" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_AntiDrift_Audit_v7.sql
+psql "<SUPABASE_DB_URL_STAGING>" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_AntiDrift_Audit_v8.sql
 
 If it fails, it stops with a clear “Anti‑Drift FAIL:” message.
 
@@ -69,7 +69,7 @@ It simulates multiple users (Alice/Bob/Charlie) by setting the Supabase JWT clai
 ### How to run it locally
 From repo root:
 
-psql "<SUPABASE_DB_URL_STAGING>" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_RLS_Tests_v7.sql
+psql "<SUPABASE_DB_URL_STAGING>" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_RLS_Tests_v8.sql
 
 This script runs in a transaction and ROLLBACKs, so it won’t pollute staging.
 

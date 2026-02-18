@@ -1,0 +1,28 @@
+# NDYRA Blueprint v7 — Implementation Log (Anti-Drift)
+
+This file exists **only** to satisfy the anti-drift rule:
+
+> No new routes / DB migrations / Netlify functions without an explicit blueprint update.
+
+The canonical blueprint remains: `NDYRA_SoupToNuts_Blueprint_v7.pdf`
+
+---
+
+## CP29 (2026-02-18)
+
+Blueprint sections referenced:
+- **2. Route Map** (member app routes)
+- **4. UI Build Spec** (AppShell + PostCard contract)
+- **6. Social Core** (FYP feed foundations)
+
+Implemented / scaffolded routes (as defined in blueprint):
+- `/app/fyp/` — For You feed (seek pagination + demo mode)
+- `/app/post/{id}` — Post detail route (Netlify redirect + page scaffold)
+- `/app/following/` — stub scaffold
+- `/app/create/` — stub scaffold
+- `/app/notifications/` — stub scaffold
+- `/app/profile/` — stub scaffold
+
+Notes:
+- No new DB tables added.
+- Uses existing Social Core migrations (CP27 v7) as the required schema.

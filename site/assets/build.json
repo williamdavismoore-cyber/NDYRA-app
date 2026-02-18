@@ -1,11 +1,18 @@
 {
-  "cp": 27,
-  "label": "CP27",
-  "build_id": "2026-02-18_27",
-  "kit_version": "v2.9",
-  "base": "CP26 v2.8",
-  "build_date_iso": "2026-02-18T02:11:42.940652+00:00",
+  "cp": 29,
+  "label": "CP29",
+  "build_id": "2026-02-18_29",
+  "kit_version": "v3.1",
+  "base": "CP28 v3.0",
+  "build_date_iso": "2026-02-18T00:00:00-05:00",
   "notes": [
-    "CP27: CP27 law + gates alignment + checkpoint label + NDYRA brand sync."
-  ]
+    "CP29: Social Core MVP begins (Blueprint v7 Build Order Step 1A)",
+    "New NDYRA AppShell pages: /app/fyp, /app/following, /app/create, /app/notifications, /app/profile, /app/post/{id}",
+    "FYP feed supports seek pagination + demo mode (?src=demo) for deterministic E2E",
+    "PostCard + ReactionBar components added (encouragement-only reactions)",
+    "Netlify redirect added for /app/post/* -> /app/post/index.html"
+  ],
+  "checkpoint": 29,
+  "description": "Social Core: /app/fyp (For You feed) + PostCard + ReactionBar + demo feed + dynamic /app/post/* route",
+  "timestamp_utc": "2026-02-18T00:00:00Z"
 }

@@ -1,3 +1,15 @@
+-- NDYRA CP27 RLS Tests (v7) — Gate B (This is law)
+--
+-- Designed to run BOTH:
+--   (A) In Supabase SQL Editor: replace the placeholder UUIDs below for Alice/Bob (Auth users), then Run.
+--   (B) In CI / psql: keep placeholders, but set session vars before running:
+--         SET ndyra.alice_uuid = '<ALICE_UUID>';
+--         SET ndyra.bob_uuid   = '<BOB_UUID>';
+--
+-- NOTE: This script runs inside a transaction and ends with ROLLBACK so it will not leave test data behind.
+--
+begin;
+
 -- =========================================================
 -- NDYRA CP27 — RLS Regression Tests (v7)
 -- =========================================================
@@ -23,8 +35,8 @@
 do $$
 declare
   -- >>> REPLACE THESE UUIDS <<<
-  alice uuid := '00000000-0000-0000-0000-000000000001';
-  bob   uuid := '00000000-0000-0000-0000-000000000002';
+  alice uuid := coalesce(nullif(current_setting('ndyra.alice_uuid', true), '')::uuid, '00000000-0000-0000-0000-000000000001'::uuid);
+  bob   uuid := coalesce(nullif(current_setting('ndyra.bob_uuid', true), '')::uuid, '00000000-0000-0000-0000-000000000002'::uuid);
 
   post_public uuid;
   post_private uuid;
@@ -151,3 +163,5 @@ begin
   raise notice 'RLS TESTS PASS (v7): no private leaks, follower gating works, blocks enforced.';
 
 end $$;
+
+rollback;
