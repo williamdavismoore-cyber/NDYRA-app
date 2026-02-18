@@ -1,4 +1,4 @@
-name: HIIT56 Checkpoint QA
+name: NDYRA Checkpoint QA
 
 on:
   workflow_dispatch:
@@ -67,11 +67,11 @@ jobs:
             echo "Missing GitHub secret: SUPABASE_DB_URL_STAGING"
             exit 1
           fi
-          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_AntiDrift_Audit_v8.sql
+          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_AntiDrift_Audit_v7.sql
 
       - name: Gate B — RLS Tests
         env:
           SUPABASE_DB_URL_STAGING: ${{ secrets.SUPABASE_DB_URL_STAGING }}
         run: |
-          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_RLS_Tests_v8.sql
+          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_RLS_Tests_v7.sql
 
