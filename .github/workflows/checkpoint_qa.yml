@@ -103,6 +103,7 @@ jobs:
       SUPABASE_DB_URL_STAGING: ${{ secrets.SUPABASE_DB_URL_STAGING }}
       RLS_TEST_ALICE_UUID: ${{ secrets.RLS_TEST_ALICE_UUID }}
       RLS_TEST_BOB_UUID: ${{ secrets.RLS_TEST_BOB_UUID }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -128,4 +129,7 @@ jobs:
 
       - name: Gate B — RLS Tests (v7, rollback)
         run: |
-          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1             -c "set ndyra.alice_uuid='${RLS_TEST_ALICE_UUID}';"             -c "set ndyra.bob_uuid='${RLS_TEST_BOB_UUID}';"             -f supabase/gates/NDYRA_CP27_RLS_Tests_v7.sql
+          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1 \
+            -c "set ndyra.alice_uuid='${RLS_TEST_ALICE_UUID}';" \
+            -c "set ndyra.bob_uuid='${RLS_TEST_BOB_UUID}';" \
+            -f supabase/gates/NDYRA_CP27_RLS_Tests_v7.sql
