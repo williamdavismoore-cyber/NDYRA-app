@@ -26,6 +26,9 @@ async function loadCfg(){
     const r = await fetch('/api/public-config', { cache: 'no-store' });
     if(r.ok){
       _cfg = await r.json();
+      // Back-compat: accept snake_case keys from older configs/functions
+      if(_cfg && !_cfg.supabaseUrl && _cfg.supabase_url) _cfg.supabaseUrl = _cfg.supabase_url;
+      if(_cfg && !_cfg.supabaseAnonKey && _cfg.supabase_anon_key) _cfg.supabaseAnonKey = _cfg.supabase_anon_key;
       if(_cfg?.supabaseUrl && _cfg?.supabaseAnonKey) return _cfg;
     }
   }catch(_){}
@@ -36,6 +39,9 @@ async function loadCfg(){
     if(r2.ok){
       const j = await r2.json();
       _cfg = j;
+      // Back-compat: accept snake_case keys from local test config file
+      if(_cfg && !_cfg.supabaseUrl && _cfg.supabase_url) _cfg.supabaseUrl = _cfg.supabase_url;
+      if(_cfg && !_cfg.supabaseAnonKey && _cfg.supabase_anon_key) _cfg.supabaseAnonKey = _cfg.supabase_anon_key;
       if(_cfg?.supabaseUrl && _cfg?.supabaseAnonKey && !_cfg.supabaseAnonKey.startsWith('YOUR_')) return _cfg;
     }
   }catch(_){}

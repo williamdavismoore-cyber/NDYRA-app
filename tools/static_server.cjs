@@ -26,6 +26,9 @@ const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
+  // IMPORTANT: Playwright E2E uses ES modules (.mjs). Browsers require a JS MIME type
+  // for module scripts; otherwise, they'll refuse to execute and the app won't boot.
+  '.mjs': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',

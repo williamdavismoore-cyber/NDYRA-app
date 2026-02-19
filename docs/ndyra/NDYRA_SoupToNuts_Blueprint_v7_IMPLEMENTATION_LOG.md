@@ -26,3 +26,24 @@ Implemented / scaffolded routes (as defined in blueprint):
 Notes:
 - No new DB tables added.
 - Uses existing Social Core migrations (CP27 v7) as the required schema.
+## CP30 (2026-02-18)
+
+Blueprint sections referenced:
+- **6. Social Core — Step 1B** (Following feed)
+
+Changes:
+- Implemented `/app/following/` feed using the same PostCard contract as `/app/fyp/`.
+- Supports:
+  - **Demo mode** via `?src=demo` (for deterministic E2E without Supabase)
+  - Real mode requires auth + pulls posts from:
+    - `follows_users` (followed people)
+    - `follows_tenants` (followed gyms/tenants)
+  - Seek pagination (created_at cursor)
+  - Encouragement reactions (persisted when authed, disabled in demo)
+
+Non-blueprint fixes (safe, no drift):
+- Fixed Supabase public config key mismatch by returning and accepting **camelCase + snake_case** keys.
+
+Notes:
+- No new routes added (route existed as scaffold in CP29).
+- No DB schema changes.

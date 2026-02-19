@@ -8,6 +8,10 @@ module.exports = defineConfig({
   timeout: 30_000,
   expect: { timeout: 15_000 },
   retries: 0,
+  reporter: [
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['list'],
+  ],
   use: {
     baseURL: BASE,
     trace: 'retain-on-failure',
