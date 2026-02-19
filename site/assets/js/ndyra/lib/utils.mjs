@@ -53,3 +53,37 @@ export function makeEl(tag, attrs={}, children=[]){
 export function safeText(v){
   return (v === null || v === undefined) ? '' : String(v);
 }
+
+
+export function markActiveNav(key) {
+  document.querySelectorAll('[data-nav]').forEach((a) => {
+    const match = a.getAttribute('data-nav') === key;
+    a.classList.toggle('active', match);
+  });
+}
+
+let __toastEl;
+let __toastTimer;
+
+export function toast(message, opts = {}) {
+  const msg = String(message || '').trim();
+  if (!msg) return;
+
+  const duration = Number(opts.duration || 2200);
+
+  if (!__toastEl) {
+    __toastEl = document.createElement('div');
+    __toastEl.className = 'ndyra-toast';
+    __toastEl.setAttribute('role', 'status');
+    __toastEl.setAttribute('aria-live', 'polite');
+    document.body.appendChild(__toastEl);
+  }
+
+  __toastEl.textContent = msg;
+  __toastEl.classList.add('show');
+
+  if (__toastTimer) window.clearTimeout(__toastTimer);
+  __toastTimer = window.setTimeout(() => {
+    __toastEl?.classList.remove('show');
+  }, duration);
+}

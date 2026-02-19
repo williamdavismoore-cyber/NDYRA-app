@@ -26,8 +26,6 @@ const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
-  // IMPORTANT: Playwright E2E uses ES modules (.mjs). Browsers require a JS MIME type
-  // for module scripts; otherwise, they'll refuse to execute and the app won't boot.
   '.mjs': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
@@ -62,6 +60,13 @@ const server = http.createServer((req, res) => {
   try{
     const u = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     let pathname = decodeURIComponent(u.pathname || '/');
+
+  // Netlify-style dynamic route support for local/static server
+  // /app/post/:id -> /app/post/index.html (URL remains /app/post/:id)
+  const postMatch = pathname.match(/^\/app\/post\/([^\/]+)\/?$/);
+  if (postMatch && postMatch[1] && postMatch[1] !== 'index.html') {
+    pathname = '/app/post/index.html';
+  }
 
     // Normalize directory -> index.html
     if(pathname.endsWith('/')) pathname += 'index.html';

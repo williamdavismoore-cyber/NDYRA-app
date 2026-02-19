@@ -76,9 +76,62 @@ function applyMediaToCards(root){
 }
 
 async function loadDemo(){
-  const r = await fetch('/assets/data/ndyra_demo_posts.json', { cache:'no-store' });
-  if(!r.ok) throw new Error('Demo data missing');
-  return await r.json();
+  // Demo data is shipped as a JSON file for easy curation, but we also keep
+  // a tiny embedded fallback so the feed *always* renders (helps QA + E2E).
+  const embedded = {
+    profiles: [
+      { user_id:'demo-user-a', handle:'ndyra_team', full_name:'NDYRA Team', avatar_url:'/assets/branding/app-icon-192.png' },
+      { user_id:'demo-user-b', handle:'nova_lab', full_name:'NOVA Lab', avatar_url:'/assets/branding/app-icon-192.png' },
+      { user_id:'demo-user-c', handle:'forge', full_name:'Aelric Forge', avatar_url:'/assets/branding/app-icon-192.png' },
+    ],
+    tenants: [],
+    posts: [
+      {
+        id:'demo-post-1',
+        author_user_id:'demo-user-a',
+        author_tenant_id:null,
+        body:'NDYRA is live in demo mode. Gates are law. No drift.',
+        media:null,
+        visibility:'public',
+        created_at: new Date(Date.now() - 1000*60*42).toISOString(),
+        reactions_count:12,
+        comments_count:3,
+      },
+      {
+        id:'demo-post-2',
+        author_user_id:'demo-user-b',
+        author_tenant_id:null,
+        body:'QA harness is green. Now we build faster without breaking reality.',
+        media:null,
+        visibility:'public',
+        created_at: new Date(Date.now() - 1000*60*18).toISOString(),
+        reactions_count:7,
+        comments_count:1,
+      },
+      {
+        id:'demo-post-3',
+        author_user_id:'demo-user-c',
+        author_tenant_id:null,
+        body:'Blueprint-first development is underrated. It makes scale feel calm.',
+        media:null,
+        visibility:'public',
+        created_at: new Date(Date.now() - 1000*60*6).toISOString(),
+        reactions_count:3,
+        comments_count:0,
+      },
+    ],
+  };
+
+  try {
+    const r = await fetch('/assets/data/ndyra_demo_posts.json', { cache:'no-store' });
+    if(!r.ok) throw new Error('Demo JSON not found');
+    const json = await r.json();
+    if(!json?.posts?.length) throw new Error('Demo JSON empty');
+    return json;
+  } catch (err) {
+    console.warn('[NDYRA] Demo feed fallback used:', err?.message || err);
+    return embedded;
+  }
 }
 
 function collectIds(posts, key){
