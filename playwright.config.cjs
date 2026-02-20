@@ -1,25 +1,24 @@
-const { defineConfig } = require('@playwright/test');
-
-const PORT = process.env.PW_PORT || 4174;
-const BASE = `http://localhost:${PORT}`;
+const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: './tests/e2e',
+  testDir: './tests',
   timeout: 30_000,
-  expect: { timeout: 15_000 },
-  retries: 0,
+  retries: process.env.CI ? 1 : 0,
+  reporter: [['html', { open: 'never' }], ['list']],
+
   use: {
-    baseURL: BASE,
-    trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    // Avoid "old build ghosts" caused by service workers / aggressive caching
-    serviceWorkers: 'block',
+    baseURL: 'http://localhost:4173',
+    trace: 'on-first-retry',
   },
+
   webServer: {
-    command: `node tools/static_server.cjs --root site --port ${PORT}`,
-    url: BASE,
+    command: 'node tools/static_server.cjs --root site --port 4173',
+    port: 4173,
     reuseExistingServer: false,
-    timeout: 120_000
-  }
+  },
+
+  projects: [
+    { name: 'Desktop Chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'Mobile Safari', use: { ...devices['iPhone 14'] } },
+  ],
 });
