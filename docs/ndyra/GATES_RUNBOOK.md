@@ -59,7 +59,13 @@ npm run qa:lighthouse:ci
 
 Open Supabase → SQL Editor → New query → paste and run:
 
-- `supabase/gates/NDYRA_CP27_AntiDrift_Audit_*.sql`
+Preferred:
+
+- `supabase/gates/NDYRA_CP27_AntiDrift_Audit_v8.sql`
+
+Legacy (only if you have a reason):
+
+- `supabase/gates/NDYRA_CP27_AntiDrift_Audit_v7.sql`
 
 If it raises an exception, treat it as a **hard fail**.
 
@@ -74,8 +80,18 @@ If it raises an exception, treat it as a **hard fail**.
 
 2) Copy their UUIDs from `auth.users` and paste them into:
 
-- `supabase/gates/NDYRA_CP27_RLS_Tests_*.sql`
+Preferred:
+
+- `supabase/gates/NDYRA_CP27_RLS_Tests_v8.sql`
+
+Legacy:
+
+- `supabase/gates/NDYRA_CP27_RLS_Tests_v7.sql`
 
 3) Run the script in Supabase SQL Editor.
 
 If it raises an exception, treat it as a **hard fail**.
+
+Notes:
+
+- v8 forces `role=authenticated` and `row_security=on` so you don’t get false positives/negatives when running inside the SQL Editor.

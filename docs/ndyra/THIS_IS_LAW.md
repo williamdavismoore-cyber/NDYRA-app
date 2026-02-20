@@ -32,8 +32,15 @@ No PR merges unless **all gates pass**:
 
 Database gates are designed to be run against **STAGING** before merge:
 
-- `supabase/gates/NDYRA_CP27_AntiDrift_Audit_*.sql`
-- `supabase/gates/NDYRA_CP27_RLS_Tests_*.sql`
+Preferred:
+
+- `supabase/gates/NDYRA_CP27_AntiDrift_Audit_v8.sql`
+- `supabase/gates/NDYRA_CP27_RLS_Tests_v8.sql`
+
+Legacy (only if you have a reason):
+
+- `supabase/gates/NDYRA_CP27_AntiDrift_Audit_v7.sql`
+- `supabase/gates/NDYRA_CP27_RLS_Tests_v7.sql`
 
 ---
 
