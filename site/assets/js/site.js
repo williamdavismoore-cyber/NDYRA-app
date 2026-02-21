@@ -1064,7 +1064,10 @@ function withCacheBust(url){
   try{
     const u = new URL(url, location.origin);
     if(u.origin === location.origin){
-      if(!u.searchParams.has('v')) u.searchParams.set('v', HIIT56_BUILD_ID);
+      if(!u.searchParams.has('v')){
+        const bid = (HIIT56_BUILD && HIIT56_BUILD.build_id) ? HIIT56_BUILD.build_id : HIIT56_BUILD_ID;
+        u.searchParams.set('v', bid);
+      }
     }
     return u.toString();
   }catch(e){ return url; }
