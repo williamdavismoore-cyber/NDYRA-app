@@ -105,7 +105,7 @@ async function fetchViewerReactions(sb, userId, postIds){
   const { data, error } = await sb
     .from('post_reactions')
     .select('post_id,reaction')
-    .eq('reactor_user_id', userId)
+    .eq('user_id', userId)
     .in('post_id', postIds);
   if(error) return new Map();
   const map = new Map();
@@ -249,12 +249,12 @@ export async function init(){
               .from('post_reactions')
               .delete()
               .eq('post_id', postId)
-              .eq('reactor_user_id', user.id);
+              .eq('user_id', user.id);
             if(error) console.warn('[NDYRA] reaction delete failed', error);
           }else{
             const { error } = await sb
               .from('post_reactions')
-              .upsert({ post_id: postId, reactor_user_id: user.id, reaction: nextReaction }, { onConflict: 'post_id,reactor_user_id' });
+              .upsert({ post_id: postId, user_id: user.id, reaction: nextReaction }, { onConflict: 'post_id,user_id' });
             if(error) console.warn('[NDYRA] reaction upsert failed', error);
           }
         },

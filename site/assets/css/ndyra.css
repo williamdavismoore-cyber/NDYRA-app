@@ -815,3 +815,482 @@ body[data-page="ndyra-post"]{
 
 .join-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
 .join-note{ font-size: 12px; opacity: 0.8; }
+
+/* =========================================================
+   NDYRA Social Shell (For You / Following) — CP39 polish
+   ========================================================= */
+
+.ndyra-social-page .ndyra-header .inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.ndyra-header__center,
+.ndyra-header__right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.ndyra-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.02);
+  color:var(--text);
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:0.2px;
+  text-decoration:none;
+}
+
+.ndyra-pill.is-active{
+  border-color:rgba(255,64,96,0.50);
+  box-shadow:0 0 0 3px rgba(255,64,96,0.14);
+}
+
+.ndyra-social-layout{
+  max-width:1280px;
+  margin:0 auto;
+  padding:18px 16px 96px;
+  display:grid;
+  grid-template-columns:240px minmax(0, 1fr) 340px;
+  gap:18px;
+}
+
+.ndyra-leftnav{
+  position:sticky;
+  top:74px;
+  align-self:start;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:6px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--line);
+}
+
+.ndyra-leftnav__item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 10px;
+  border-radius:14px;
+  color:var(--text);
+  text-decoration:none;
+  border:1px solid transparent;
+}
+
+.ndyra-leftnav__item:hover{
+  background:rgba(255,255,255,0.03);
+  border-color:rgba(255,255,255,0.06);
+}
+
+.ndyra-leftnav__item.is-active{
+  background:rgba(255,64,96,0.10);
+  border-color:rgba(255,64,96,0.28);
+}
+
+.ndyra-leftnav__dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.24);
+  background:rgba(255,255,255,0.06);
+  box-shadow:0 0 0 3px rgba(0,0,0,0.16) inset;
+}
+
+.ndyra-leftnav__item.is-active .ndyra-leftnav__dot{
+  background:rgba(255,64,96,0.90);
+  border-color:rgba(255,64,96,0.90);
+  box-shadow:0 0 0 3px rgba(255,64,96,0.18);
+}
+
+.ndyra-leftnav__label{
+  font-weight:900;
+  letter-spacing:0.2px;
+  font-size:13px;
+}
+
+.ndyra-leftnav__sep{
+  height:1px;
+  background:rgba(255,255,255,0.08);
+  margin:6px 8px;
+}
+
+.ndyra-social-main{
+  min-width:0;
+}
+
+.ndyra-rightrail{
+  position:sticky;
+  top:74px;
+  align-self:start;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.ndyra-railcard{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:12px;
+}
+
+.ndyra-railcard__title{
+  font-weight:950;
+  letter-spacing:0.2px;
+  margin:0 0 8px;
+}
+
+.ndyra-railcard__body{
+  font-size:13px;
+  line-height:1.4;
+}
+
+.ndyra-railcard__actions{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+}
+
+.rail-links a{
+  display:block;
+  color:var(--text);
+  text-decoration:none;
+  padding:6px 0;
+  border-bottom:1px dashed rgba(255,255,255,0.10);
+  font-size:13px;
+}
+
+.rail-links a:last-child{ border-bottom:none; }
+
+/* Hide right rail on small desktop */
+@media (max-width: 1060px){
+  .ndyra-social-layout{ grid-template-columns:240px minmax(0, 1fr); }
+  .ndyra-rightrail{ display:none; }
+}
+
+/* Collapse left labels for compact desktop */
+@media (max-width: 880px){
+  .ndyra-social-layout{ grid-template-columns:74px minmax(0, 1fr); }
+  .ndyra-leftnav{ padding:6px; }
+  .ndyra-leftnav__label{ display:none; }
+}
+
+/* Mobile: bottom nav becomes primary */
+@media (max-width: 720px){
+  .ndyra-social-layout{
+    display:block;
+    padding:14px 12px 86px;
+  }
+  .ndyra-leftnav{ display:none; }
+  .ndyra-header__center,
+  .ndyra-header__right{ display:none; }
+}
+
+/* =========================================================
+   Signals strip (Stories)
+   ========================================================= */
+
+/* Curated Signal fonts (Aelric addendum: curated only) */
+.signal-font-serif{ font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif; }
+.signal-font-sans{ font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.signal-font-grotesk{ font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, Arial, sans-serif; }
+
+
+
+.signal-strip-row{
+  display:flex;
+  gap:12px;
+  align-items:stretch;
+  overflow:auto;
+  padding:6px 2px 14px;
+  scroll-snap-type:x mandatory;
+}
+
+.signal-strip-head{
+  min-width:220px;
+  flex:0 0 auto;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.10);
+  border-radius:18px;
+  padding:12px;
+}
+
+.signal-strip-title{
+  margin:0 0 6px;
+  font-weight:950;
+  letter-spacing:0.2px;
+}
+
+.signal-strip-sub{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+}
+
+.signal-strip-empty{
+  padding:12px 4px 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.signal-card{
+  position:relative;
+  width:170px;
+  flex:0 0 auto;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.10);
+  background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  padding:10px;
+  cursor:pointer;
+  text-align:left;
+  color:var(--text);
+  scroll-snap-align:start;
+}
+
+.signal-card:hover{
+  border-color:rgba(255,64,96,0.28);
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+.signal-thumb{
+  height:108px;
+  border-radius:16px;
+  overflow:hidden;
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.signal-thumb--new{
+  background:rgba(255,64,96,0.12);
+  border-color:rgba(255,64,96,0.35);
+}
+
+.signal-media{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.signal-audio{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.signal-audio-icon{
+  font-size:34px;
+  opacity:0.9;
+}
+
+.signal-text{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px;
+  text-align:center;
+  font-weight:950;
+  letter-spacing:0.2px;
+  font-size:16px;
+}
+
+.signal-tap{
+  margin-top:10px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:0.2px;
+  color:#fff;
+  background:rgba(0,0,0,0.48);
+  border:1px solid rgba(255,255,255,0.14);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.signal-meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+  min-width:0;
+}
+
+.signal-avatar{
+  width:26px;
+  height:26px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.06);
+  flex:0 0 auto;
+}
+
+.signal-who{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+}
+
+.signal-name{
+  font-weight:950;
+  font-size:13px;
+  letter-spacing:0.2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.signal-handle{
+  color:var(--muted);
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Mobile */
+@media (max-width: 720px){
+  .signal-strip-head{ min-width:190px; }
+  .signal-card{ width:160px; }
+}
+
+/* =========================================================
+   Signals modal viewer
+   ========================================================= */
+
+.ndyra-no-scroll{
+  overflow:hidden !important;
+}
+
+.signal-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.signal-modal[hidden]{ display:none !important; }
+
+.signal-modal__backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.74);
+  backdrop-filter:blur(4px);
+}
+
+.signal-modal__panel{
+  position:relative;
+  width:min(980px, 100%);
+  max-height:86vh;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) 320px;
+}
+
+.signal-modal__media{
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:360px;
+}
+
+.signal-modal__media video,
+.signal-modal__media audio{
+  width:100%;
+  height:100%;
+}
+
+.signal-modal__meta{
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.signal-modal__cap{
+  font-weight:950;
+  letter-spacing:0.2px;
+}
+
+.signal-modal__sub{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+
+.signal-modal__tap{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.05);
+  color:var(--text);
+  font-weight:950;
+  cursor:pointer;
+}
+
+.signal-modal__tap:hover{
+  border-color:rgba(255,64,96,0.28);
+  box-shadow:0 0 0 3px rgba(255,64,96,0.12);
+}
+
+.signal-modal__close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:40px;
+  height:40px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(0,0,0,0.40);
+  color:var(--text);
+  font-size:18px;
+  font-weight:950;
+  cursor:pointer;
+}
+
+.signal-modal__close:hover{
+  border-color:rgba(255,64,96,0.28);
+  box-shadow:0 0 0 3px rgba(255,64,96,0.12);
+}
+
+/* Stack on small screens */
+@media (max-width: 860px){
+  .signal-modal__panel{
+    grid-template-columns:1fr;
+  }
+  .signal-modal__media{
+    min-height:280px;
+  }
+}

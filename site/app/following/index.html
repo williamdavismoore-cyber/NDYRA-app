@@ -7,57 +7,102 @@
   <link rel="icon" href="/assets/branding/favicon.ico" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png" />
-  <link rel="stylesheet" href="/assets/css/styles.css" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css" />
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=cp39" />
 </head>
-<body data-page="ndyra-following" class="ndyra">
-  <div class="ndyra-shell">
+<body data-page="ndyra-following" class="ndyra-social-page">
 
-    <div class="ndyra-topbar">
-      <div class="inner">
-        <a class="ndyra-brand" href="/app/fyp/">
-          <img src="/assets/branding/app-icon-192.png" alt="NDYRA" />
-          <span class="wordmark">NDYRA</span>
-        </a>
+  <header class="ndyra-header ndyra-header--social">
+    <div class="inner">
+      <a class="brand" href="/" aria-label="NDYRA home">
+        <img src="/assets/branding/NDYRA_Icon_DarkCircle_512.png" alt="NDYRA" width="26" height="26" />
+        <span>NDYRA</span>
+      </a>
 
-        <nav class="ndyra-topnav" aria-label="Primary">
-          <a data-nav href="/app/fyp/">For You</a>
-          <a data-nav href="/app/following/">Following</a>
-          <a data-nav href="/app/create/">Create</a>
-          <a data-nav href="/app/notifications/">Alerts</a>
-          <a data-nav href="/app/profile/">Me</a>
-        </nav>
+      <div class="ndyra-header__center">
+        <span class="ndyra-pill is-active">Following</span>
+        <a class="ndyra-pill" href="/app/fyp/">For You</a>
+        <a class="ndyra-pill" href="/app/following/">Following</a>
+      </div>
+
+      <div class="ndyra-header__right">
+        <a class="ndyra-pill" href="/app/create/">Create</a>
+        <a class="ndyra-pill" href="/app/notifications/">Alerts</a>
+        <a class="ndyra-pill" href="/app/profile/">Me</a>
       </div>
     </div>
+  </header>
 
-    <main class="ndyra-main">
-      <div class="inner">
-        
-  <div class="ndyra-feed" data-ndyra-feed></div>
-  <div class="muted" data-ndyra-status style="margin-top:12px;color:var(--ndyra-text-500);"></div>
-  <div data-ndyra-sentinel style="height:1px;"></div>
+  <main class="ndyra-main">
+  <div class="ndyra-social-layout">
+    <aside class="ndyra-leftnav" aria-label="NDYRA navigation">
+      <a class="ndyra-leftnav__item" href="/app/fyp/" data-nav="fyp"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">For You</span></a>
+          <a class="ndyra-leftnav__item is-active" href="/app/following/" data-nav="following"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Following</span></a>
+          <a class="ndyra-leftnav__item" href="/app/signals/" data-nav="signals"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Signals</span></a>
+          <a class="ndyra-leftnav__item" href="/app/create/" data-nav="create"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Create</span></a>
+          <a class="ndyra-leftnav__item" href="/app/notifications/" data-nav="alerts"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Alerts</span></a>
+          <a class="ndyra-leftnav__item" href="/app/profile/" data-nav="me"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Me</span></a>
+          <div class="ndyra-leftnav__sep"></div>
+          <a class="ndyra-leftnav__item" href="/gym/demo-gym/join?src=demo" data-nav="join"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Quick Join</span></a>
+          <a class="ndyra-leftnav__item" href="/biz/check-in?src=demo" data-nav="biz"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Business</span></a>
+          <a class="ndyra-leftnav__item" href="/workouts/" data-nav="fitness"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Fitness</span></a>
+    </aside>
 
-</div>
+    <main class="ndyra-social-main" aria-label="Feed">
+      <h1 class="sr-only">NDYRA — Following</h1>
 
+      <!-- Signals (Stories) -->
+      <section class="ndyra-signal-strip" data-signal-strip aria-label="Signals"></section>
+
+      <!-- Feed -->
+      <div class="ndyra-feed" data-ndyra-feed></div>
+      <div class="ndyra-sentinel" data-ndyra-sentinel></div>
+
+      <div class="ndyra-empty-state" data-ndyra-empty hidden>
+        <h2>Nothing yet</h2>
+        <p class="muted">This feed is empty in your current mode.</p>
       </div>
     </main>
 
-    <nav class="ndyra-bottomnav" aria-label="Bottom">
-      <div class="inner">
-        <a data-nav href="/app/fyp/"><span class="ico">🜂</span><span>For You</span></a>
-        <a data-nav href="/app/following/"><span class="ico">⟡</span><span>Following</span></a>
-        <a data-nav href="/app/create/"><span class="ico">＋</span><span>Create</span></a>
-        <a data-nav href="/app/notifications/"><span class="ico">⚑</span><span>Alerts</span></a>
-        <a data-nav href="/app/profile/"><span class="ico">⦿</span><span>Me</span></a>
-      </div>
-    </nav>
+    <aside class="ndyra-rightrail" aria-label="Right rail">
+      <div class="ndyra-railcard">
+          <div class="ndyra-railcard__title">NDYRA Signals</div>
+          <div class="ndyra-railcard__body muted">
+            Stories, disciplined. Muted by default — tap to hear.
+          </div>
+          <div class="ndyra-railcard__actions">
+            <a class="btn small" href="/app/signals/?src=demo">Open Signals</a>
+          </div>
+        </div>
 
-    <div class="footer">
-      NDYRA — build preview (CP29). Social Core build in progress. Gates enforced (Audit + RLS).
-    </div>
+        <div class="ndyra-railcard">
+          <div class="ndyra-railcard__title">Quick QA shortcuts</div>
+          <div class="ndyra-railcard__body">
+            <div class="rail-links">
+              <a href="/gym/demo-gym/join?src=demo">/gym/demo-gym/join</a>
+              <a href="/app/book/class/demo?src=demo">/app/book/class/:id</a>
+              <a href="/biz/check-in?src=demo">/biz/check-in</a>
+              <a href="/biz/migrate?src=demo">/biz/migrate</a>
+            </div>
+          </div>
+        </div>
 
+        <div class="ndyra-railcard">
+          <div class="ndyra-railcard__title">Need access?</div>
+          <div class="ndyra-railcard__body muted">
+            If a page asks for login, use <a href="/login.html">Login</a> and flip to <strong>QA Master</strong>.
+          </div>
+        </div>
+    </aside>
   </div>
+</main>
 
-  <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
+  <nav class="ndyra-bottomnav" aria-label="Primary">
+    <a class="" href="/app/fyp/">For You</a>
+    <a class="active" href="/app/following/">Following</a>
+    <a href="/app/create/">Create</a>
+    <a href="/app/notifications/">Alerts</a>
+    <a href="/app/profile/">Me</a>
+  </nav>
+
 </body>
 </html>
