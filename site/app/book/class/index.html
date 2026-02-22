@@ -27,12 +27,58 @@
         <span data-class-session-id style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;"></span>
       </div>
       <div style="margin-top: 10px; opacity: .8;">
-        This page is scaffolded. The canonical token booking RPC is <code>book_class_with_tokens(p_class_session_id uuid)</code>.
+        Canonical token booking RPC: <code>book_class_with_tokens(p_class_session_id uuid)</code>
       </div>
+    </section>
+
+    <section class="card" style="padding: 14px; margin-top: 12px;">
+      <h2 style="margin: 0 0 10px; font-size: 16px;">Eligibility</h2>
+
+      <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <div style="opacity:.7; font-size:12px;">Tenant authority</div>
+          <div data-tenant-sor style="font-weight: 700;">…</div>
+        </div>
+        <div>
+          <div style="opacity:.7; font-size:12px;">Booking kill switch</div>
+          <div data-tenant-kill style="font-weight: 700;">…</div>
+        </div>
+        <div>
+          <div style="opacity:.7; font-size:12px;">Waiver</div>
+          <div data-waiver style="font-weight: 700;">…</div>
+        </div>
+        <div>
+          <div style="opacity:.7; font-size:12px;">Membership</div>
+          <div data-membership style="font-weight: 700;">…</div>
+        </div>
+        <div>
+          <div style="opacity:.7; font-size:12px;">Tokens</div>
+          <div data-tokens style="font-weight: 700;">…</div>
+        </div>
+        <div>
+          <div style="opacity:.7; font-size:12px;">Required tokens</div>
+          <div data-required-tokens style="font-weight: 700;">…</div>
+        </div>
+      </div>
+
+      <div data-booking-banner style="margin-top: 12px; padding: 10px; border-radius: 10px; background: rgba(255,255,255,.06); display:none;"></div>
+
+      <div style="display:flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;">
+        <button class="btn" data-action="book-membership" disabled>Book with Membership</button>
+        <button class="btn" data-action="book-tokens" disabled>Book with Tokens</button>
+        <a class="btn" data-action="update-payment" href="/pricing.html" style="display:none; text-decoration:none;">Update Payment</a>
+        <a class="btn" data-action="sign-waiver" href="/join.html" style="display:none; text-decoration:none;">Sign Waiver</a>
+      </div>
+
+      <div style="margin-top: 10px; opacity: .75; font-size: 13px;">
+        Demo toggles (query params): <code>demo_membership</code>, <code>demo_tokens</code>, <code>demo_waiver</code>, <code>demo_sor</code>, <code>demo_kill</code>.
+      </div>
+
+      <div data-booking-result style="margin-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; white-space: pre-wrap;"></div>
     </section>
   </main>
 
-  <footer class="footer" style="text-align:center; padding: 14px; opacity:.8;">Build Preview</footer>
+  <footer class="footer" style="text-align:center; padding: 14px; opacity:.8;">NDYRA — build preview (CP42).</footer>
 
   <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
 </body>

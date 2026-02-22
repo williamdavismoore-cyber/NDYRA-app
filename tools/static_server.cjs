@@ -32,10 +32,14 @@ const ROOT_DIR = path.resolve(process.cwd(), getArg('--root', 'site'));
 // ------------------------------------------------------------
 const routeMap = [
   // Public
-  { pattern: '/gym/:slug/join', to: '/join.html' },
+  { pattern: '/gym/:slug/join', to: '/gym/join/index.html' },
+  { pattern: '/gym/join', to: '/gym/join/index.html' },
 
   // App
   { pattern: '/app/book/class/:class_session_id', to: '/app/book/class/index.html' },
+  { pattern: '/app/post/:id', to: '/app/post/index.html' },
+  { pattern: '/app/profile/:handle', to: '/app/profile/index.html' },
+  { pattern: '/app/signals/:handle', to: '/app/signals/index.html' },
 
   // Business portal migration
   { pattern: '/biz/migrate', to: '/biz/migrate/index.html' },

@@ -5,7 +5,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-
+    branches: [ main ]
 jobs:
   qa:
     runs-on: ubuntu-latest
@@ -47,3 +47,31 @@ jobs:
         with:
           name: lighthouse-artifacts
           path: artifacts/lighthouse
+
+  db_gates:
+    name: DB Gates (Anti-Drift + RLS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install psql
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Gate A — Anti-Drift Audit
+        env:
+          SUPABASE_DB_URL_STAGING: ${{ secrets.SUPABASE_DB_URL_STAGING }}
+        run: |
+          if [ -z "$SUPABASE_DB_URL_STAGING" ]; then
+            echo "Missing GitHub secret: SUPABASE_DB_URL_STAGING"
+            exit 1
+          fi
+          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_AntiDrift_Audit_v8.sql
+
+      - name: Gate B — RLS Tests
+        env:
+          SUPABASE_DB_URL_STAGING: ${{ secrets.SUPABASE_DB_URL_STAGING }}
+        run: |
+          psql "$SUPABASE_DB_URL_STAGING" -v ON_ERROR_STOP=1 -f supabase/gates/NDYRA_CP27_RLS_Tests_v8.sql
+

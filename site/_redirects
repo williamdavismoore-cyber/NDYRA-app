@@ -1,21 +1,23 @@
-# NDYRA QA rewrites (Blueprint v7.3.1 aligned)
-# NOTE: These are required for Netlify deploys (static hosting) so deep links resolve.
+# ----------------------------------------------
+# NDYRA redirects (Blueprint v7.3.1)
+# - Keep these aligned with tools/static_server.cjs
+# - Order matters: specific dynamic rewrites first
+# ----------------------------------------------
 
-# Public
-/gym/*/join                 /join.html                        200
+# App dynamic routes
+/app/book/class/*     /app/book/class/index.html   200
+/app/post/*           /app/post/index.html         200
+/app/profile/*        /app/profile/index.html      200
+/app/signals/*        /app/signals/index.html      200
 
-# App
-/app/post/*                 /app/post/index.html              200
-/app/signals/*              /app/signals/index.html           200
-/app/book/class/*           /app/book/class/index.html        200
+# Quick Join (canonical)
+/gym/*/join            /gym/join/index.html        200
 
-# Business migration
-/biz/migrate                /biz/migrate/index.html           200
-/biz/migrate/members        /biz/migrate/members/index.html   200
-/biz/migrate/schedule       /biz/migrate/schedule/index.html  200
-/biz/migrate/verify         /biz/migrate/verify/index.html    200
-/biz/migrate/commit         /biz/migrate/commit/index.html    200
-/biz/migrate/cutover        /biz/migrate/cutover/index.html   200
+# Soft fallbacks
+/workouts/*            /workouts/index.html        200
+/app/*                 /app/index.html             200
+/biz/*                 /biz/index.html             200
+/admin/*               /admin/index.html           200
 
-# Business check-in
-/biz/check-in               /biz/check-in/index.html          200
+# Site fallback
+/*                     /index.html                 200

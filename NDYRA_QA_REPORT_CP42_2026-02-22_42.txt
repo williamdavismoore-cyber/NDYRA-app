@@ -1,0 +1,68 @@
+NDYRA — QA REPORT — CP42 (2026-02-22_42)
+================================================
+
+What changed (Blueprint v7.3.1 alignment / no drift)
+----------------------------------------------------
+1) Quick Join routing FIX (critical)
+   - Netlify rewrite corrected:
+       /gym/*/join  ->  /gym/join/index.html  (status 200)
+     Previously this incorrectly rewrote to /join.html, which could surface legacy UI.
+
+   - Local QA static server route map corrected:
+       /gym/:slug/join  ->  /gym/join/index.html
+     This matches the Blueprint route requirement.
+
+2) App dynamic deep-links FIX (Netlify + local)
+   - Netlify now rewrites the dynamic app routes to their correct HTML shells:
+       /app/post/*      -> /app/post/index.html
+       /app/profile/*   -> /app/profile/index.html
+       /app/signals/*   -> /app/signals/index.html
+       /app/book/class/*-> /app/book/class/index.html
+
+   - Local QA static server route map now matches those same dynamic routes:
+       /app/post/:id, /app/profile/:handle, /app/signals/:handle,
+       /app/book/class/:class_session_id
+
+   Result: direct-link QA (or clicking shared links) no longer falls back to /app/index.html.
+
+3) Cache-bust + stale asset purge
+   - Service worker cache version bumped:
+       ndyra-static-cp40-v1  ->  ndyra-static-cp42-v1
+   - Branding precache URLs updated to include v=2026-02-22_42
+   - site.js fallback build label/id updated to CP42 / 2026-02-22_42
+
+4) Build stamp consistency
+   - site/assets/build.json updated to CP42
+   - HTML footer default stamps updated to "build preview (CP42)" so first paint is correct even before JS.
+
+5) Anti-drift guardrails
+   - tools/qa_smoke.py now asserts:
+     - required Netlify rewrites exist in site/_redirects
+     - required dynamic routes exist in tools/static_server.cjs
+
+Local QA status
+---------------
+- python tools/qa_smoke.py  => PASS ✅
+
+What you should run on your machine
+-----------------------------------
+1) Install deps:
+   npm ci
+   npx playwright install
+
+2) Local QA server:
+   npm run start:qa
+   (opens on http://localhost:4173)
+
+3) Full QA gates:
+   npm run qa:all
+
+4) Supabase gates (staging):
+   ./tools/run_db_gates.sh   (mac/linux)
+   .\tools\run_db_gates.bat  (windows)
+
+Expected outcome
+----------------
+- /gym/<slug>/join always shows NDYRA Quick Join.
+- /app/post/<id>, /app/profile/<handle>, /app/signals/<handle> load correctly in QA and Netlify.
+- Stale SW caches are forced to roll forward (cp42 cache name).

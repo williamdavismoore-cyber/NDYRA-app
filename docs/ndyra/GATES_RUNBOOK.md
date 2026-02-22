@@ -69,15 +69,32 @@ npm run qa:lighthouse
 
 Open Supabase → SQL Editor → New query → paste and run:
 
-- `supabase/gates/NDYRA_CP27_AntiDrift_Audit_*.sql`
+- `supabase/gates/NDYRA_CP38_AntiDrift_Audit_v9.sql`
 
 If it raises an exception, treat it as a **hard fail**.
 
 ---
 
-## QA Access ("master" login)
+## 4) Supabase Gate B — RLS Regression Tests
 
-If you can open the NDYRA preview but get redirected to **Log in** (or actions 401/403), that’s expected: Biz/Admin flows require a real Supabase session *plus* the right role rows.
+1) Create two test users in Supabase Auth:
+
+- ALICE (author)
+- BOB (viewer)
+
+2) Copy their UUIDs from `auth.users` and paste them into:
+
+- `supabase/gates/NDYRA_CP27_RLS_Tests_v8.sql`
+
+3) Run the script in Supabase SQL Editor.
+
+If it raises an exception, treat it as a **hard fail**.
+
+---
+
+## QA Access (when you’re seeing 401/403)
+
+Biz/Admin flows require a real Supabase session *plus* role rows.
 
 Minimal path:
 
@@ -100,20 +117,3 @@ insert into public.tenant_users(tenant_id, user_id, role)
 values ('YOUR_TENANT_UUID', 'YOUR_USER_UUID', 'admin')
 on conflict do nothing;
 ```
-
----
-
-## 4) Supabase Gate B — RLS Regression Tests
-
-1) Create two test users in Supabase Auth:
-
-- ALICE (author)
-- BOB (viewer)
-
-2) Copy their UUIDs from `auth.users` and paste them into:
-
-- `supabase/gates/NDYRA_CP27_RLS_Tests_*.sql`
-
-3) Run the script in Supabase SQL Editor.
-
-If it raises an exception, treat it as a **hard fail**.

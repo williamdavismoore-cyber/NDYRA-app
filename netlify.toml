@@ -7,4 +7,8 @@
 [build.environment]
   NODE_VERSION = "20"
 
+[functions]
+  # Faster + more deterministic function builds.
+  node_bundler = "esbuild"
+
 # Pretty URLs + dynamic route rewrites are handled by site/_redirects.

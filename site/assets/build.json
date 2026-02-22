@@ -1,11 +1,13 @@
 {
-  "cp": 37,
-  "label": "CP37",
-  "build_id": "2026-02-21_37",
+  "cp": 42,
+  "label": "CP42",
+  "build_id": "2026-02-22_42",
   "kit_version": "v3.8",
-  "base": "CP36 v3.7",
-  "build_date_iso": "2026-02-21T19:48:41.807466+00:00",
+  "base": "CP41 v3.7",
+  "build_date_iso": "2026-02-22T19:50:29.711585Z",
   "notes": [
-    "CP37: QA access unlock (demo roles satisfy requireAuth), Playwright projects restored, static_server no-deps with Blueprint v7.3.1 route map."
+    "CP42: Fix /gym/{slug}/join rewrites (Netlify + local) and parse slug from path.",
+    "CP42: Bump SW cache version + cache-bust branding assets to prevent HIIT56 bleed-through.",
+    "CP42: Add QA guardrails so this can’t drift again."
   ]
 }

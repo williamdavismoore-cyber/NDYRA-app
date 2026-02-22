@@ -1,18 +1,18 @@
-# HIIT56 Automated QA Harness (CP26)
+# NDYRA Automated QA Harness
 
-This checkpoint adds *repeatable*, automated QA that you can run **every checkpoint** before packaging.
+This repo includes *repeatable*, automated QA that you can run **every checkpoint** before packaging.
 
 ## 1) Install dependencies (one-time)
 
-From the kit folder:
+From the repo root:
 
 ```bash
-npm install
+npm ci
 npx playwright install
 ```
 
 Notes:
-- `npm install` brings in Playwright + Lighthouse CI + static server tooling.
+- `npm ci` uses the lockfile for deterministic installs.
 - `npx playwright install` downloads browsers (Chromium/Firefox/WebKit) for stable testing.
 
 ## 2) Run the automated QA suite
@@ -46,12 +46,12 @@ Artifacts:
 If Vimeo embeds randomly fail on preview/prod, **it is often privacy allow-list**, not code.
 
 ```bash
-VIMEO_TOKEN="YOUR_TOKEN" npm run qa:vimeo:allowlist -- --domain hiit56online.com --domain YOUR_NETLIFY_DOMAIN.netlify.app
+VIMEO_TOKEN="YOUR_TOKEN" npm run qa:vimeo:allowlist -- --domain YOUR_CUSTOM_DOMAIN.com --domain YOUR_NETLIFY_DOMAIN.netlify.app
 ```
 
 Optional auto-fix (adds missing domains):
 ```bash
-VIMEO_TOKEN="YOUR_TOKEN" node tools/vimeo_allowlist_check.mjs --domain hiit56online.com --fix
+VIMEO_TOKEN="YOUR_TOKEN" node tools/vimeo_allowlist_check.mjs --domain YOUR_CUSTOM_DOMAIN.com --fix
 ```
 
 ## 4) Telemetry (Sentry-style)

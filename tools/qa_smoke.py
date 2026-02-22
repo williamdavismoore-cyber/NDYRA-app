@@ -28,7 +28,8 @@ DATA = SITE / "assets" / "data"
 
 
 def _load_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
+    # utf-8-sig tolerates a UTF-8 BOM (common when JSON is edited on Windows).
+    return json.loads(path.read_text(encoding="utf-8-sig"))
 
 
 def assert_(cond: bool, msg: str) -> None:
@@ -41,10 +42,11 @@ def main() -> int:
     build_path = SITE / "assets" / "build.json"
     label = "CP??"
     try:
-        data = json.loads(build_path.read_text(encoding="utf-8"))
+        # Use utf-8-sig to tolerate Windows-saved files that include a UTF-8 BOM.
+        data = json.loads(build_path.read_text(encoding="utf-8-sig"))
         label = data.get("label") or f"CP{data.get('cp')}"
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"WARN: could not parse build.json ({build_path}): {e}")
     print(f"NDYRA QA SMOKE — {label}")
     print(f"Root: {ROOT}")
     print(f"Site: {SITE}")
@@ -89,6 +91,53 @@ def main() -> int:
     for p in required_pages:
         assert_(p.exists(), f"Missing page: {p}")
         print(f"  OK: {p.relative_to(ROOT)}")
+
+
+
+    # --------------------------------------------------------
+    # [1b] Route rewrites + QA guardrails (anti-drift)
+    # --------------------------------------------------------
+    print("\n[1b] Route rewrites + QA guardrails")
+
+    redirects_path = SITE / "_redirects"
+    assert_(redirects_path.exists(), f"Missing redirects file: {redirects_path}")
+    redirects_txt = redirects_path.read_text(encoding="utf-8", errors="replace")
+
+    required_rewrites = [
+        ("/gym/*/join", "/gym/join/index.html"),
+        ("/app/book/class/*", "/app/book/class/index.html"),
+        ("/app/post/*", "/app/post/index.html"),
+        ("/app/profile/*", "/app/profile/index.html"),
+        ("/app/signals/*", "/app/signals/index.html"),
+    ]
+
+    for src, dst in required_rewrites:
+        assert_(
+            src in redirects_txt and dst in redirects_txt,
+            f"_redirects missing rewrite: {src} -> {dst}",
+        )
+
+    print("  OK: _redirects dynamic rewrites (app + quick join)")
+
+    server_path = ROOT / "tools" / "static_server.cjs"
+    assert_(server_path.exists(), f"Missing static server: {server_path}")
+    server_txt = server_path.read_text(encoding="utf-8", errors="replace")
+
+    required_routes = [
+        ("pattern: '/gym/:slug/join'", "to: '/gym/join/index.html'"),
+        ("pattern: '/app/book/class/:class_session_id'", "to: '/app/book/class/index.html'"),
+        ("pattern: '/app/post/:id'", "to: '/app/post/index.html'"),
+        ("pattern: '/app/profile/:handle'", "to: '/app/profile/index.html'"),
+        ("pattern: '/app/signals/:handle'", "to: '/app/signals/index.html'"),
+    ]
+
+    for src, dst in required_routes:
+        assert_(
+            src in server_txt and dst in server_txt,
+            f"static_server.cjs missing route map entry: {src} -> {dst}",
+        )
+
+    print("  OK: static_server route map (app + quick join)")
 
     print("\n[2] Data manifest presence")
     required_data = [
@@ -167,7 +216,7 @@ def main() -> int:
     js = SITE / "assets" / "js" / "site.js"
     assert_(css.exists(), "Missing styles.css")
     assert_(js.exists(), "Missing site.js")
-    assert_("--accent:#e40001" in css.read_text(encoding="utf-8"), "Accent color not found in CSS")
+    assert_("#ff2b4a" in css.read_text(encoding="utf-8"), "NDYRA accent color not found in CSS")
     print("  OK")
 
 

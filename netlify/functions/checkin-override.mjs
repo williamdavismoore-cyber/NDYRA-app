@@ -6,6 +6,7 @@
  * - Writes checkin_overrides + audit_log
  * - Returns readiness evaluation
  * - Override does NOT bypass waiver requirement
+ * - Must respect tenants.system_of_record + kill switches
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -105,6 +106,43 @@ export const handler = async (event) => {
     const isStaff = role === 'admin' || role === 'staff';
     if (!isStaff) {
       return json(403, { ok: false, error: 'forbidden', hint: 'Actor must be tenant staff.' });
+    }
+
+    // Tenant guardrails: authoritative source + kill switch
+    const { data: tenantRow, error: tenantErr } = await supabase
+      .from('tenants')
+      .select('id, name, system_of_record, kill_switch_disable_checkin')
+      .eq('id', tenant_id)
+      .single();
+
+    if (tenantErr || !tenantRow?.id) {
+      return json(404, { ok: false, error: 'tenant_not_found', details: tenantErr?.message });
+    }
+
+    if (String(tenantRow.system_of_record || '') !== 'ndyra') {
+      await supabase.from('audit_log').insert({
+        tenant_id,
+        actor_user_id: actorId,
+        action: 'checkin_blocked',
+        entity_type: 'tenant',
+        entity_id: tenant_id,
+        details: { reason: 'tenant_not_authoritative', system_of_record: tenantRow.system_of_record },
+      });
+
+      return json(409, { ok: false, error: 'tenant_not_authoritative' });
+    }
+
+    if (tenantRow.kill_switch_disable_checkin) {
+      await supabase.from('audit_log').insert({
+        tenant_id,
+        actor_user_id: actorId,
+        action: 'checkin_blocked',
+        entity_type: 'tenant',
+        entity_id: tenant_id,
+        details: { reason: 'kill_switch_disable_checkin' },
+      });
+
+      return json(409, { ok: false, error: 'checkin_disabled' });
     }
 
     // Insert override (server-side write)

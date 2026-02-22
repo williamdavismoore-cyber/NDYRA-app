@@ -1,12 +1,12 @@
-/* HIIT56 v0.1 (CP17) — Brand: mostly black + red accents + white text */
+/* NDYRA base styles (legacy-compatible) */
 :root{
   --bg:#000000;
   --fg:#ffffff;
-  --accent:#e40001;
+  --accent: #ff2b4a;
   --muted:#b7b7b7;
   --card:#0b0b0b;
   --card2:#111111;
-  --border:rgba(228,0,1,.55);
+  --border:rgba(255,43,74,.55);
   --max:1200px;
   --radius:18px;
 }
@@ -64,24 +64,24 @@ a:hover{opacity:.9}
   font-size:.92rem;
 }
 .nav a.primary{
-  border-color:rgba(228,0,1,.85);
-  background:rgba(228,0,1,.12);
+  border-color:rgba(255,43,74,.85);
+  background:rgba(255,43,74,.12);
 }
 .badge{
   display:inline-block;
   font-size:.72rem;
   padding:4px 8px;
-  border:1px solid rgba(228,0,1,.75);
+  border:1px solid rgba(255,43,74,.75);
   border-radius:999px;
   color:var(--fg);
-  background:rgba(228,0,1,.10);
+  background:rgba(255,43,74,.10);
 }
 
 .hero{
   border:1px solid rgba(255,255,255,.10);
   border-radius:var(--radius);
   overflow:hidden;
-  background:linear-gradient(160deg, rgba(228,0,1,.18), rgba(255,255,255,0) 60%);
+  background:linear-gradient(160deg, rgba(255,43,74,.18), rgba(255,255,255,0) 60%);
 }
 .hero-grid{
   display:grid; gap:18px;
@@ -104,8 +104,8 @@ a:hover{opacity:.9}
   cursor:pointer;
 }
 .btn.primary{
-  border-color:rgba(228,0,1,.85);
-  background:rgba(228,0,1,.18);
+  border-color:rgba(255,43,74,.85);
+  background:rgba(255,43,74,.18);
 }
 .btn:active{transform:translateY(1px)}
 .btn-row{display:flex; gap:10px; flex-wrap:wrap}
@@ -198,8 +198,8 @@ a:hover{opacity:.9}
 }
 
 .banner{
-  border:1px solid rgba(228,0,1,.55);
-  background:rgba(228,0,1,.10);
+  border:1px solid rgba(255,43,74,.55);
+  background:rgba(255,43,74,.10);
   border-radius:14px;
   padding:12px 14px;
   margin:16px 0;
@@ -445,15 +445,15 @@ select option{ color:#000; background:#fff; }
   background:rgba(0,0,0,.25);
 }
 .timeline-item.active{
-  border-color:rgba(228,0,1,.75);
-  background:rgba(228,0,1,.08);
+  border-color:rgba(255,43,74,.75);
+  background:rgba(255,43,74,.08);
 }
 .timeline-item .left{display:flex; gap:10px; align-items:center; min-width:0}
 .timeline-item .name{font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .timeline-item .right{white-space:nowrap; color:rgba(255,255,255,.7)}
 
 .kind-work{border-color:rgba(46,204,113,.75) !important; background:rgba(46,204,113,.12) !important;}
-.kind-rest{border-color:rgba(228,0,1,.75) !important; background:rgba(228,0,1,.12) !important;}
+.kind-rest{border-color:rgba(255,43,74,.75) !important; background:rgba(255,43,74,.12) !important;}
 .kind-move-a{border-color:rgba(241,196,15,.80) !important; background:rgba(241,196,15,.12) !important;}
 .kind-move-b{border-color:rgba(255,205,90,.80) !important; background:rgba(255,205,90,.12) !important;}
 .kind-station{border-color:rgba(128,0,32,.80) !important; background:rgba(128,0,32,.16) !important;}
@@ -490,8 +490,8 @@ select option{ color:#000; background:#fff; }
 .station-tile .station-title{font-weight:850; margin-bottom:6px}
 .station-tile .move{color:rgba(255,255,255,.85)}
 .station-tile.active{
-  border-color:rgba(228,0,1,.75);
-  background:rgba(228,0,1,.08);
+  border-color:rgba(255,43,74,.75);
+  background:rgba(255,43,74,.08);
 }
 
 .badge-row{
@@ -515,8 +515,8 @@ select option{ color:#000; background:#fff; }
 }
 .select:focus, .input:focus{
   outline:none;
-  border-color:rgba(228,0,1,.75);
-  box-shadow:0 0 0 3px rgba(228,0,1,.12);
+  border-color:rgba(255,43,74,.75);
+  box-shadow:0 0 0 3px rgba(255,43,74,.12);
 }
 .mono{
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;

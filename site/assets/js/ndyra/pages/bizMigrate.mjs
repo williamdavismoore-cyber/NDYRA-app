@@ -100,10 +100,21 @@ async function callImport({ tenantId, importBatchId, sourceSystem, records }) {
 function currentStep() {
   const p = window.location.pathname;
   if (p.includes('/biz/migrate/members')) return 'members';
-  if (p.includes('/biz/migrate/tokens')) return 'tokens';
-  if (p.includes('/biz/migrate/review')) return 'review';
-  if (p.includes('/biz/migrate/settings')) return 'settings';
+  if (p.includes('/biz/migrate/schedule')) return 'schedule';
+  if (p.includes('/biz/migrate/verify')) return 'verify';
+  if (p.includes('/biz/migrate/commit')) return 'commit';
+  if (p.includes('/biz/migrate/cutover')) return 'cutover';
   return 'home';
+}
+
+function stepCard(title, body, links = []) {
+  return el('div', { class: 'card', style: 'padding:14px; margin-top:12px;' }, [
+    el('div', { style: 'display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;' }, [
+      el('strong', { text: title }),
+      el('div', { class: 'btn-row' }, links),
+    ]),
+    el('div', { class: 'small', style: 'margin-top:8px; opacity:.85;', text: body }),
+  ]);
 }
 
 export async function init() {
@@ -117,13 +128,22 @@ export async function init() {
 
   if (step === 'home') {
     root.appendChild(el('div', {}, [
-      el('p', { class: 'small', text: 'Migration toolkit (staff). Start with members CSV import.' }),
-      el('div', { class: 'btn-row' }, [
+      el('p', { class: 'small', text: 'Migration toolkit (staff). Blueprint v7.3.1 flow: Members → (Schedule optional) → Verify → Commit → Cutover.' }),
+      stepCard('1) Members import', 'Upload members CSV. Must be idempotent by import_batch_id.', [
         el('a', { class: 'btn primary', href: '/biz/migrate/members/' }, ['Import members CSV']),
-        el('a', { class: 'btn', href: '/biz/migrate/tokens/' }, ['Token seeding (soon)']),
-        el('a', { class: 'btn', href: '/biz/migrate/review/' }, ['Review batches (soon)']),
       ]),
-      el('p', { class: 'small', text: 'Blueprint: imports must be idempotent via import_batch_id.' }),
+      stepCard('2) Schedule (optional)', 'Choose a cutover window + comms plan. Recommended for smooth transition.', [
+        el('a', { class: 'btn', href: '/biz/migrate/schedule/' }, ['Open schedule step']),
+      ]),
+      stepCard('3) Verify', 'Run consistency checks (counts, collisions, token balances, waiver templates).', [
+        el('a', { class: 'btn', href: '/biz/migrate/verify/' }, ['Open verify step']),
+      ]),
+      stepCard('4) Commit', 'Lock migration batch + prepare NDYRA as authoritative System of Record.', [
+        el('a', { class: 'btn', href: '/biz/migrate/commit/' }, ['Open commit step']),
+      ]),
+      stepCard('5) Cutover', 'Flip system_of_record to NDYRA after verify is clean. This is the real switch.', [
+        el('a', { class: 'btn', href: '/biz/migrate/cutover/' }, ['Open cutover step']),
+      ]),
     ]));
     return;
   }
@@ -191,6 +211,7 @@ export async function init() {
     });
 
     root.appendChild(el('div', {}, [
+      el('p', { class: 'small', text: 'Members import → idempotent via import_batch_id (safe rerun).' }),
       tenant,
       batch,
       el('div', { class: 'btn-row' }, [btnNewBatch]),
@@ -199,14 +220,35 @@ export async function init() {
       el('div', { class: 'btn-row' }, [btnImport, el('a', { class: 'btn', href: '/biz/migrate/' }, ['Back'])]),
       status,
       out,
-      el('p', { class: 'small', text: 'Rerun the same batch ID to safely no-op (backend idempotency).' }),
+      el('p', { class: 'small', text: 'Tip: rerun the same batch ID to confirm no-op idempotency.' }),
     ]));
 
     return;
   }
 
-  root.appendChild(el('div', {}, [
-    el('p', { class: 'small', text: `Step “${step}” scaffolded. Next: batch review + token seeding UI.` }),
+  // Scaffold pages for schedule/verify/commit/cutover (no drift, minimal UI)
+  const map = {
+    schedule: {
+      title: 'Schedule (optional)',
+      body: 'Pick your cutover window. Recommended: off-peak hours. Include comms to members + staff rehearsal.',
+    },
+    verify: {
+      title: 'Verify',
+      body: 'Consistency checks should pass before cutover: member counts, email collisions, token balances, waiver template configured, check-in readiness works.',
+    },
+    commit: {
+      title: 'Commit',
+      body: 'Commit locks the migration batch. If your process includes a dry-run window, do it here. Cutover should not happen until verify is clean.',
+    },
+    cutover: {
+      title: 'Cutover',
+      body: 'This is the authoritative switch: set tenants.system_of_record = ndyra (after verify). If system_of_record != ndyra, booking/check-in must remain blocked.',
+    },
+  };
+
+  const info = map[step] || { title: 'Migration', body: 'Step scaffolded.' };
+
+  root.appendChild(stepCard(info.title, info.body, [
     el('a', { class: 'btn', href: '/biz/migrate/' }, ['Back to migrate home']),
   ]));
 }

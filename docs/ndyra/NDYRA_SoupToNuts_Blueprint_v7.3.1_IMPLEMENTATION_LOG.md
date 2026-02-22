@@ -111,3 +111,139 @@ Changes:
 Hardening:
 - Updated cache headers + service worker cache-bust (prevents “stuck on old build” / wrong brand shell during QA).
 - Updated home page CTA to land directly on NDYRA surfaces used in QA (`/app/fyp/`, `/app/following/`, `/gym/{slug}/join`).
+
+---
+
+## CP35 (2026-02-21)
+
+Blueprint sections referenced:
+- **9. Gym Ops System-of-Record** (migration + check-in)
+- **Appendix A** (token ledger + check-in overrides)
+
+Changes:
+- Added migration + ops backend scaffolding:
+  - `migration_batches` (idempotent import tracking)
+  - `checkin_overrides` (staff override trail)
+  - Token ledger: `token_wallets`, `token_transactions` + server-side credit/spend RPCs
+- Added serverless tooling:
+  - `netlify/functions/tenant-migration-import.mjs` (CSV import endpoint)
+  - `netlify/functions/checkin-override.mjs` (staff override endpoint)
+
+Notes:
+- Token booking RPC is added in CP38.
+
+---
+
+## CP36 (2026-02-21)
+
+Blueprint addendum referenced:
+- **Signals Module Addendum (CP36 Aelric)**
+
+Changes:
+- Implemented Signals as a disciplined Stories surface:
+  - Muted by default (tap-to-hear)
+  - Strict caps (per-user + per-tenant)
+  - Visibility gates reuse `can_view_post()`
+- Added QA access scaffolding for viewing protected pages (UI-only; server-side remains enforced).
+
+---
+
+## CP37 (2026-02-21)
+
+Changes:
+- QA unlock + stability improvements:
+  - Playwright project config cleaned (desktop + mobile)
+  - Netlify publish + caching fixes to prevent stale-brand shells
+  - Signals limit enforcement updated (DB + UI)
+
+---
+
+## CP38 (2026-02-22)
+
+Blueprint sections referenced:
+- **Appendix A — Booking fork + tokens**
+- **13. Social Core Scaling** (comment throttle + Following feed RPC + index manifest)
+
+Backend (Supabase):
+- New migration: `supabase/migrations/2026-02-22_000000_NDYRA_CP38_Booking_Scale_v7.3.1.sql`
+  - `tenants` kill switches:
+    - `kill_switch_disable_booking`
+    - `kill_switch_disable_checkin`
+    - `kill_switch_disable_migration_commit`
+  - `membership_status` enum + `gym_memberships` table (RLS enabled)
+  - `class_types`, `class_sessions`, `class_bookings` (RLS enabled)
+  - `spend_tokens()` signature aligned to Blueprint v7.3.1
+  - Canonical booking RPC: `book_class_with_tokens(p_class_session_id uuid)`
+  - Scaling prereqs:
+    - `can_comment_now(post_id)` helper + comment insert policy wiring
+    - `get_following_feed(limit, cursor)` RPC (SECURITY INVOKER)
+    - index manifest indexes (stable pagination + stats)
+
+Serverless:
+- `checkin-override.mjs` updated to respect:
+  - `tenants.system_of_record` (blocks when external)
+  - `tenants.kill_switch_disable_checkin`
+
+Frontend:
+- `/app/book/class/:class_session_id` upgraded to show Smart Booking Fork eligibility (demo mode via query params).
+
+QA:
+- Added Playwright E2E: `tests/e2e/book_class_token_fork.spec.js` (demo deterministic).
+- Added Supabase gate: `supabase/gates/NDYRA_CP38_AntiDrift_Audit_v9.sql`
+- Updated `docs/ndyra/GATES_RUNBOOK.md` to reference latest gates.
+
+---
+
+## CP39 (2026-02-22)
+
+Blueprint sections referenced:
+- **3. Non-Gym User Experience (Social-First Shell)**
+- **Signals Addendum (CP36)**
+
+Changes:
+- Introduced the NDYRA “social shell” layout for non-gym users:
+  - For You + Following start pages
+  - Left rail navigation (desktop) + bottom nav (mobile)
+  - Signals strip at the top of feeds (muted by default)
+  - Right rail placeholders for social context (suggested gyms, trending)
+
+Notes:
+- This is UI-first and demo-friendly; all real visibility continues to reuse `can_view_post()`.
+
+---
+
+## CP40 (2026-02-22)
+
+Changes:
+- **Brand purge / QA clarity:** removed HIIT56 hero imagery from the NDYRA QA landing surface.
+  - Replaced `Desktop Poster.webp` + `Mobile Poster.webp` with NDYRA-branded posters.
+  - Updated homepage hero to use posters instead of legacy mp4 hero videos.
+  - Added cache-busting query params to posters to reduce stale-asset confusion on deploy previews.
+- **Theme alignment:** updated accent palette to NDYRA neon-red so legacy surfaces don’t read as HIIT56.
+- **QA smoke hardening:** tightened checks to assert the new accent color and keep parsing consistent.
+
+
+---
+
+## CP41 (2026-02-22)
+
+Changes:
+- **Super QA pass (no drift):** tightened QA stability and reduced “stale build” confusion.
+  - Build stamp + cache-busting hardened (build.json read + safe parsing).
+  - Netlify publish is explicitly `site/`.
+  - Added “Full Repo Replace” deliverable packaging (replaces Netlify drop zip).
+
+Notes:
+- This checkpoint is operational hardening only; no new product patterns.
+
+---
+
+## CP42 (2026-02-22)
+
+Changes:
+- **Quick Join routing fixed (critical):**
+  - Netlify rewrite corrected: `/gym/*/join` now serves `/gym/join/index.html` (not `/join.html`).
+  - Local QA static server route map corrected to match Blueprint: `/gym/:slug/join` → `/gym/join/index.html`.
+- **Cache busting bumped:** service worker cache version advanced to prevent any remaining HIIT56 asset bleed-through.
+- **Anti-drift QA guardrails:** `tools/qa_smoke.py` now asserts both the `_redirects` rule and the static server route map so this can’t regress silently.
+

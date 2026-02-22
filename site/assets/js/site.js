@@ -1054,11 +1054,11 @@ async function loadJSON(path){
 }
 
 // =========================
-// Build info + cache-busting (CP37)
+// Build info + cache-busting (CP42)
 // =========================
 // NOTE: Variable names are legacy (HIIT56_*). Values must match /assets/build.json.
-const HIIT56_BUILD_ID = '2026-02-21_37';
-const HIIT56_BUILD_LABEL = 'CP37';
+const HIIT56_BUILD_ID = '2026-02-22_42';
+const HIIT56_BUILD_LABEL = 'CP42';
 let HIIT56_BUILD = { label: HIIT56_BUILD_LABEL, build_id: HIIT56_BUILD_ID };
 
 function withCacheBust(url){

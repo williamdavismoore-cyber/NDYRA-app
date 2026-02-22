@@ -5,11 +5,18 @@ let _sb = null;
 
 // ------------------------------------------------------------
 // QA / demo identity (UI-only). Backend enforcement remains RLS/RPC.
-// This exists so QA can *see* protected pages without a real Supabase session.
 // ------------------------------------------------------------
-const QA_ROLE_KEY = 'hiit56_role';
-const QA_EMAIL_KEY = 'hiit56_demo_email';
-const QA_UID_KEY = 'hiit56_demo_uid';
+const DEMO_USER_ID = '00000000-0000-0000-0000-000000000001';
+const DEMO_EMAIL = 'qa@ndyra.app';
+
+const QA_ROLE_KEY = 'ndyra_role';
+const QA_EMAIL_KEY = 'ndyra_demo_email';
+const QA_UID_KEY = 'ndyra_demo_uid';
+
+// Legacy keys from earlier HIIT56-based scaffolding (auto-migrated)
+const LEGACY_QA_ROLE_KEY = 'hiit56_role';
+const LEGACY_QA_EMAIL_KEY = 'hiit56_demo_email';
+const LEGACY_QA_UID_KEY = 'hiit56_demo_uid';
 
 function safeLocalGet(k) {
   try { return localStorage.getItem(k); } catch { return null; }
@@ -18,31 +25,43 @@ function safeLocalSet(k, v) {
   try { localStorage.setItem(k, v); } catch {}
 }
 
+function migrateLegacyKeys(){
+  const legacyRole = safeLocalGet(LEGACY_QA_ROLE_KEY);
+  const legacyEmail = safeLocalGet(LEGACY_QA_EMAIL_KEY);
+  const legacyUid = safeLocalGet(LEGACY_QA_UID_KEY);
+
+  if (legacyRole && !safeLocalGet(QA_ROLE_KEY)) safeLocalSet(QA_ROLE_KEY, legacyRole);
+  if (legacyEmail && !safeLocalGet(QA_EMAIL_KEY)) safeLocalSet(QA_EMAIL_KEY, legacyEmail);
+  if (legacyUid && !safeLocalGet(QA_UID_KEY)) safeLocalSet(QA_UID_KEY, legacyUid);
+}
+
 function getQARole() {
+  migrateLegacyKeys();
   const r = (safeLocalGet(QA_ROLE_KEY) || '').trim();
-  if (!r || r === 'guest') return null;
-  return r;
+  return r || null;
 }
 
 function ensureDemoUid() {
+  migrateLegacyKeys();
   let uid = safeLocalGet(QA_UID_KEY);
   if (uid) return uid;
+
   uid = (globalThis.crypto && crypto.randomUUID)
     ? crypto.randomUUID()
-    : `00000000-0000-0000-0000-${String(Date.now()).slice(-12).padStart(12,'0')}`;
+    : DEMO_USER_ID;
+
   safeLocalSet(QA_UID_KEY, uid);
   return uid;
 }
 
 function getDemoUser() {
-  const role = getQARole();
-  if (!role) return null;
-  const id = ensureDemoUid();
-  const email = (safeLocalGet(QA_EMAIL_KEY) || `${role}@qa.local`).trim();
-  // Shape matches the bits we actually use (id/email). Marked __qa for downstream checks.
-  return { id, email, __qa: true, qa_role: role };
-}
+  const role = getQARole() || 'guest';
+  const email = (safeLocalGet(QA_EMAIL_KEY) || DEMO_EMAIL).trim();
+  const id = ensureDemoUid() || DEMO_USER_ID;
 
+  // Shape matches the subset we use. Marked __qa so we don't try profile upserts.
+  return { id, email, __qa: true, qa_role: role, user_metadata: { full_name: 'QA' } };
+}
 
 async function ensureSupabaseSdk(){
   if(window.supabase?.createClient) return;
@@ -72,7 +91,7 @@ async function loadCfg(){
       if(_cfg && !_cfg.supabaseAnonKey && _cfg.supabase_anon_key) _cfg.supabaseAnonKey = _cfg.supabase_anon_key;
       if(_cfg?.supabaseUrl && _cfg?.supabaseAnonKey) return _cfg;
     }
-  }catch(_){}
+  }catch(_){/* ignore */}
 
   // 2) Local fallback file (for local preview)
   try{
@@ -80,14 +99,13 @@ async function loadCfg(){
     if(r2.ok){
       const j = await r2.json();
       _cfg = j;
-      // Back-compat: accept snake_case keys from local test config file
       if(_cfg && !_cfg.supabaseUrl && _cfg.supabase_url) _cfg.supabaseUrl = _cfg.supabase_url;
       if(_cfg && !_cfg.supabaseAnonKey && _cfg.supabase_anon_key) _cfg.supabaseAnonKey = _cfg.supabase_anon_key;
       if(_cfg?.supabaseUrl && _cfg?.supabaseAnonKey && !_cfg.supabaseAnonKey.startsWith('YOUR_')) return _cfg;
     }
-  }catch(_){}
+  }catch(_){/* ignore */}
 
-  throw new Error('Supabase public config not available (set Netlify env vars or fill /assets/data/supabase_public_test.json)');
+  throw new Error('Supabase public config not available');
 }
 
 export async function getSupabase(){
@@ -100,22 +118,28 @@ export async function getSupabase(){
   return _sb;
 }
 
+export function isDemoMode(){
+  // Demo mode is when we can't load a usable Supabase public config.
+  return !_cfg || !_cfg?.supabaseUrl || !_cfg?.supabaseAnonKey;
+}
+
 export async function getUser() {
   // Prefer a real Supabase session if present.
   try {
     const sb = await getSupabase();
     const { data, error } = await sb.auth.getUser();
     if (!error && data?.user) return data.user;
-  } catch (e) {
-    // ignore (missing config, network, etc.)
+  } catch (_) {
+    // ignore
   }
 
-  // QA/demo fallback (UI only)
+  // QA/demo fallback
   return getDemoUser();
 }
 
 export async function ensureProfile(user){
-  if(!user) return { ok:false, reason:'no-user' };
+  if(!user || user.__qa) return { ok:false, reason:'qa-demo' };
+
   const sb = await getSupabase();
 
   const row = {
@@ -149,10 +173,6 @@ export async function requireAuth(next = null) {
     return null;
   }
 
-  // Only attempt profile upsert when we have a real Supabase session.
-  if (!user.__qa) {
-    await ensureProfile(user);
-  }
-
+  await ensureProfile(user);
   return user;
 }
