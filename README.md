@@ -52,8 +52,8 @@ Useful variants:
 ```bash
 npm run qa:e2e -- --headed
 npm run qa:e2e -- --debug
-npm run qa:e2e -- --project="Desktop Chromium"
-npm run qa:e2e -- --project="Mobile Safari"
+npm run qa:e2e:desktop
+npm run qa:e2e:mobile
 ```
 
 If you ever see:

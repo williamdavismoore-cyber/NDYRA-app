@@ -14,7 +14,7 @@
 
 // Bump this when you want to force-refresh caches globally.
 // (HTML is network-first, so this is mostly for static assets.)
-const CACHE_NAME = 'ndyra-static-cp35-v2';
+const CACHE_NAME = 'ndyra-static-cp36-v1';
 
 // Keep precache small + safe (install should not fail on a 404).
 const PRECACHE_URLS = [

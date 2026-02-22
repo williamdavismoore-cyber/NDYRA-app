@@ -3,6 +3,47 @@ import { safeText } from './utils.mjs';
 let _cfg = null;
 let _sb = null;
 
+// ------------------------------------------------------------
+// QA / demo identity (UI-only). Backend enforcement remains RLS/RPC.
+// This exists so QA can *see* protected pages without a real Supabase session.
+// ------------------------------------------------------------
+const QA_ROLE_KEY = 'hiit56_role';
+const QA_EMAIL_KEY = 'hiit56_demo_email';
+const QA_UID_KEY = 'hiit56_demo_uid';
+
+function safeLocalGet(k) {
+  try { return localStorage.getItem(k); } catch { return null; }
+}
+function safeLocalSet(k, v) {
+  try { localStorage.setItem(k, v); } catch {}
+}
+
+function getQARole() {
+  const r = (safeLocalGet(QA_ROLE_KEY) || '').trim();
+  if (!r || r === 'guest') return null;
+  return r;
+}
+
+function ensureDemoUid() {
+  let uid = safeLocalGet(QA_UID_KEY);
+  if (uid) return uid;
+  uid = (globalThis.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : `00000000-0000-0000-0000-${String(Date.now()).slice(-12).padStart(12,'0')}`;
+  safeLocalSet(QA_UID_KEY, uid);
+  return uid;
+}
+
+function getDemoUser() {
+  const role = getQARole();
+  if (!role) return null;
+  const id = ensureDemoUid();
+  const email = (safeLocalGet(QA_EMAIL_KEY) || `${role}@qa.local`).trim();
+  // Shape matches the bits we actually use (id/email). Marked __qa for downstream checks.
+  return { id, email, __qa: true, qa_role: role };
+}
+
+
 async function ensureSupabaseSdk(){
   if(window.supabase?.createClient) return;
   await new Promise((resolve, reject) => {
@@ -59,11 +100,18 @@ export async function getSupabase(){
   return _sb;
 }
 
-export async function getUser(){
-  const sb = await getSupabase();
-  const { data, error } = await sb.auth.getUser();
-  if(error) return null;
-  return data?.user ?? null;
+export async function getUser() {
+  // Prefer a real Supabase session if present.
+  try {
+    const sb = await getSupabase();
+    const { data, error } = await sb.auth.getUser();
+    if (!error && data?.user) return data.user;
+  } catch (e) {
+    // ignore (missing config, network, etc.)
+  }
+
+  // QA/demo fallback (UI only)
+  return getDemoUser();
 }
 
 export async function ensureProfile(user){
@@ -93,12 +141,18 @@ export function redirectToLogin(nextUrl = window.location.pathname + window.loca
   window.location.href = `/auth/login.html?next=${next}`;
 }
 
-export async function requireAuth(){
+export async function requireAuth(next = null) {
   const user = await getUser();
-  if(!user){
-    redirectToLogin();
+
+  if (!user) {
+    redirectToLogin(next || (window.location.pathname + window.location.search));
     return null;
   }
-  await ensureProfile(user);
+
+  // Only attempt profile upsert when we have a real Supabase session.
+  if (!user.__qa) {
+    await ensureProfile(user);
+  }
+
   return user;
 }

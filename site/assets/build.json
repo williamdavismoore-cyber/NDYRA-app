@@ -1,11 +1,11 @@
 {
-  "cp": 34,
-  "label": "CP34",
-  "build_id": "2026-02-20_34",
-  "kit_version": "v3.6",
-  "base": "CP33 v3.5",
-  "build_date_iso": "2026-02-20T23:54:21+00:00",
+  "cp": 37,
+  "label": "CP37",
+  "build_id": "2026-02-21_37",
+  "kit_version": "v3.8",
+  "base": "CP36 v3.7",
+  "build_date_iso": "2026-02-21T19:48:41.807466+00:00",
   "notes": [
-    "CP34: Quick Join payment wiring + QA stability hardening (service worker + cache headers) — Blueprint v7.3.1."
+    "CP37: QA access unlock (demo roles satisfy requireAuth), Playwright projects restored, static_server no-deps with Blueprint v7.3.1 route map."
   ]
 }

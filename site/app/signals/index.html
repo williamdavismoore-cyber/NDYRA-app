@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NDYRA — Signals</title>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/ndyra.css" />
+  <link rel="icon" href="/assets/branding/ndyra-icon-192.png" />
+</head>
+<body data-page="ndyra-signals">
+  <header class="ndyra-top" data-ndyra-topnav></header>
+
+  <main class="container ndyra-page">
+    <div class="ndyra-kicker">Signals</div>
+    <h1 class="ndyra-h1">Disciplined Stories</h1>
+    <p class="ndyra-sub">
+      Muted by default — tap to hear. This is a QA-facing preview that matches the CP36 addendum constraints.
+    </p>
+
+    <section class="ndyra-signal-strip" data-signal-strip aria-label="Signals"></section>
+
+    <section class="ndyra-card" style="margin-top: 14px;">
+      <h2 class="ndyra-h2">Capture (native smoothing)</h2>
+      <p class="ndyra-sub" style="margin-top: 6px;">
+        We use browser-native audio capture smoothing (echo cancellation / noise suppression / auto gain).
+      </p>
+
+      <div class="join-actions" style="margin-top: 10px;">
+        <button class="btn" data-signal-rec-start type="button">Start recording</button>
+        <button class="btn" data-signal-rec-stop type="button" disabled>Stop</button>
+      </div>
+
+      <div style="margin-top: 12px; display: grid; gap: 10px;">
+        <div class="ndyra-sub">Preview (tap to hear)</div>
+        <audio data-signal-rec-preview controls muted style="width: 100%;"></audio>
+      </div>
+
+      <div class="join-note" style="margin-top: 12px;">
+        AI Voice is template-only (no free text) — wiring lands when the serverless voice pipeline is live.
+      </div>
+    </section>
+
+    <div class="footer" style="margin-top: 22px;">NDYRA — build preview (CP37).</div>
+  </main>
+
+  <nav class="ndyra-bottom" data-ndyra-bottomnav></nav>
+
+  <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
+</body>
+</html>

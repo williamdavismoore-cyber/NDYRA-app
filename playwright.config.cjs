@@ -1,55 +1,45 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 
+const PORT = 4173;
+const BASE_URL = `http://127.0.0.1:${PORT}`;
+
 /**
- * NDYRA E2E Harness
- * - Runs against the lightweight static server (tools/static_server.cjs)
- * - Default projects: Desktop Chromium + Mobile Safari (WebKit)
- *
- * Tip:
- *   npx playwright test --project="Desktop Chromium"
- *   npx playwright test --project="Mobile Safari"
+ * NDYRA Playwright config (Blueprint v7.3.1 aligned)
+ * - Always spins up the static server against /site
+ * - Runs two projects: Desktop Chromium + Mobile Safari
+ * - Generates an HTML report for QA sanity checks
  */
 module.exports = defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: true,
-  timeout: 30_000,
-  expect: {
-    timeout: 15_000,
-  },
+  timeout: 30 * 1000,
+  expect: { timeout: 7 * 1000 },
 
-  // Console output + HTML report
-  reporter: [
-    ['list'],
-    ['html', { open: 'never' }],
-  ],
-
+  // Keep artifacts when failures happen
   use: {
-    baseURL: 'http://localhost:4173',
-    trace: 'retain-on-failure',
-    video: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    baseURL: BASE_URL,
+    trace: 'on-first-retry'
   },
+
+  reporter: [['list'], ['html', { open: 'never' }]],
 
   webServer: {
-    command: 'npm run dev:site',
-    url: 'http://localhost:4173',
+    command: `node tools/static_server.cjs --port ${PORT} --root site`,
+    url: BASE_URL,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 30 * 1000
   },
 
   projects: [
     {
       name: 'Desktop Chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-      },
+      use: { ...devices['Desktop Chrome'] }
     },
     {
       name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 14'],
-      },
-    },
-  ],
+      // Playwright doesn't ship real Safari; iPhone profile uses WebKit which is the closest.
+      use: { ...devices['iPhone 13'] }
+    }
+  ]
 });
+

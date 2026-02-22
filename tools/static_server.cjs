@@ -1,27 +1,98 @@
 #!/usr/bin/env node
 /**
- * Tiny static server for Playwright E2E.
- * Why: avoids SPA-rewrite quirks and guarantees querystrings don't affect file resolution.
+ * NDYRA static server (QA / local dev)
+ * - Serves /site as the publish root
+ * - Implements the Blueprint v7.3.1 route map rewrites (no new routing framework)
  *
  * Usage:
- *   node tools/static_server.cjs --root site --port 4174
+ *   node tools/static_server.cjs --port 4173 --root site
  */
+
 const http = require('http');
 const fs = require('fs');
+const fsp = fs.promises;
 const path = require('path');
 const { URL } = require('url');
 
-function arg(name, fallback=null){
-  const idx = process.argv.indexOf(`--${name}`);
-  if(idx === -1) return fallback;
-  const val = process.argv[idx+1];
-  if(!val || val.startsWith('--')) return fallback;
-  return val;
+// ------------------------------------------------------------
+// Args
+// ------------------------------------------------------------
+function getArg(name, fallback) {
+  const idx = process.argv.indexOf(name);
+  if (idx === -1) return fallback;
+  const v = process.argv[idx + 1];
+  return v ?? fallback;
 }
 
-const ROOT = path.resolve(arg('root', 'site'));
-const PORT = Number(arg('port', process.env.PW_PORT || 4174));
+const PORT = Number(getArg('--port', process.env.PORT || 4173));
+const ROOT_DIR = path.resolve(process.cwd(), getArg('--root', 'site'));
 
+// ------------------------------------------------------------
+// Blueprint v7.3.1 route map (must match the Blueprint exactly)
+// ------------------------------------------------------------
+const routeMap = [
+  // Public
+  { pattern: '/gym/:slug/join', to: '/join.html' },
+
+  // App
+  { pattern: '/app/book/class/:class_session_id', to: '/app/book/class/index.html' },
+
+  // Business portal migration
+  { pattern: '/biz/migrate', to: '/biz/migrate/index.html' },
+  { pattern: '/biz/migrate/members', to: '/biz/migrate/members/index.html' },
+  { pattern: '/biz/migrate/schedule', to: '/biz/migrate/schedule/index.html' }, // optional, recommended
+  { pattern: '/biz/migrate/verify', to: '/biz/migrate/verify/index.html' },
+  { pattern: '/biz/migrate/commit', to: '/biz/migrate/commit/index.html' },
+  { pattern: '/biz/migrate/cutover', to: '/biz/migrate/cutover/index.html' },
+
+  // Business check-in
+  { pattern: '/biz/check-in', to: '/biz/check-in/index.html' }
+];
+
+// ------------------------------------------------------------
+// Routing helpers
+// ------------------------------------------------------------
+function normalizePathname(p) {
+  if (!p) return '/';
+  // strip trailing slash except root
+  if (p.length > 1 && p.endsWith('/')) return p.slice(0, -1);
+  return p;
+}
+
+function compilePattern(pattern) {
+  // Converts "/gym/:slug/join" to regex and param names.
+  const parts = pattern.split('/').filter(Boolean);
+  const names = [];
+  const rxParts = parts.map((seg) => {
+    if (seg.startsWith(':')) {
+      names.push(seg.slice(1));
+      return '([^/]+)';
+    }
+    return seg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  });
+  const rx = new RegExp('^/' + rxParts.join('/') + '$');
+  return { rx, names };
+}
+
+const compiledRouteMap = routeMap.map((r) => ({
+  ...r,
+  ...compilePattern(r.pattern)
+}));
+
+function rewritePath(pathname) {
+  const p = normalizePathname(pathname);
+
+  for (const r of compiledRouteMap) {
+    const m = p.match(r.rx);
+    if (m) return r.to;
+  }
+
+  return p;
+}
+
+// ------------------------------------------------------------
+// Static serving
+// ------------------------------------------------------------
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -35,93 +106,116 @@ const MIME = {
   '.webp': 'image/webp',
   '.gif': 'image/gif',
   '.ico': 'image/x-icon',
-  '.webmanifest': 'application/manifest+json; charset=utf-8',
-  '.txt': 'text/plain; charset=utf-8',
-  '.map': 'application/json; charset=utf-8',
-  '.woff': 'font/woff',
   '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.ttf': 'font/ttf',
   '.mp4': 'video/mp4',
   '.webm': 'video/webm',
+  '.wav': 'audio/wav',
+  '.mp3': 'audio/mpeg'
 };
 
-function contentType(filePath){
-  const ext = path.extname(filePath).toLowerCase();
-  return MIME[ext] || 'application/octet-stream';
+function safeResolve(root, urlPath) {
+  // Prevent path traversal.
+  const p = urlPath.replace(/\0/g, '');
+  const resolved = path.resolve(root, '.' + p);
+  if (!resolved.startsWith(root)) return null;
+  return resolved;
 }
 
-function safeJoin(root, rel){
-  const joined = path.join(root, rel);
-  const normRoot = root.endsWith(path.sep) ? root : root + path.sep;
-  if(!joined.startsWith(normRoot)) return null;
-  return joined;
+async function fileExists(p) {
+  try {
+    const st = await fsp.stat(p);
+    return st.isFile() ? { ok: true, stat: st } : { ok: false };
+  } catch {
+    return { ok: false };
+  }
 }
 
-const server = http.createServer((req, res) => {
-  try{
+async function dirIndex(p) {
+  const idx = path.join(p, 'index.html');
+  const exists = await fileExists(idx);
+  return exists.ok ? idx : null;
+}
+
+function setCommonHeaders(res, servedPath) {
+  // Build fingerprint should never be cached during QA.
+  if (servedPath.endsWith(path.join('assets', 'build.json'))) {
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
+  } else {
+    // Reasonable default for local dev.
+    res.setHeader('Cache-Control', 'no-cache');
+  }
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+}
+
+function send(res, status, body, type = 'text/plain; charset=utf-8') {
+  res.statusCode = status;
+  res.setHeader('Content-Type', type);
+  res.end(body);
+}
+
+async function serveFile(req, res, servedPath) {
+  const ext = path.extname(servedPath).toLowerCase();
+  const type = MIME[ext] || 'application/octet-stream';
+
+  setCommonHeaders(res, servedPath);
+  res.statusCode = 200;
+  res.setHeader('Content-Type', type);
+
+  // Stream for memory friendliness
+  const stream = fs.createReadStream(servedPath);
+  stream.on('error', () => send(res, 500, 'Server error'));
+  stream.pipe(res);
+}
+
+const server = http.createServer(async (req, res) => {
+  try {
     const u = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-    let pathname = decodeURIComponent(u.pathname || '/');
+    const pathname = rewritePath(u.pathname);
 
-    // Netlify-style dynamic route support for local/static server
+    // Map directories to index.html
+    let wanted = pathname;
+    if (wanted.endsWith('/')) wanted = wanted + 'index.html';
 
-    // /app/post/:id -> /app/post/index.html (URL remains /app/post/:id)
-    const postMatch = pathname.match(/^\/app\/post\/([^\/]+)\/?$/);
-    if (postMatch && postMatch[1] && postMatch[1] !== 'index.html') {
-      pathname = '/app/post/index.html';
-    }
+    const resolved = safeResolve(ROOT_DIR, wanted);
+    if (!resolved) return send(res, 400, 'Bad request');
 
-    // /gym/:slug/join -> /gym/join/index.html
-    const gymJoinMatch = pathname.match(/^\/gym\/([^\/]+)\/join\/?$/);
-    if (gymJoinMatch && gymJoinMatch[1]) {
-      pathname = '/gym/join/index.html';
-    }
-
-    // /app/book/class/:class_session_id -> /app/book/class/index.html
-    const bookClassMatch = pathname.match(/^\/app\/book\/class\/([^\/]+)\/?$/);
-    if (bookClassMatch && bookClassMatch[1] && bookClassMatch[1] !== 'index.html') {
-      pathname = '/app/book/class/index.html';
-    }
-
-    // Normalize directory -> index.html
-    if(pathname.endsWith('/')) pathname += 'index.html';
-
-    // Default to root index
-    if(pathname === '') pathname = '/index.html';
-
-    const rel = pathname.replace(/^\/+/, '');
-    const filePath = safeJoin(ROOT, rel);
-
-    // No traversal
-    if(!filePath){
-      res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('Forbidden');
-      return;
-    }
-
-    fs.stat(filePath, (err, st) => {
-      if(err || !st.isFile()){
-        res.writeHead(404, {
-          'Content-Type': 'text/plain; charset=utf-8',
-          // Prevent caching during E2E
-          'Cache-Control': 'no-store'
-        });
-        res.end('Not Found');
-        return;
+    // If path is a directory, try index.html
+    let candidate = resolved;
+    try {
+      const st = await fsp.stat(candidate);
+      if (st.isDirectory()) {
+        const idx = await dirIndex(candidate);
+        if (idx) candidate = idx;
       }
+    } catch {
+      // ignore; fileExists handles
+    }
 
-      // Stream file
-      res.writeHead(200, {
-        'Content-Type': contentType(filePath),
-        'Cache-Control': 'no-store',
-      });
-      fs.createReadStream(filePath).pipe(res);
-    });
-  }catch(e){
-    res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
-    res.end('Server error');
+    const exists = await fileExists(candidate);
+    if (exists.ok) return serveFile(req, res, candidate);
+
+    // If not found and request looked like a directory path without trailing slash,
+    // try directory index (e.g. /app/fyp -> /app/fyp/index.html)
+    const maybeDir = safeResolve(ROOT_DIR, pathname);
+    if (maybeDir) {
+      try {
+        const st = await fsp.stat(maybeDir);
+        if (st.isDirectory()) {
+          const idx = await dirIndex(maybeDir);
+          if (idx) return serveFile(req, res, idx);
+        }
+      } catch {}
+    }
+
+    send(res, 404, 'Not found');
+  } catch (e) {
+    send(res, 500, 'Server error');
   }
 });
 
 server.listen(PORT, () => {
-  console.log(`E2E static server: ${ROOT}`);
-  console.log(`Listening on http://localhost:${PORT}`);
+  console.log(`NDYRA static server listening on http://127.0.0.1:${PORT}`);
+  console.log(`Root: ${ROOT_DIR}`);
 });

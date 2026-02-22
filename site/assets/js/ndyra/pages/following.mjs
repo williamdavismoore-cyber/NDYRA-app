@@ -1,6 +1,7 @@
 import { qs, qbool, makeEl } from '../lib/utils.mjs';
 import { getSupabase, getUser, requireAuth, redirectToLogin, ensureProfile } from '../lib/supabase.mjs';
 import { renderPostCard } from '../components/postCard.mjs';
+import { loadDemoSignals, renderSignalStrip } from '../components/signalStrip.mjs';
 
 const PAGE_SIZE = 8;
 const HIDE_KEY = 'ndyra_hide_post_ids_v1';
@@ -156,6 +157,8 @@ async function fetchFollows(sb, userId){
 export async function init(){
   markActiveNav();
 
+  const signalMount = document.querySelector('[data-signal-strip]');
+
   const feedRoot = document.querySelector('[data-ndyra-feed]');
   const status = document.querySelector('[data-ndyra-status]');
   const sentinel = document.querySelector('[data-ndyra-sentinel]');
@@ -163,6 +166,12 @@ export async function init(){
 
   const hidden = getHidden();
   const demoMode = qbool('demo') || qs('src') === 'demo';
+
+  // Signals strip (demo-first).
+  if(signalMount){
+    const demoSignals = demoMode ? await loadDemoSignals() : [];
+    renderSignalStrip(signalMount, demoSignals);
+  }
 
   let sb = null;
   let user = null;

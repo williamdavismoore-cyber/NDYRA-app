@@ -27,14 +27,41 @@
   <div class="container">
     <div class="section-title">
       <h2>Log in</h2>
-      <div class="small">Supabase account login</div>
+      <div class="small">Supabase login + QA Quick Access</div>
+    </div>
+
+    <!-- =====================================================
+         QA QUICK ACCESS (NO PASSWORD)
+         UI-only unlock for local/dev/preview.
+         Server-side enforcement still happens via RLS.
+         ===================================================== -->
+    <div class="card" style="min-height:auto">
+      <div class="meta">
+        <div class="title">QA Quick Access</div>
+        <div class="small">Use this if you’re blocked by email/password but still need to QA routes + UI.</div>
+
+        <div class="btn-row" style="margin-top:12px; flex-wrap:wrap">
+          <button class="btn" data-qa-role="guest">Guest</button>
+          <button class="btn" data-qa-role="member">Member</button>
+          <button class="btn" data-qa-role="biz_staff">Business Staff</button>
+          <button class="btn" data-qa-role="biz_admin">Business Admin</button>
+          <button class="btn primary" data-qa-role="super_admin">Master</button>
+        </div>
+
+        <div class="title" style="margin-top:14px">Tenant context (Business)</div>
+        <select class="input" data-qa-tenant></select>
+
+        <div class="small" style="margin-top:10px">
+          This sets a local QA role (<code>hiit56_role</code>) and redirects back to <code>?next=</code>.
+        </div>
+      </div>
     </div>
 
     <div class="card" style="min-height:auto">
       <div class="meta">
-        <div class="title">Email</div>
+        <div class="title">Supabase Email</div>
         <input class="input" type="email" placeholder="you@example.com" data-auth-email>
-        <div class="title" style="margin-top:12px">Password</div>
+        <div class="title" style="margin-top:12px">Supabase Password</div>
         <input class="input" type="password" placeholder="••••••••" data-auth-pass>
         <div class="btn-row" style="margin-top:14px">
           <button class="btn primary" data-auth-login>Log in</button>
@@ -44,6 +71,59 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // QA Quick Access (no password).
+    // Sets local role + tenant context and returns to ?next=.
+    (function(){
+      const ROLE_KEY = 'hiit56_role';
+      const TENANT_KEY = 'hiit56_tenant_slug';
+      const params = new URLSearchParams(location.search);
+      const next = params.get('next') || '/';
+
+      const tenantSel = document.querySelector('[data-qa-tenant]');
+      if(tenantSel){
+        fetch('/assets/data/tenants_demo.json', { cache: 'no-store' })
+          .then(r => r.ok ? r.json() : [])
+          .then(list => {
+            const safe = Array.isArray(list) ? list : [];
+            if(!safe.length){
+              tenantSel.innerHTML = '<option value="demo-gym-alpha">Demo Gym Alpha</option>';
+              return;
+            }
+            tenantSel.innerHTML = safe.map(t => `<option value="${t.slug}">${t.name}</option>`).join('');
+            const preferred = safe.find(t => t.slug === 'demo-gym-alpha') || safe[0];
+            tenantSel.value = preferred.slug;
+          })
+          .catch(() => {
+            tenantSel.innerHTML = '<option value="demo-gym-alpha">Demo Gym Alpha</option>';
+          });
+      }
+
+      function safeRedirect(){
+        try{
+          if(next && next.startsWith('/')){
+            location.href = next;
+            return;
+          }
+        }catch(e){}
+        location.href = '/';
+      }
+
+      function setRole(role){
+        try{
+          localStorage.setItem(ROLE_KEY, role);
+          const tenant = tenantSel && tenantSel.value ? tenantSel.value : 'demo-gym-alpha';
+          localStorage.setItem(TENANT_KEY, tenant);
+        }catch(e){}
+        safeRedirect();
+      }
+
+      document.querySelectorAll('[data-qa-role]').forEach(btn => {
+        btn.addEventListener('click', () => setRole(btn.getAttribute('data-qa-role')));
+      });
+    })();
+  </script>
 
   <script src="/assets/vendor/supabase/supabase.js"></script>
   <script>

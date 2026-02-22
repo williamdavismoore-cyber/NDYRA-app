@@ -163,4 +163,103 @@ begin
 
 end $$;
 
+
+-- ------------------------------------------------------------
+-- Signals (binding addendum) — limits + visibility
+-- ------------------------------------------------------------
+do $$
+declare
+  t_cap uuid;
+  t_vis uuid;
+  u uuid;
+  bob uuid;
+  sig uuid;
+  i int;
+  c int;
+begin
+  raise notice '--- Signals limits + visibility tests ---';
+
+  perform set_config('request.jwt.claim.role', 'authenticated', true);
+
+  -- Tenant context for cap tests
+  select public.ensure_tenant('t-signal-cap', 'Signal Cap Gym') into t_cap;
+
+  -- Fill to the club cap: 5 users × 2 signals = 10 active signals
+  for i in 1..5 loop
+    u := gen_random_uuid();
+    perform set_config('request.jwt.claim.sub', u::text, true);
+    perform public.ensure_profile(u, format('u%s@ndyra.test', i), format('User %s', i));
+
+    sig := gen_random_uuid();
+    insert into public.posts(id, author_user_id, tenant_context_id, visibility, content_text, kind, expires_at)
+    values (sig, u, t_cap, 'public', format('signal %s-a', i), 'signal', now() + interval '1 hour');
+
+    sig := gen_random_uuid();
+    insert into public.posts(id, author_user_id, tenant_context_id, visibility, content_text, kind, expires_at)
+    values (sig, u, t_cap, 'public', format('signal %s-b', i), 'signal', now() + interval '1 hour');
+
+    -- Per-user cap: 3rd active signal must fail
+    begin
+      sig := gen_random_uuid();
+      insert into public.posts(id, author_user_id, tenant_context_id, visibility, content_text, kind, expires_at)
+      values (sig, u, t_cap, 'public', format('signal %s-c', i), 'signal', now() + interval '1 hour');
+      raise exception 'FAIL: signal user cap not enforced (3rd insert succeeded)';
+    exception when others then
+      -- expected
+      null;
+    end;
+  end loop;
+
+  -- Per-club cap: 11th active signal in the same tenant must fail
+  u := gen_random_uuid();
+  perform set_config('request.jwt.claim.sub', u::text, true);
+  perform public.ensure_profile(u, 'overflow@ndyra.test', 'Overflow');
+
+  begin
+    sig := gen_random_uuid();
+    insert into public.posts(id, author_user_id, tenant_context_id, visibility, content_text, kind, expires_at)
+    values (sig, u, t_cap, 'public', 'overflow signal', 'signal', now() + interval '1 hour');
+    raise exception 'FAIL: signal club cap not enforced (11th insert succeeded)';
+  exception when others then
+    -- expected
+    null;
+  end;
+
+  -- Visibility test in a separate tenant context (so caps don't interfere)
+  select public.ensure_tenant('t-signal-vis', 'Signal Visibility Gym') into t_vis;
+
+  u := gen_random_uuid();
+  perform set_config('request.jwt.claim.sub', u::text, true);
+  perform public.ensure_profile(u, 'author@ndyra.test', 'Author');
+
+  sig := gen_random_uuid();
+  insert into public.posts(id, author_user_id, tenant_context_id, visibility, content_text, kind, expires_at)
+  values (sig, u, t_vis, 'private', 'private signal', 'signal', now() + interval '1 hour');
+
+  bob := gen_random_uuid();
+  perform set_config('request.jwt.claim.sub', bob::text, true);
+  perform public.ensure_profile(bob, 'bob@ndyra.test', 'Bob');
+
+  select count(*) into c from public.posts where id = sig;
+  if c <> 0 then
+    raise exception 'FAIL: Bob can see private signal';
+  end if;
+
+  -- Author can see (while unexpired)
+  perform set_config('request.jwt.claim.sub', u::text, true);
+  select count(*) into c from public.posts where id = sig;
+  if c <> 1 then
+    raise exception 'FAIL: Author cannot see own private signal';
+  end if;
+
+  -- Expiry makes signals invisible to everyone (including author)
+  update public.posts set expires_at = now() - interval '1 hour' where id = sig;
+
+  select count(*) into c from public.posts where id = sig;
+  if c <> 0 then
+    raise exception 'FAIL: expired signal still visible to author';
+  end if;
+
+end $$;
+
 rollback;
