@@ -252,7 +252,7 @@ export async function init(){
         author,
         tenant,
         viewerReaction,
-        canReact: !!user,
+        canReact: !!user && !demoMode,
         onReact: async (postId, reactionKey, { card }) => {
           if(!user){
             redirectToLogin();

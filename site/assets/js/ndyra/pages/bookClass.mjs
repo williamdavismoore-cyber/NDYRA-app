@@ -123,117 +123,54 @@ export async function init(){
   // DEMO mode: deterministic gating from query params (used in QA/E2E)
   // ------------------------------------------------------------------
   if(isDemoMode()){
-    const sor = demoGet('demo_sor', 'ndyra'); // ndyra|external
-    const kill = demoGetBool('demo_kill', false);
-    const waiver = demoGetBool('demo_waiver', true);
+    // deterministic demo behavior driven by query params (used by Playwright + QA)
+    const membershipStatus = demoGet(params, 'membership', 'past_due');
+    const tokenBalance = parseInt(demoGet(params, 'tokens', '0'),10) || 0;
+    const requiredTokens = parseInt(demoGet(params, 'required_tokens', '6'),10) || 6;
+    const waiverSigned = demoGet(params, 'waiver', 'ok') !== 'missing';
+    const sor = demoGet(params, 'sor', 'ndyra');
 
-    const membershipStatus = demoGet('demo_membership', 'past_due'); // active|past_due|none
-    const membershipExists = membershipStatus !== 'none';
-
-    const requiredTokens = demoGetInt('demo_required_tokens', 1);
-    const startingTokens = demoGetInt('demo_tokens', 3);
-    const tokenBalance = demoEnsureTokens(startingTokens);
-
-    const visibility = demoGet('demo_visibility', 'public'); // public|members
-
-    setText('[data-tenant-sor]', sor === 'ndyra' ? 'Authoritative (NDYRA)' : 'External (blocked)');
-    setText('[data-tenant-kill]', kill ? 'ON (blocked)' : 'OFF');
-    setText('[data-waiver]', waiver ? 'Signed' : 'Missing');
-    setText('[data-membership]', membershipExists ? membershipStatus : 'none');
-    setText('[data-tokens]', tokenBalance);
-    setText('[data-required-tokens]', requiredTokens);
-
-    const memEligible = membershipEligible(membershipStatus);
-    const tokensEligible = tokenBalance >= requiredTokens;
-
-    // Smart Booking Fork show condition (Blueprint): membership exists but not eligible, tokens sufficient, tenant allows token path.
-    const tokenPathAllowed = (
-      sor === 'ndyra'
-      && !kill
-      && waiver
-      && visibility === 'public'
-      && membershipExists
-      && !memEligible
-      && tokensEligible
-    );
-
-    const membershipPathAllowed = (
-      sor === 'ndyra'
-      && !kill
-      && waiver
-      && membershipExists
-      && memEligible
-    );
-
+    setText('[data-membership-status]', membershipStatus);
     setVisible('[data-action="update-payment"]', membershipStatus === 'past_due');
-    setVisible('[data-action="sign-waiver"]', !waiver);
+    setVisible('[data-action="sign-waiver"]', !waiverSigned);
 
-    setDisabled('[data-action="book-membership"]', !membershipPathAllowed);
+    // Smart fork (Blueprint): token path appears ONLY when membership exists but is not eligible,
+    // tokens are sufficient, waiver is signed, and tenant is authoritative (SoR=ndyra).
+    const memEligible = membershipEligible(membershipStatus);
+    const tokensOk = tokenBalance >= requiredTokens;
+    const membershipBookAllowed = memEligible && waiverSigned && sor === 'ndyra';
+    const tokenPathAllowed = (!memEligible) && tokensOk && waiverSigned && sor === 'ndyra';
+
+    // Banner messaging for non-authoritative tenants
+    if (sor !== 'ndyra') {
+      showBanner(`Not authoritative (system_of_record=${sor}). Booking is disabled.`);
+    } else {
+      // hide banner when OK
+      const b = qs('[data-booking-banner]');
+      if (b) { b.hidden = true; b.textContent = ''; }
+    }
+
+    setText('[data-token-balance]', String(tokenBalance));
+    setText('[data-required-tokens]', String(requiredTokens));
+
+    setVisible('[data-token-path]', tokenPathAllowed);
+    setVisible('[data-token-path]', tokenPathAllowed);
+  setVisible('[data-token-balance-wrap]', tokenPathAllowed);
+
+    setDisabled('[data-action="book-membership"]', !membershipBookAllowed);
     setDisabled('[data-action="book-tokens"]', !tokenPathAllowed);
 
-    showBanner(
-      sor !== 'ndyra'
-        ? 'Booking disabled: tenant is not authoritative (system_of_record != ndyra).'
-        : kill
-          ? 'Booking disabled by tenant kill switch.'
-          : !waiver
-            ? 'Waiver required before booking.'
-            : visibility !== 'public'
-              ? 'Tokens are not allowed for members-only sessions.'
-              : (!membershipExists)
-                ? 'Membership required.'
-                : (memEligible)
-                  ? 'Membership eligible: use membership booking.'
-                  : (!tokensEligible)
-                    ? 'Not enough tokens.'
-                    : ''
-    );
+    qs('[data-action="book-tokens"]')?.addEventListener('click', () => {
+      if (!tokenPathAllowed) return toast('Token booking not available (demo).');
+      setText('[data-booking-result]', 'Booked with tokens (demo).');
+      toast('Booked with tokens (demo).');
+    });
 
-    if(btnTokens){
-      btnTokens.addEventListener('click', async () => {
-        try{
-          btnTokens.disabled = true;
-
-          // idempotency: re-click returns same booking id, no double-spend
-          const k = demoBookingKey(classSessionId);
-          const existing = localStorage.getItem(k);
-          if(existing){
-            const cur = demoEnsureTokens(startingTokens);
-            const payload = { ok:true, booking_id: existing, remaining_balance: cur, idempotent: true };
-            if(resultEl) resultEl.textContent = JSON.stringify(payload, null, 2);
-            toast('Already booked (idempotent).');
-            btnTokens.disabled = false;
-            return;
-          }
-
-          const cur = demoEnsureTokens(startingTokens);
-          if(cur < requiredTokens){
-            throw new Error('insufficient_tokens');
-          }
-
-          const bookingId = randomId();
-          localStorage.setItem(k, bookingId);
-          demoSetTokens(cur - requiredTokens);
-          setText('[data-tokens]', cur - requiredTokens);
-
-          const payload = { ok:true, booking_id: bookingId, remaining_balance: cur - requiredTokens, demo: true };
-          if(resultEl) resultEl.textContent = JSON.stringify(payload, null, 2);
-          toast('Booked with tokens (demo).');
-        }catch(e){
-          const msg = e?.message || String(e);
-          if(resultEl) resultEl.textContent = JSON.stringify({ ok:false, error: msg }, null, 2);
-          toast(msg);
-        }finally{
-          btnTokens.disabled = false;
-        }
-      });
-    }
-
-    if(btnMembership){
-      btnMembership.addEventListener('click', () => {
-        toast('Membership booking path not wired yet (CP38 focuses on token RPC).');
-      });
-    }
+    qs('[data-action="book-membership"]')?.addEventListener('click', () => {
+      if (!membershipBookAllowed) return toast('Membership booking not available (demo).');
+      setText('[data-booking-result]', 'Booked with membership (demo).');
+      toast('Booked with membership (demo).');
+    });
 
     return;
   }

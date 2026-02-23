@@ -1,13 +1,14 @@
 {
-  "cp": 42,
-  "label": "CP42",
-  "build_id": "2026-02-22_42",
-  "kit_version": "v3.8",
-  "base": "CP41 v3.7",
-  "build_date_iso": "2026-02-22T19:50:29.711585Z",
+  "cp": 43,
+  "label": "CP43",
+  "build_id": "2026-02-22_43",
+  "kit_version": "v3.9",
+  "base": "CP42 v3.8",
+  "build_date_iso": "2026-02-22T22:35:01.031702Z",
   "notes": [
-    "CP42: Fix /gym/{slug}/join rewrites (Netlify + local) and parse slug from path.",
-    "CP42: Bump SW cache version + cache-bust branding assets to prevent HIIT56 bleed-through.",
-    "CP42: Add QA guardrails so this can’t drift again."
+    "CP43: Fix NDYRA app feeds not booting (add boot.mjs to /app/fyp and /app/following).",
+    "CP43: Enforce booking fork logic in demo mode (hide token path for eligible members; disable booking when SoR!=ndyra; banner text).",
+    "CP43: Demo mode can be forced via ?src=demo for consistent QA/E2E.",
+    "CP43: Restore Buildbook + AntiDrift visibility in deliverables."
   ]
 }

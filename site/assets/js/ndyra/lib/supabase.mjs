@@ -119,7 +119,15 @@ export async function getSupabase(){
 }
 
 export function isDemoMode(){
-  // Demo mode is when we can't load a usable Supabase public config.
+  // Explicit demo override (used by QA/E2E): ?src=demo
+  try {
+    const u = new URL(window.location.href);
+    if (u.searchParams.get('src') === 'demo') return true;
+  } catch (_) {
+    // ignore
+  }
+
+  // Fallback demo mode: no usable Supabase public config.
   return !_cfg || !_cfg?.supabaseUrl || !_cfg?.supabaseAnonKey;
 }
 
