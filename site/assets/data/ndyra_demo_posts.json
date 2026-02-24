@@ -1,10 +1,98 @@
 {
   "posts": [
     {
+      "id": "demo-post-010-aftermath",
+      "kind": "aftermath",
+      "author_user_id": "demo-user-001",
+      "author_tenant_id": null,
+      "tenant_context_id": null,
+      "club_id": null,
+      "visibility": "public",
+      "content_text": "AFTERMATH — 56 min. Locked in. 🜂",
+      "workout_ref": {
+        "template": "NDYRA-HIIT",
+        "minutes": 56,
+        "calories": 612,
+        "hr_avg": 153,
+        "hr_peak": 186,
+        "strain": 8.6,
+        "recovery": 74,
+        "notes": "No comparisons. Just your signal."
+      },
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_at": "2026-02-24T11:37:43Z",
+      "updated_at": "2026-02-24T11:37:43Z",
+      "author": {
+        "display_name": "William",
+        "handle": "@william",
+        "avatar_url": null
+      },
+      "post_media": [],
+      "post_stats": [
+        {
+          "reactions_total": 0,
+          "reactions_fire": 0,
+          "reactions_clap": 0,
+          "reactions_flex": 0,
+          "reactions_heart": 0,
+          "reactions_check": 0,
+          "comments_count": 0,
+          "last_engaged_at": null,
+          "score_48h": 0,
+          "updated_at": "2026-02-24T11:37:43Z"
+        }
+      ]
+    },
+    {
+      "id": "demo-post-011-aftermath",
+      "kind": "aftermath",
+      "author_user_id": "demo-user-001",
+      "author_tenant_id": null,
+      "tenant_context_id": null,
+      "club_id": null,
+      "visibility": "followers",
+      "content_text": "AFTERMATH — 28 min. Locked in. 🜂",
+      "workout_ref": {
+        "template": "NDYRA-HIIT",
+        "minutes": 28,
+        "calories": 318,
+        "hr_avg": 149,
+        "hr_peak": 178,
+        "strain": 6.2,
+        "recovery": 81,
+        "notes": "No comparisons. Just your signal."
+      },
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_at": "2026-02-24T11:25:43Z",
+      "updated_at": "2026-02-24T11:25:43Z",
+      "author": {
+        "display_name": "Nova Lab",
+        "handle": "@novalab",
+        "avatar_url": null
+      },
+      "post_media": [],
+      "post_stats": [
+        {
+          "reactions_total": 0,
+          "reactions_fire": 0,
+          "reactions_clap": 0,
+          "reactions_flex": 0,
+          "reactions_heart": 0,
+          "reactions_check": 0,
+          "comments_count": 0,
+          "last_engaged_at": null,
+          "score_48h": 0,
+          "updated_at": "2026-02-24T11:37:43Z"
+        }
+      ]
+    },
+    {
       "id": "demo-post-001",
       "created_at": "2026-02-18T12:00:00Z",
       "visibility": "public",
-      "content_text": "First light of NDYRA. \ud83d\udd25 Building in public, shipping in silence.",
+      "content_text": "First light of NDYRA. 🔥 Building in public, shipping in silence.",
       "author_user_id": "demo-user-001",
       "author_tenant_id": null,
       "tenant_context_id": null,
@@ -64,7 +152,7 @@
       "id": "demo-post-003",
       "created_at": "2026-02-18T15:45:00Z",
       "visibility": "public",
-      "content_text": "Your feed is going to feel like a mission-control console\u2014clean, fast, and addictive.",
+      "content_text": "Your feed is going to feel like a mission-control console—clean, fast, and addictive.",
       "author_user_id": "demo-user-001",
       "author_tenant_id": null,
       "tenant_context_id": null,

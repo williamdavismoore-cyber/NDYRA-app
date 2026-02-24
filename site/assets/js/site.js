@@ -1,6 +1,6 @@
-/* HIIT56 CP12 — static preview renderer (no backend/auth yet)
+/* NDYRA — static preview renderer (demo mode)
    Notes:
-   - Member vs Business vs Guest is currently a demo role flag stored in localStorage.
+   - Roles are demo-only until Supabase auth is wired.
    - Public previews are teaser-limited. Member pages show full lists.
 */
 
@@ -21,14 +21,39 @@ const fmtTime = (sec) => {
   return `${m.toString().padStart(2,'0')}:${r.toString().padStart(2,'0')}`;
 };
 
-const BEEP_KEY = 'hiit56_beep_volume'; // stored as 0..1 float
+// Display helpers (rebrand-safe)
+function displayTitle(raw){
+  const s = String(raw || '');
+  // Strip legacy brand prefix from demo content (keeps titles clean in NDYRA UI)
+  return s.replace(/^\s*hiit\s*56\s*(\||-|—)?\s*/i, '').trim();
+}
+
+
+
+const BEEP_KEY = 'ndyra_beep_volume'; // stored as 0..1 float
+const LEGACY_BEEP_KEY = 'hiit56_beep_volume';
+
 function getBeepVolume(){
-  const raw = localStorage.getItem(BEEP_KEY);
+  let raw = localStorage.getItem(BEEP_KEY);
+
+  // One-way migrate legacy key (keeps existing users intact)
+  if (raw === null) {
+    const legacy = localStorage.getItem(LEGACY_BEEP_KEY);
+    if (legacy !== null) {
+      localStorage.setItem(BEEP_KEY, legacy);
+      raw = legacy;
+    }
+  }
+
   const v = raw === null ? 0.7 : Number(raw);
   return clamp(isFinite(v) ? v : 0.7, 0, 1);
 }
+
 function setBeepVolume(v){
-  localStorage.setItem(BEEP_KEY, String(clamp(Number(v)||0, 0, 1)));
+  const s = String(clamp(Number(v)||0, 0, 1));
+  localStorage.setItem(BEEP_KEY, s);
+  // Keep legacy in sync for a few checkpoints (safe migration)
+  localStorage.setItem(LEGACY_BEEP_KEY, s);
 }
 
 let _audioCtx = null;
@@ -1056,17 +1081,18 @@ async function loadJSON(path){
 // =========================
 // Build info + cache-busting (CP42)
 // =========================
-// NOTE: Variable names are legacy (HIIT56_*). Values must match /assets/build.json.
-const HIIT56_BUILD_ID = '2026-02-22_42';
-const HIIT56_BUILD_LABEL = 'CP42';
-let HIIT56_BUILD = { label: HIIT56_BUILD_LABEL, build_id: HIIT56_BUILD_ID };
+// NOTE: Values must match /assets/build.json.
+const NDYRA_BUILD_ID = '2026-02-24_50';
+const NDYRA_BUILD_LABEL = 'CP50';
+let NDYRA_BUILD = { label: NDYRA_BUILD_LABEL, build_id: NDYRA_BUILD_ID };
+window.__ndyraBuild = NDYRA_BUILD;
 
 function withCacheBust(url){
   try{
     const u = new URL(url, location.origin);
     if(u.origin === location.origin){
       if(!u.searchParams.has('v')){
-        const bid = (HIIT56_BUILD && HIIT56_BUILD.build_id) ? HIIT56_BUILD.build_id : HIIT56_BUILD_ID;
+        const bid = (NDYRA_BUILD && NDYRA_BUILD.build_id) ? NDYRA_BUILD.build_id : NDYRA_BUILD_ID;
         u.searchParams.set('v', bid);
       }
     }
@@ -1077,11 +1103,11 @@ function withCacheBust(url){
 async function loadBuildInfo(){
   try{
     const res = await fetch('/assets/build.json', {cache:'no-store'});
-    if(!res.ok) return HIIT56_BUILD;
+    if(!res.ok) return NDYRA_BUILD;
     const data = await res.json();
-    if(data && data.label) HIIT56_BUILD = data;
+    if(data && data.label) NDYRA_BUILD = data;
   }catch(e){ /* ignore */ }
-  return HIIT56_BUILD;
+  return NDYRA_BUILD;
 }
 
 // =========================
@@ -1543,15 +1569,16 @@ function cardCategory(cat){
 }
 
 function cardVideo(video){
+  const cleanTitle = displayTitle(video.title);
   const el = document.createElement('div');
   el.className = 'card';
   el.tabIndex = 0;
   el.setAttribute('role', 'button');
-  el.setAttribute('aria-label', `Play ${video.title}`);
+  el.setAttribute('aria-label', `Play ${cleanTitle||''}`);
 
   const img = document.createElement('img');
   img.loading = 'lazy';
-  img.alt = video.title;
+  img.alt = cleanTitle;
   const origThumb = thumbForVideo(video) || '/assets/branding/Desktop Poster.webp';
   img.src = bestThumb(origThumb);
   img.onerror = ()=>{ if(img.src !== origThumb) img.src = origThumb; };
@@ -1559,7 +1586,7 @@ function cardVideo(video){
   el.innerHTML = `
     <div class="thumb"></div>
     <div class="meta">
-      <div class="title">${video.title}</div>
+      <div class="title">${cleanTitle}</div>
       <p class="small">Vimeo ID: ${video.video_id ?? ''}</p>
     </div>
   `;
@@ -1573,13 +1600,14 @@ function cardVideo(video){
 }
 
 function cardLinkVideo(video, href, pillText){
+  const cleanTitle = displayTitle(video.title);
   const el = document.createElement('a');
   el.className = 'card';
   el.href = href;
 
   const img = document.createElement('img');
   img.loading = 'lazy';
-  img.alt = video.title;
+  img.alt = cleanTitle;
   const origThumb = thumbForVideo(video) || '/assets/branding/Desktop Poster.webp';
   img.src = bestThumb(origThumb);
   img.onerror = ()=>{ if(img.src !== origThumb) img.src = origThumb; };
@@ -1587,7 +1615,7 @@ function cardLinkVideo(video, href, pillText){
   el.innerHTML = `
     <div class="thumb"></div>
     <div class="meta">
-      <div class="title">${video.title}</div>
+      <div class="title">${cleanTitle}</div>
       <p class="small">Vimeo ID: ${video.video_id ?? ''}</p>
     </div>
   `;
@@ -1614,7 +1642,7 @@ function openVideoModal(video){
 
   const headTitle = qs('[data-modal-title]', modal);
   const body = qs('[data-modal-body]', modal);
-  if(headTitle) headTitle.textContent = video.title || 'Video';
+  if(headTitle) headTitle.textContent = displayTitle(video.title) || 'Video';
 
   body.innerHTML = '';
 
@@ -2042,7 +2070,7 @@ async function pageWorkoutDetail({mode}){
   const catEl = qs('[data-workout-category]');
   const metaEl = qs('[data-workout-meta]');
 
-  if(titleEl) titleEl.textContent = video.title || (mode === 'public' ? 'Workout Preview' : 'Workout');
+  if(titleEl) titleEl.textContent = displayTitle(video.title) || (mode === 'public' ? 'Workout Preview' : 'Workout');
   if(catEl) catEl.textContent = cat ? cat.title : (video.category_slug || '');
   if(metaEl) metaEl.textContent = `Vimeo ID: ${video.video_id}`;
 
@@ -5172,9 +5200,9 @@ function pageBizStart(){
 // =========================
 // Build label injection (CP23+)
 // =========================
-// HIIT56_BUILD_LABEL is defined in the Build info block above.
+// NDYRA_BUILD_LABEL is defined in the Build info block above.
 function applyBuildLabel(){
-  const label = (HIIT56_BUILD && HIIT56_BUILD.label) ? HIIT56_BUILD.label : HIIT56_BUILD_LABEL;
+  const label = (NDYRA_BUILD && NDYRA_BUILD.label) ? NDYRA_BUILD.label : NDYRA_BUILD_LABEL;
   try{
     document.querySelectorAll('.footer').forEach(f=>{
       f.innerHTML = f.innerHTML.replace(/build preview \(CP\d+\)/g, `build preview (${label})`);
@@ -5187,96 +5215,87 @@ function applyBuildLabel(){
 
 
 // =========================
-// Telemetry (CP26) — lightweight "Sentry-style" crash reporting
-// - Sends unhandled errors + key runtime warnings to a Netlify Function.
-// - Optional: forward to Slack/Discord webhook via TELEMETRY_WEBHOOK_URL on Netlify.
+// Telemetry (CP26→) — NDYRA
 // =========================
-const HIIT56_TELEMETRY_ENDPOINT = '/.netlify/functions/telemetry_ingest';
-const HIIT56_SESSION_KEY = 'hiit56_session_id';
 
-function hiit56SessionId(){
-  try{
-    let sid = sessionStorage.getItem(HIIT56_SESSION_KEY);
-    if(!sid){
-      sid = Math.random().toString(16).slice(2) + Date.now().toString(16);
-      sessionStorage.setItem(HIIT56_SESSION_KEY, sid);
+const NDYRA_TELEMETRY_ENDPOINT = '/.netlify/functions/telemetry';
+const NDYRA_SESSION_KEY = 'ndyra_session_id';
+const LEGACY_SESSION_KEY = 'hiit56_session_id'; // legacy migration only
+
+function ndyraSessionId(){
+  // Prefer NDYRA key
+  let id = sessionStorage.getItem(NDYRA_SESSION_KEY);
+
+  // Migrate legacy -> NDYRA one-way
+  if (!id) {
+    const legacy = sessionStorage.getItem(LEGACY_SESSION_KEY);
+    if (legacy) {
+      sessionStorage.setItem(NDYRA_SESSION_KEY, legacy);
+      id = legacy;
     }
-    return sid;
-  }catch(e){ return 'unknown'; }
+  }
+
+  if (!id) {
+    id = crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
+    sessionStorage.setItem(NDYRA_SESSION_KEY, id);
+  }
+
+  return id;
 }
 
-function hiit56NormalizeErr(err){
-  try{
-    if(err instanceof Error) return { name: err.name, message: err.message, stack: err.stack };
-    if(typeof err === 'string') return { message: err };
-    if(err && typeof err === 'object'){
-      // common event shapes
-      const msg = err.message || err.reason || err.error || err.toString?.();
-      const st = err.stack || err.error?.stack || undefined;
-      return { message: String(msg||'Unknown error'), stack: st };
-    }
-    return { message: String(err) };
-  }catch(e){ return { message: 'Unknown error' }; }
+function ndyraNormalizeErr(err){
+  if (!err) return { message: 'unknown error' };
+
+  // strings
+  if (typeof err === 'string') return { message: err };
+
+  // Error object
+  const out = {
+    message: err.message || 'error',
+    name: err.name,
+    stack: err.stack
+  };
+
+  // extra useful fields (best-effort)
+  for (const k of ['code','status','details','hint']) {
+    if (err[k] !== undefined) out[k] = err[k];
+  }
+  return out;
 }
 
-function hiit56TelemetrySend(eventType, payload) {
-  try {
-    const body = {
-      eventType,
-      payload,
-      href: location.href,
-      ts: new Date().toISOString(),
-      build_id: (HIIT56_BUILD && HIIT56_BUILD.build_id) ? HIIT56_BUILD.build_id : HIIT56_BUILD_ID,
-      label: (HIIT56_BUILD && HIIT56_BUILD.label) ? HIIT56_BUILD.label : HIIT56_BUILD_LABEL,
-      session_id: hiit56SessionId(),
-      ua: navigator.userAgent
-    };
+function ndyraTelemetrySend(event, payload){
+  const body = JSON.stringify({
+    event,
+    payload,
+    build_label: (window.__ndyraBuild && window.__ndyraBuild.label) ? window.__ndyraBuild.label : (typeof NDYRA_BUILD_LABEL !== 'undefined' ? NDYRA_BUILD_LABEL : 'CP??'),
+    build_id: (window.__ndyraBuild && window.__ndyraBuild.build_id) ? window.__ndyraBuild.build_id : (typeof NDYRA_BUILD_ID !== 'undefined' ? NDYRA_BUILD_ID : ''),
+    session_id: ndyraSessionId(),
+    ua: navigator.userAgent,
+    href: location.href,
+    ts: new Date().toISOString()
+  });
 
-    const data = JSON.stringify(body);
-    if (navigator.sendBeacon) {
-      const blob = new Blob([data], { type: 'application/json' });
-      navigator.sendBeacon(HIIT56_TELEMETRY_ENDPOINT, blob);
-    } else {
-      fetch(HIIT56_TELEMETRY_ENDPOINT, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: data,
-        keepalive: true
-      }).catch(()=>{});
-    }
-  } catch (e) { /* ignore */ }
+  if (navigator.sendBeacon) {
+    try {
+      navigator.sendBeacon(NDYRA_TELEMETRY_ENDPOINT, body);
+      return;
+    } catch(_) {}
+  }
+
+  fetch(NDYRA_TELEMETRY_ENDPOINT, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body
+  }).catch(()=>{});
 }
 
-function v56ReportError(err){
-  try{
-    console.error('[NDYRA] Unhandled error:', err);
-    hiit56TelemetrySend('frontend_error', hiit56NormalizeErr(err));
-    let b = document.querySelector('[data-error-banner]');
-    if(!b){
-      b = document.createElement('div');
-      b.setAttribute('data-error-banner','');
-      b.style.position='fixed';
-      b.style.left='12px';
-      b.style.right='12px';
-      b.style.bottom='12px';
-      b.style.zIndex='9999';
-      b.style.padding='12px 14px';
-      b.style.borderRadius='14px';
-      b.style.background='rgba(0,0,0,.78)';
-      b.style.color='#fff';
-      b.style.backdropFilter='blur(8px)';
-      b.style.fontSize='14px';
-      b.innerHTML = '<strong>Something hiccuped.</strong> <span style="opacity:.8">Try refreshing.</span> <button style="margin-left:10px" class="btn">Refresh</button>';
-      document.body.appendChild(b);
-      const btn = b.querySelector('button');
-      if(btn) btn.addEventListener('click', ()=>location.reload());
-      setTimeout(()=>{ try{ b.remove(); }catch(e){} }, 9000);
-    }
-  }catch(e){}
+function ndyraReportError(err, source){
+  console.error('[NDYRA] error captured', source, err);
+  try { ndyraTelemetrySend('frontend_error', { source, ...ndyraNormalizeErr(err) }); } catch(_) {}
 }
 
-window.addEventListener('error', (e)=> v56ReportError(e?.error || e?.message || e));
-window.addEventListener('unhandledrejection', (e)=> v56ReportError(e?.reason || e));
+window.addEventListener('error', (e)=> ndyraReportError(e?.error || e?.message || e));
+window.addEventListener('unhandledrejection', (e)=> ndyraReportError(e?.reason || e));
 
 async function init(){
 
@@ -5319,4 +5338,4 @@ async function init(){
   if(page === 'login') pageLogin();
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{ init().catch(v56ReportError); });
+document.addEventListener('DOMContentLoaded', ()=>{ init().catch(ndyraReportError); });

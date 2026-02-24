@@ -1,17 +1,50 @@
-// NDYRA shared bottom nav (mobile-first)
+// NDYRA — Bottom Nav (mobile-first Social Shell)
+// Injected into pages via [data-ndyra-bottomnav]. No external deps.
 
-export function renderBottomNav({ mount, active = '' } = {}) {
-  if (!mount) return;
+import { iconSvg } from './icons.mjs';
 
-  const is = (key) => (key === active ? 'class="active"' : '');
+export function renderBottomNav(){
+  const mount = document.querySelector('[data-ndyra-bottomnav]');
+  if(!mount) return;
+
+  const items = [
+    { key: 'fyp', label: 'For You', href: '/app/fyp/', icon: 'home' },
+    { key: 'following', label: 'Following', href: '/app/following/', icon: 'users' },
+    { key: 'signals', label: 'Signals', href: '/app/signals/', icon: 'signal' },
+    { key: 'profile', label: 'Profile', href: '/app/profile/', icon: 'user' },
+    { key: 'biz', label: 'Business', href: '/biz/check-in/', icon: 'briefcase' },
+  ];
 
   mount.innerHTML = `
-    <nav class="ndyra-bottomnav" aria-label="Primary">
-      <a ${is('fyp')} href="/app/fyp/">For You</a>
-      <a ${is('following')} href="/app/following/">Following</a>
-      <a ${is('create')} href="/app/create/">Create</a>
-      <a ${is('alerts')} href="/app/notifications/">Alerts</a>
-      <a ${is('me')} href="/app/profile/">Me</a>
+    <nav class="ndyra-bottomnav" role="navigation" aria-label="NDYRA">
+      ${items.map((it)=>`
+        <a class="ndyra-bottomnav__item" href="${it.href}" data-nav="${it.key}">
+          <span class="ico">${iconSvg(it.icon)}</span>
+          <span class="label">${it.label}</span>
+        </a>
+      `).join('')}
     </nav>
   `;
+}
+
+export function markActiveNav(){
+  // Prefer explicit hint from body data-active-nav.
+  let active = document.body?.getAttribute?.('data-active-nav') || '';
+
+  // Fallback: infer from the current pathname.
+  if(!active){
+    const p = (location?.pathname || '').toLowerCase();
+    if(p.startsWith('/app/fyp')) active = 'fyp';
+    else if(p.startsWith('/app/following')) active = 'following';
+    else if(p.startsWith('/app/signals')) active = 'signals';
+    else if(p.startsWith('/app/profile')) active = 'profile';
+    else if(p.startsWith('/biz')) active = 'biz';
+  }
+
+  if(!active) return;
+
+  document.querySelectorAll('.ndyra-bottomnav [data-nav]').forEach((a)=>{
+    const key = a.getAttribute('data-nav');
+    if(key === active) a.classList.add('is-active');
+  });
 }

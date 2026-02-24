@@ -1,0 +1,113 @@
+NDYRA — QA REPORT — CP45 — 2026-02-24_45
+
+GATES RUN (local):
+
+1) qa:smoke
+NDYRA QA SMOKE — CP45
+Root: /mnt/data/ndyra_cp45_work
+Site: /mnt/data/ndyra_cp45_work/site
+
+[0] Law files presence
+  OK: IP_GUARDRAILS.md
+  OK: docs/ndyra/NDYRA_SoupToNuts_Blueprint_v7.3.1_LOCKED_CORRECTED.pdf
+  OK: docs/ndyra/GATES_RUNBOOK.md
+
+[1] Page presence
+  OK: site/index.html
+  OK: site/login.html
+  OK: site/pricing.html
+  OK: site/join.html
+  OK: site/gym/join/index.html
+  OK: site/app/book/class/index.html
+  OK: site/biz/check-in/index.html
+  OK: site/biz/migrate/index.html
+  OK: site/biz/migrate/members/index.html
+  OK: site/biz/migrate/schedule/index.html
+  OK: site/biz/migrate/verify/index.html
+  OK: site/biz/migrate/commit/index.html
+  OK: site/biz/migrate/cutover/index.html
+  OK: site/for-gyms/index.html
+  OK: site/for-gyms/pricing.html
+  OK: site/for-gyms/start.html
+  OK: site/workouts/index.html
+  OK: site/workouts/category.html
+  OK: site/workouts/workout.html
+  OK: site/app/index.html
+  OK: site/app/workouts/index.html
+  OK: site/app/workouts/category.html
+  OK: site/app/workouts/workout.html
+  OK: site/app/timer/index.html
+  OK: site/app/timer/builder/index.html
+  OK: site/app/timer/my-workouts/index.html
+  OK: site/biz/index.html
+  OK: site/biz/moves/index.html
+  OK: site/biz/moves/move.html
+  OK: site/biz/gym-timer/index.html
+  OK: site/biz/gym-timer/builder/index.html
+  OK: site/admin/index.html
+  OK: site/admin/status/index.html
+
+[1b] Route rewrites + QA guardrails
+  OK: _redirects dynamic rewrites (app + quick join)
+  OK: static_server route map (app + quick join)
+
+[2] Data manifest presence
+  OK: site/assets/data/categories_v1.json
+  OK: site/assets/data/categories_draft.json
+  OK: site/assets/data/videos_classes.json
+  OK: site/assets/data/videos_moves.json
+  OK: site/assets/data/videos_all.json
+  OK: site/assets/data/videos_marketing.json
+  OK: site/assets/data/videos_category_samples.json
+  OK: site/assets/data/timer_demos.json
+  OK: site/assets/data/stripe_public_test.json
+
+[3] JSON parsing
+  OK: categories=15, classes=619, moves=71
+
+[3b] Timer demos sanity
+  OK: demos=3
+
+[4] Category slugs + posters
+  OK: 15 categories, 48 total teaser IDs
+
+[5] Classes reference known category slugs
+  OK
+
+[6] Teaser IDs exist in class list
+  OK
+
+[7] Basic internal asset refs
+  OK
+
+[7b] JS syntax check (node --check)
+  OK
+
+[8] CP string consistency
+  OK
+
+PASS ✅
+
+2) qa:super (static sanity + build-id + SW cache bust + key app boots)
+NDYRA QA SUPER
+Root: /mnt/data/ndyra_cp45_work
+  OK: build.json parsed: CP45 (2026-02-24_45)
+  OK: sw.js references current build_id
+  OK: site/app/fyp/index.html boot.mjs present
+  OK: site/app/following/index.html boot.mjs present
+  OK: site/app/signals/index.html boot.mjs present
+  OK: bookClass.mjs demo fork sets token-path visibility
+
+SUPER QA PASS ✅
+
+3) qa:ip (automated IP guardrails scan)
+IP GATE PASS ✅
+
+GATES TO RUN (staging/CI):
+- Supabase gates (Audit + RLS tests): see docs/ndyra/GATES_RUNBOOK.md
+- Playwright E2E: npm run qa:e2e
+- Lighthouse CI: npm run qa:lighthouse
+- Vimeo allow-list: npm run qa:vimeo:allowlist
+
+NOTES:
+- IP gate blocks shipped audio assets under site/. If audio must ship, document licensing in legal/licenses/ and confirm compliance with IP_GUARDRAILS.md.

@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
 </head>
 <body data-page="admin-status">
   <div class="header">
@@ -98,9 +98,39 @@
     </div>
   </div>
 
+    <div class="section-title" style="margin-top:18px">
+      <h2>QA Tools (when things look stale)</h2>
+    </div>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-top:14px">
+      <div class="card" style="min-height:auto">
+        <div class="meta">
+          <div class="title">Hard refresh helper</div>
+          <p class="small">If you're seeing an old build (or the wrong brand), this clears Service Worker + Cache Storage and reloads.</p>
+          <div class="btn-row" style="margin-top:10px">
+            <button class="btn primary" data-qa-clear-sw>Clear SW + cache + reload</button>
+            <button class="btn" data-qa-reset-demo>Reset demo login</button>
+          </div>
+          <pre class="mono" data-qa-output style="white-space:pre-wrap; margin-top:10px; background:rgba(255,255,255,.04); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.10)">Ready.</pre>
+        </div>
+      </div>
+
+      <div class="card" style="min-height:auto">
+        <div class="meta">
+          <div class="title">Quick links</div>
+          <p class="small">Jump straight into the NDYRA Social Shell for QA.</p>
+          <div class="btn-row" style="margin-top:10px">
+            <a class="btn primary" href="/app/">Open /app (For You)</a>
+            <a class="btn" href="/app/following/">Following</a>
+            <a class="btn" href="/gym/demo/join">Quick Join demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <div class="footer">
   <div class="container">
-    <div>NDYRA — build preview (CP42). Status console added.</div>
+    <div>NDYRA — build preview (<span data-build-label>CP??</span>). Status console added.</div>
   </div>
 </div>
 
@@ -109,6 +139,58 @@
       window.addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>null));
     }
   </script>
-  <script src="/assets/js/site.js" defer></script>
+  <script src="/assets/js/site.js?v=2026-02-24_50" defer></script>
+
+  <script>
+    async function qaClearSwAndCaches(){
+      const out = document.querySelector('[data-qa-output]');
+      if (out) out.textContent = 'Clearing Service Worker + caches...';
+
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+        }
+
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+
+        // Clear NDYRA + legacy demo keys (keeps you from getting stuck)
+        const prefixes = ['ndyra_', 'hiit56_'];
+        for (const k of Object.keys(localStorage)) {
+          if (prefixes.some(p => k.startsWith(p))) localStorage.removeItem(k);
+        }
+
+        if (out) out.textContent = 'Cleared. Reloading...';
+        location.reload();
+      } catch (e) {
+        if (out) out.textContent = 'ERROR: ' + (e && e.message ? e.message : String(e));
+      }
+    }
+
+    function qaResetDemo(){
+      const out = document.querySelector('[data-qa-output]');
+      try {
+        [
+          'ndyra_demo_role','ndyra_demo_tenant','ndyra_demo_tenant_name','ndyra_demo_email','ndyra_demo_guest',
+          'hiit56_role','hiit56_tenant','hiit56_tenant_name','hiit56_email'
+        ].forEach(k => localStorage.removeItem(k));
+
+        if (out) out.textContent = 'Demo state cleared. Go to /login.html to pick a role again.';
+      } catch (e) {
+        if (out) out.textContent = 'ERROR: ' + (e && e.message ? e.message : String(e));
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const b1 = document.querySelector('[data-qa-clear-sw]');
+      const b2 = document.querySelector('[data-qa-reset-demo]');
+      if (b1) b1.addEventListener('click', qaClearSwAndCaches);
+      if (b2) b2.addEventListener('click', qaResetDemo);
+    });
+  </script>
+
 </body>
 </html>

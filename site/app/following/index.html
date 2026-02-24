@@ -7,7 +7,7 @@
   <link rel="icon" href="/assets/branding/favicon.ico" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css?v=cp43" />
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-24_50" />
 </head>
 <body data-page="ndyra-following" class="ndyra-social-page">
 
@@ -18,10 +18,9 @@
         <span>NDYRA</span>
       </a>
 
-      <div class="ndyra-header__center">
-        <span class="ndyra-pill is-active">Following</span>
+      <div class="ndyra-header__center" role="navigation" aria-label="Feed">
         <a class="ndyra-pill" href="/app/fyp/">For You</a>
-        <a class="ndyra-pill" href="/app/following/">Following</a>
+        <span class="ndyra-pill is-active" aria-current="page">Following</span>
       </div>
 
       <div class="ndyra-header__right">
@@ -35,12 +34,12 @@
   <main class="ndyra-main">
   <div class="ndyra-social-layout">
     <aside class="ndyra-leftnav" aria-label="NDYRA navigation">
-      <a class="ndyra-leftnav__item" href="/app/fyp/" data-nav="fyp"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">For You</span></a>
-          <a class="ndyra-leftnav__item is-active" href="/app/following/" data-nav="following"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Following</span></a>
-          <a class="ndyra-leftnav__item" href="/app/signals/" data-nav="signals"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Signals</span></a>
+      <a class="ndyra-leftnav__item" href="/app/fyp/" data-nav="fyp"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5v10a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 20.5v-10z"/><path d="M9.5 22V14.5h5V22"/></svg></span><span class="ndyra-leftnav__label">For You</span></a>
+          <a class="ndyra-leftnav__item is-active" href="/app/following/" data-nav="following"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M2 21v-1.2a6 6 0 0 1 12 0V21"/><circle cx="17" cy="9" r="2.5"/><path d="M14 21v-1a4.8 4.8 0 0 1 8.5-3"/></svg></span><span class="ndyra-leftnav__label">Following</span></a>
+          <a class="ndyra-leftnav__item" href="/app/signals/" data-nav="signals"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M13 7l-4 6h4l-2 6 4-6h-4z"/></svg></span><span class="ndyra-leftnav__label">Signals</span></a>
           <a class="ndyra-leftnav__item" href="/app/create/" data-nav="create"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Create</span></a>
           <a class="ndyra-leftnav__item" href="/app/notifications/" data-nav="alerts"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Alerts</span></a>
-          <a class="ndyra-leftnav__item" href="/app/profile/" data-nav="me"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Me</span></a>
+          <a class="ndyra-leftnav__item" href="/app/profile/" data-nav="me"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="ndyra-leftnav__label">Me</span></a>
           <div class="ndyra-leftnav__sep"></div>
           <a class="ndyra-leftnav__item" href="/gym/demo-gym/join?src=demo" data-nav="join"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Quick Join</span></a>
           <a class="ndyra-leftnav__item" href="/biz/check-in?src=demo" data-nav="biz"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Business</span></a>
@@ -104,6 +103,6 @@
     <a href="/app/profile/">Me</a>
   </nav>
 
-  <script type="module" src="/assets/js/ndyra/boot.mjs?v=cp43"></script>
+  <script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-02-24_50"></script>
 </body>
 </html>

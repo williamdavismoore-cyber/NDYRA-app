@@ -4,6 +4,11 @@ This file is a human-readable checklist of the indexes NDYRA expects to exist fo
 
 Primary implementation lives in:
 
+Blueprint amendment (binding constraints):
+
+- `docs/ndyra/NDYRA_Amendment_Signals_Aftermath_Aelric_v3_NoAIVoice.pdf`
+
+
 - `supabase/migrations/2026-02-22_000000_NDYRA_CP38_Booking_Scale_v7.3.1.sql`
 
 ---

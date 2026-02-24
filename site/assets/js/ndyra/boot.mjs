@@ -8,7 +8,7 @@ async function loadBuild(){
   }
 }
 
-function applyBuildLabel(label){
+function applyBuildLabel(label, buildId){
   if(!label) return;
   try{
     document.querySelectorAll('.footer').forEach(f=>{
@@ -24,7 +24,10 @@ async function boot(){
   document.body.classList.add('ndyra');
 
   const build = await loadBuild();
-  if(build?.label) applyBuildLabel(build.label);
+  if(build?.label){
+    window.__NDYRA_BUILD_INFO__ = build;
+    applyBuildLabel(build.label, build.build_id);
+  }
 
   const page = document.body?.dataset?.page || '';
   const map = {

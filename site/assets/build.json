@@ -1,14 +1,11 @@
 {
-  "cp": 43,
-  "label": "CP43",
-  "build_id": "2026-02-22_43",
-  "kit_version": "v3.9",
-  "base": "CP42 v3.8",
-  "build_date_iso": "2026-02-22T22:35:01.031702Z",
+  "cp": 50,
+  "label": "CP50",
+  "build_id": "2026-02-24_50",
+  "kit_version": "v4.6",
+  "base": "CP49 v4.5",
+  "build_date_iso": "2026-02-24T16:19:41.600839+00:00",
   "notes": [
-    "CP43: Fix NDYRA app feeds not booting (add boot.mjs to /app/fyp and /app/following).",
-    "CP43: Enforce booking fork logic in demo mode (hide token path for eligible members; disable booking when SoR!=ndyra; banner text).",
-    "CP43: Demo mode can be forced via ?src=demo for consistent QA/E2E.",
-    "CP43: Restore Buildbook + AntiDrift visibility in deliverables."
+    "CP50: Social Shell polish + FYP/Following UX tighten + QA runbook clarity + placeholder art + no-drift hygiene."
   ]
 }

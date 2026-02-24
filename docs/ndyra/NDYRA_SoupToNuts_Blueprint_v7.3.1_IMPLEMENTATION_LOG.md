@@ -247,3 +247,65 @@ Changes:
 - **Cache busting bumped:** service worker cache version advanced to prevent any remaining HIIT56 asset bleed-through.
 - **Anti-drift QA guardrails:** `tools/qa_smoke.py` now asserts both the `_redirects` rule and the static server route map so this can’t regress silently.
 
+---
+
+## CP45 (2026-02-24) — IP Guardrails Gate
+
+- Added `IP_GUARDRAILS.md` (repo root) as engineering law before merge.
+- Added automated IP scan gate: `npm run qa:ip` (blocks competitor-brand strings in shipped `site/` + blocks shipped audio assets).
+- Updated gates runbook to include IP gate, and updated smoke QA to verify law-file presence.
+- Removed shipped demo audio asset; demo Signals are now video/text only (aligned with “no AI voice” amendment).
+- Updated Service Worker cache version + cache-bust query to current build_id.
+
+
+## CP46 (2026-02-24_46) — v4.2
+- Rebrand hardening: NDYRA posters/theme assets cache-busted against build_id.
+- Service Worker present and updated for NDYRA caching strategy (network-first for HTML; strict no-store).
+- IP_GUARDRAILS.md added to repo root and treated as merge-law (manual checklist + gate hooks).
+- Social Shell + Signals continued polish (NDYRA-native styling; no competitor UI cloning).
+
+## CP47 (2026-02-24_47) — v4.3
+- Hardening: Service Worker CACHE_NAME versioned with build_id to prevent stale cache bleed across checkpoints.
+- Cache-bust: all poster/theme asset URLs bumped to build_id=2026-02-24_47.
+- Serverless: removed any hardcoded legacy HIIT56 domain fallbacks in Stripe portal/session helpers (uses URL/DEPLOY_PRIME_URL; local fallback only).
+- QA: qa_super now enforces SW cache name versioning + bans legacy domain strings inside functions.
+- Build label fallbacks (site.js) synced to CP47.
+
+
+---
+
+## CP48 (2026-02-24)
+
+Blueprint / Amendments referenced:
+- **Signals + Aftermath Amendment (No AI Voice)** — “Aftermath = NDYRA-native recap; privacy and ownership first”
+- **6. Social Core** — must reuse `can_view_post()` for all visibility and avoid permissive RLS.
+
+Changes (UI only; no DB drift in this checkpoint):
+- Added **Aftermath post kind rendering** to PostCard:
+  - Detects `post.kind === 'aftermath'`
+  - Renders NDYRA-native Aftermath overlay (template tag + metric grid + note)
+  - **No comparisons / leaderboards / multi-user metrics**
+  - Visibility unchanged: still governed by existing `can_view_post()` paths on the backend (no new RLS).
+- Seeded demo feed with **2 Aftermath demo posts** so QA can validate layout deterministically.
+
+Anti-drift notes:
+- No new routes.
+- No new DB tables.
+- No new Netlify functions.
+- No new third-party media / music / fonts.
+- IP Guardrails: Aftermath UI is generic “recap card” (NDYRA-native), no competitor UI cloning.
+
+
+
+---
+
+## CP49 (2026-02-24_49) — v4.5
+
+Changes:
+- **QA stability hardening (anti-stale UI):**
+  - All HTML asset cache-bust params bumped to `build_id=2026-02-24_49`.
+  - `site/assets/build.json` and `site.js` build fallbacks synced to CP49.
+  - Admin Status page now includes **QA Tools** buttons to clear Service Worker + Cache Storage and reset demo login state.
+- **Playwright reliability:** renamed config to `playwright.config.js` so projects are always detected (fixes `--project` not found on some setups).
+- **Rebrand cleanup:** removed shipped `Hiit56 |` prefixes from demo video titles, and migrated telemetry/session naming to **NDYRA** (legacy session id preserved via one-way migration).
+- **Timer systems intentionally unchanged** in this checkpoint (being built separately).

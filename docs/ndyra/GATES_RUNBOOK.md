@@ -27,6 +27,12 @@ Then open:
 
 - http://localhost:4173/
 
+If anything looks stale (e.g. you still see an old brand/theme), open:
+
+- http://localhost:4173/admin/status
+
+…and use **QA Tools → Clear SW + cache + reload**.
+
 ---
 
 ## 1) E2E Gate (Playwright)
@@ -62,6 +68,26 @@ npx playwright show-report
 ```bash
 npm run qa:lighthouse
 ```
+
+
+---
+
+## 2.5) IP Gate (IP_GUARDRAILS.md) — **LAW**
+
+If a PR touches **Signals / Aftermath / media editing / GIFs / stickers / music / camera capture / smoothing filters / booking + token UX**, you must run the IP gate checklist.
+
+1) Open and read:
+
+- `IP_GUARDRAILS.md` (repo root)
+
+2) Run the automated IP scan (fast):
+
+```bash
+npm run qa:ip
+```
+
+If it fails, treat it as a **hard fail**.
+
 
 ---
 

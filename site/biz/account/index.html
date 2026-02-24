@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
 </head>
 <body data-page="biz-account">
 
@@ -103,7 +103,7 @@
 
   <div class="footer">
     <div class="container">
-      <div>NDYRA — build preview (CP42). Business Account scaffold added.</div>
+      <div>NDYRA — build preview (<span data-build-label>CP??</span>). Business Account scaffold added.</div>
     </div>
   </div>
 
@@ -114,10 +114,10 @@
     }
   </script>
 
-  <script src="/assets/js/site.js" defer></script>
+  <script src="/assets/js/site.js?v=2026-02-24_50" defer></script>
   <script>
-    const slug = localStorage.getItem('hiit56_tenant_slug') || '';
-    const plan = localStorage.getItem('hiit56_biz_plan_demo_' + slug) || 'monthly';
+    const slug = localStorage.getItem('ndyra_tenant_slug') || localStorage.getItem('hiit56_tenant_slug') || '';
+    const plan = localStorage.getItem('ndyra_biz_plan_demo_' + slug) || localStorage.getItem('hiit56_biz_plan_demo_' + slug) || 'monthly';
     const el = document.getElementById('bizPlan');
     if(el) el.textContent = (plan === 'annual' ? 'Annual' : 'Monthly') + ' (demo)';
   </script>

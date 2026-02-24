@@ -51,6 +51,16 @@ def main() -> int:
     print(f"Root: {ROOT}")
     print(f"Site: {SITE}")
 
+    print("\n[0] Law files presence")
+    law_paths = [
+        ROOT / "IP_GUARDRAILS.md",
+        ROOT / "docs" / "ndyra" / "NDYRA_SoupToNuts_Blueprint_v7.3.1_LOCKED_CORRECTED.pdf",
+        ROOT / "docs" / "ndyra" / "GATES_RUNBOOK.md",
+    ]
+    for p in law_paths:
+        assert_(p.exists(), f"Missing required law file: {p.relative_to(ROOT)}")
+        print(f"  OK: {p.relative_to(ROOT)}")
+
     required_pages = [
         SITE / "index.html",
         SITE / "login.html",

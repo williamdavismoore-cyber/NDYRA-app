@@ -25,7 +25,7 @@ function getOrigin(event){
   const headers = event?.headers || {};
   const host = headers['x-forwarded-host'] || headers.host;
   const proto = headers['x-forwarded-proto'] || 'https';
-  if(!host) return 'https://hiit56online.com';
+  if(!host) return process.env.URL || process.env.DEPLOY_PRIME_URL || 'http://localhost:4173';
   return `${proto}://${host}`;
 }
 

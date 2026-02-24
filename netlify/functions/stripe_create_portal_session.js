@@ -15,7 +15,7 @@ function getOrigin(headers){
   if(ref){
     try{ return new URL(ref).origin; }catch(e){}
   }
-  return process.env.URL || process.env.DEPLOY_PRIME_URL || 'https://hiit56online.com';
+  return process.env.URL || process.env.DEPLOY_PRIME_URL || 'http://localhost:4173';
 }
 
 async function resolveCustomerId(stripe, {customer_id, session_id}){

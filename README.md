@@ -81,7 +81,16 @@ Run these in **Supabase SQL Editor** against **STAGING** before merge:
 - `supabase/gates/NDYRA_CP27_AntiDrift_Audit_*.sql`
 - `supabase/gates/NDYRA_CP27_RLS_Tests_*.sql`
 
-See:
+## Engineering Law (Anti-Drift + IP)
 
-- `docs/ndyra/THIS_IS_LAW.md`
+Merge blockers (law before merge):
+
+- **Blueprint is the only source of truth.** No new patterns/frameworks/DB tables/routes unless the Blueprint is updated first.
+- **No PR merges unless all gates pass** (Audit + RLS + E2E + Lighthouse + Vimeo allow‑list + IP gate).
+- **IP Guardrails are law** for anything touching Signals, Aftermath, media editing, GIFs/stickers, music, camera capture, smoothing filters, or booking/token UX patterns.
+
+See:
+- `docs/ndyra/NDYRA_SoupToNuts_Blueprint_v7.3.1_LOCKED_CORRECTED.pdf`
 - `docs/ndyra/GATES_RUNBOOK.md`
+- `IP_GUARDRAILS.md`
+- `docs/ndyra/NDYRA_SoupToNuts_Blueprint_v7_IMPLEMENTATION_LOG.md`

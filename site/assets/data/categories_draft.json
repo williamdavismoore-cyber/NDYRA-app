@@ -1,6 +1,6 @@
 {
   "version": "draft_v1.1",
-  "notes": "CP10: implemented Adjustments_2-8-23 \u2014 added HIIT56 Specials/Mash-Ups category (auto-detected mash-up/special-guest titles), moved HIIT 21 into Specialty HIIT, separated Ab Lab from Recovery, updated group names. Hero + teasers selected from latest 10 per category; prefer titles without dates.\nCP12 mirror: HIIT56 Specials/Mash-Ups folded into HIIT.",
+  "notes": "CP10: implemented Adjustments_2-8-23 — added NDYRA Specials/Mash-Ups category (auto-detected mash-up/special-guest titles), moved HIIT 21 into Specialty HIIT, separated Ab Lab from Recovery, updated group names. Hero + teasers selected from latest 10 per category; prefer titles without dates.\nCP12 mirror: NDYRA Specials/Mash-Ups folded into HIIT.",
   "categories": [
     {
       "slug": "hiit",
@@ -39,7 +39,7 @@
         450686979,
         436701536
       ],
-      "specials_title": "HIIT56 Specials/Mash-Ups"
+      "specials_title": "Specials / Mash-Ups"
     },
     {
       "slug": "hiit-beginner",

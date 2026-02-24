@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
 </head>
 <body data-page="auth-login">
   <div class="header">
@@ -52,7 +52,7 @@
         <select class="input" data-qa-tenant></select>
 
         <div class="small" style="margin-top:10px">
-          This sets a local QA role (<code>hiit56_role</code>) and redirects back to <code>?next=</code>.
+          This sets a local QA role (<code>ndyra_role</code>) and redirects back to <code>?next=</code>.
         </div>
       </div>
     </div>
@@ -76,8 +76,10 @@
     // QA Quick Access (no password).
     // Sets local role + tenant context and returns to ?next=.
     (function(){
-      const ROLE_KEY = 'hiit56_role';
-      const TENANT_KEY = 'hiit56_tenant_slug';
+      const ROLE_KEY = 'ndyra_role';
+      const LEGACY_ROLE_KEY = 'hiit56_role';
+      const TENANT_KEY = 'ndyra_tenant_slug';
+      const LEGACY_TENANT_KEY = 'hiit56_tenant_slug';
       const params = new URLSearchParams(location.search);
       const next = params.get('next') || '/';
 
@@ -113,8 +115,10 @@
       function setRole(role){
         try{
           localStorage.setItem(ROLE_KEY, role);
+        try { localStorage.removeItem(LEGACY_ROLE_KEY); } catch(e) {}
           const tenant = tenantSel && tenantSel.value ? tenantSel.value : 'demo-gym-alpha';
           localStorage.setItem(TENANT_KEY, tenant);
+        try { localStorage.removeItem(LEGACY_TENANT_KEY); } catch(e) {}
         }catch(e){}
         safeRedirect();
       }

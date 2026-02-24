@@ -9,7 +9,7 @@
   
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
   <style>
   .hero-video .mobile{display:none}
   @media (max-width:700px){ .hero-video .desktop{display:none} .hero-video .mobile{display:block} }
@@ -56,10 +56,10 @@
       </div>
       <div class="hero-video" aria-label="Homepage hero">
         <picture class="desktop">
-          <img src="/assets/branding/Desktop Poster.webp?v=2026-02-22_42" alt="NDYRA preview" loading="lazy">
+          <img src="/assets/branding/Desktop Poster.webp?v=2026-02-24_50" alt="NDYRA preview" loading="lazy">
         </picture>
         <picture class="mobile">
-          <img src="/assets/branding/Mobile Poster.webp?v=2026-02-22_42" alt="NDYRA preview" loading="lazy">
+          <img src="/assets/branding/Mobile Poster.webp?v=2026-02-24_50" alt="NDYRA preview" loading="lazy">
         </picture>
       </div>
     </div>
@@ -107,7 +107,7 @@
     </a>
 
     <a class="card" href="/workouts/">
-      <div class="thumb"><img src="/assets/branding/Desktop Poster.webp?v=2026-02-22_42" alt="Workout previews" loading="lazy"></div>
+      <div class="thumb"><img src="/assets/branding/Desktop Poster.webp?v=2026-02-24_50" alt="Workout previews" loading="lazy"></div>
       <div class="meta">
         <div class="title">Workout previews</div>
         <p class="small">Legacy teaser browsing (still useful for conversion QA).</p>
@@ -128,7 +128,7 @@
 </div>
   <div class="footer">
   <div class="container">
-    <div>NDYRA — build preview (CP42). Signals are now in QA (muted by default).</div>
+    <div>NDYRA — build preview (<span data-build-label>CP??</span>). Signals are now in QA (muted by default).</div>
   </div>
 </div>
   
@@ -137,6 +137,6 @@
       window.addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="/assets/js/site.js" defer></script>
+  <script src="/assets/js/site.js?v=2026-02-24_50" defer></script>
 </body>
 </html>
