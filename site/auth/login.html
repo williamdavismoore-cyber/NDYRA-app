@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53">
 </head>
 <body data-page="auth-login">
   <div class="header">
@@ -19,7 +19,7 @@
         <a href="/pricing.html">Pricing</a>
         <a href="/for-gyms/">For Gyms</a>
         <a href="/join.html">Join</a>
-        <a href="/auth/login.html" class="primary">Log in</a>
+        <a href="/auth/signup.html" class="primary">Sign up</a>
       </div>
     </div>
   </div>
@@ -27,114 +27,32 @@
   <div class="container">
     <div class="section-title">
       <h2>Log in</h2>
-      <div class="small">Supabase login + QA Quick Access</div>
-    </div>
-
-    <!-- =====================================================
-         QA QUICK ACCESS (NO PASSWORD)
-         UI-only unlock for local/dev/preview.
-         Server-side enforcement still happens via RLS.
-         ===================================================== -->
-    <div class="card" style="min-height:auto">
-      <div class="meta">
-        <div class="title">QA Quick Access</div>
-        <div class="small">Use this if you’re blocked by email/password but still need to QA routes + UI.</div>
-
-        <div class="btn-row" style="margin-top:12px; flex-wrap:wrap">
-          <button class="btn" data-qa-role="guest">Guest</button>
-          <button class="btn" data-qa-role="member">Member</button>
-          <button class="btn" data-qa-role="biz_staff">Business Staff</button>
-          <button class="btn" data-qa-role="biz_admin">Business Admin</button>
-          <button class="btn primary" data-qa-role="super_admin">Master</button>
-        </div>
-
-        <div class="title" style="margin-top:14px">Tenant context (Business)</div>
-        <select class="input" data-qa-tenant></select>
-
-        <div class="small" style="margin-top:10px">
-          This sets a local QA role (<code>ndyra_role</code>) and redirects back to <code>?next=</code>.
-        </div>
-      </div>
+      <div class="small">Supabase authentication</div>
     </div>
 
     <div class="card" style="min-height:auto">
       <div class="meta">
-        <div class="title">Supabase Email</div>
+        <div class="title">Email</div>
         <input class="input" type="email" placeholder="you@example.com" data-auth-email>
-        <div class="title" style="margin-top:12px">Supabase Password</div>
+        <div class="title" style="margin-top:12px">Password</div>
         <input class="input" type="password" placeholder="••••••••" data-auth-pass>
+
         <div class="btn-row" style="margin-top:14px">
           <button class="btn primary" data-auth-login>Log in</button>
           <a class="btn" href="/auth/signup.html">Create account</a>
         </div>
+
         <div class="small" style="margin-top:10px" data-auth-msg></div>
       </div>
     </div>
   </div>
-
-  <script>
-    // QA Quick Access (no password).
-    // Sets local role + tenant context and returns to ?next=.
-    (function(){
-      const ROLE_KEY = 'ndyra_role';
-      const LEGACY_ROLE_KEY = 'hiit56_role';
-      const TENANT_KEY = 'ndyra_tenant_slug';
-      const LEGACY_TENANT_KEY = 'hiit56_tenant_slug';
-      const params = new URLSearchParams(location.search);
-      const next = params.get('next') || '/';
-
-      const tenantSel = document.querySelector('[data-qa-tenant]');
-      if(tenantSel){
-        fetch('/assets/data/tenants_demo.json', { cache: 'no-store' })
-          .then(r => r.ok ? r.json() : [])
-          .then(list => {
-            const safe = Array.isArray(list) ? list : [];
-            if(!safe.length){
-              tenantSel.innerHTML = '<option value="demo-gym-alpha">Demo Gym Alpha</option>';
-              return;
-            }
-            tenantSel.innerHTML = safe.map(t => `<option value="${t.slug}">${t.name}</option>`).join('');
-            const preferred = safe.find(t => t.slug === 'demo-gym-alpha') || safe[0];
-            tenantSel.value = preferred.slug;
-          })
-          .catch(() => {
-            tenantSel.innerHTML = '<option value="demo-gym-alpha">Demo Gym Alpha</option>';
-          });
-      }
-
-      function safeRedirect(){
-        try{
-          if(next && next.startsWith('/')){
-            location.href = next;
-            return;
-          }
-        }catch(e){}
-        location.href = '/';
-      }
-
-      function setRole(role){
-        try{
-          localStorage.setItem(ROLE_KEY, role);
-        try { localStorage.removeItem(LEGACY_ROLE_KEY); } catch(e) {}
-          const tenant = tenantSel && tenantSel.value ? tenantSel.value : 'demo-gym-alpha';
-          localStorage.setItem(TENANT_KEY, tenant);
-        try { localStorage.removeItem(LEGACY_TENANT_KEY); } catch(e) {}
-        }catch(e){}
-        safeRedirect();
-      }
-
-      document.querySelectorAll('[data-qa-role]').forEach(btn => {
-        btn.addEventListener('click', () => setRole(btn.getAttribute('data-qa-role')));
-      });
-    })();
-  </script>
 
   <script src="/assets/vendor/supabase/supabase.js"></script>
   <script>
     async function loadSupabaseCfg(){
       // 1) Deployed env (Netlify): dynamic config from env vars
       try{
-        const r = await fetch('/api/public-config', { cache: 'no-store' });
+        const r = await fetch('/api/public_config', { cache: 'no-store' });
         if(r.ok){
           const j = await r.json();
           if(j?.supabase_url && j?.supabase_anon_key) return j;
@@ -147,22 +65,13 @@
       return await r2.json();
     }
 
-    async function ensureProfile(supabase, user){
-      if(!user?.id) return;
-      await supabase.from('profiles').upsert({
-        user_id: user.id,
-        email: user.email ?? null,
-        full_name: user.user_metadata?.full_name ?? null
-      }, { onConflict: 'user_id' });
-    }
-
     (async function(){
       const emailEl = document.querySelector('[data-auth-email]');
       const passEl = document.querySelector('[data-auth-pass]');
       const btn = document.querySelector('[data-auth-login]');
       const msg = document.querySelector('[data-auth-msg]');
 
-      const next = new URLSearchParams(location.search).get('next') || '/';
+      const next = new URLSearchParams(location.search).get('next') || '/app/fyp/';
 
       let supabase;
       try{
@@ -186,8 +95,8 @@
         try{
           const { data, error } = await supabase.auth.signInWithPassword({ email, password });
           if(error) throw error;
-          await ensureProfile(supabase, data.user);
-          location.href = next;
+          msg.textContent = 'Success.';
+          setTimeout(()=> location.href = next, 400);
         }catch(err){
           msg.textContent = err?.message || 'Login failed.';
         }finally{
@@ -195,6 +104,7 @@
           btn.textContent = 'Log in';
         }
       });
+
     })();
   </script>
 </body>

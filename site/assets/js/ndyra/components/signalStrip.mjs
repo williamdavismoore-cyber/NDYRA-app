@@ -276,15 +276,6 @@ function buildSignalCard(signal) {
   return root;
 }
 
-export async function loadDemoSignals() {
-  try {
-    const res = await fetch('/assets/data/ndyra_demo_signals.json', { cache: 'no-store' });
-    const json = await res.json();
-    return json.signals || [];
-  } catch (err) {
-    return [];
-  }
-}
 
 export function renderSignalStrip(mount, signals, opts = {}) {
   if (!mount) return;
@@ -292,7 +283,7 @@ export function renderSignalStrip(mount, signals, opts = {}) {
   const maxPerUser = opts.maxPerUser || 2;
   const maxPerTenant = opts.maxPerTenant || 10;
 
-  // demo-only: just cap list length (real enforcement happens in DB / services)
+  // Safety cap for UI rendering. Real enforcement happens in DB / services.
   const capped = (signals || []).slice(0, Math.max(1, maxPerTenant));
 
   mount.innerHTML = '';

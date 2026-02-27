@@ -34,6 +34,7 @@ const routeMap = [
   // Public
   { pattern: '/gym/:slug/join', to: '/gym/join/index.html' },
   { pattern: '/gym/join', to: '/gym/join/index.html' },
+  { pattern: '/gym/:slug', to: '/gym/profile/index.html' },
 
   // App
   { pattern: '/app/book/class/:class_session_id', to: '/app/book/class/index.html' },

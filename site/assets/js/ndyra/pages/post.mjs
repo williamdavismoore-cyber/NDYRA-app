@@ -1,5 +1,5 @@
-import { qbool, qs, toast, markActiveNav } from '../lib/utils.mjs';
-import { getSupabase, getUser } from '../lib/supabase.mjs';
+import { qs, toast, markActiveNav } from '../lib/utils.mjs';
+import { getSupabase, getUser, redirectToLogin, ensureProfile } from '../lib/supabase.mjs';
 import { renderPostCard } from '../components/postCard.mjs';
 
 function pathPostId() {
@@ -11,48 +11,81 @@ function pathPostId() {
   const i = parts.findIndex((p) => p === 'post');
   if (i >= 0 && parts[i + 1] && parts[i + 1] !== 'index.html') return parts[i + 1];
 
-  // last-ditch: last segment
   const last = parts[parts.length - 1];
   if (last && last !== 'post' && last !== 'index.html') return last;
   return null;
 }
 
-async function getDemoPosts() {
-  const res = await fetch('/assets/data/ndyra_demo_posts.json', { cache: 'no-store' });
-  if (!res.ok) throw new Error('Demo data missing');
-  return res.json();
-}
-
-function demoComments(postId) {
-  // Minimal demo thread (no persistence)
-  const now = new Date();
-  const t0 = new Date(now.getTime() - 1000 * 60 * 18).toISOString();
-  const t1 = new Date(now.getTime() - 1000 * 60 * 11).toISOString();
-  const t2 = new Date(now.getTime() - 1000 * 60 * 5).toISOString();
-  return [
-    { id: `demo-c1-${postId}`, post_id: postId, user_id: 'demo-user-a', parent_id: null, body: 'NDYRA feels like a new era.', created_at: t0 },
-    { id: `demo-c2-${postId}`, post_id: postId, user_id: 'demo-user-b', parent_id: null, body: 'The gates system is 🔥', created_at: t1 },
-    { id: `demo-c3-${postId}`, post_id: postId, user_id: 'demo-user-c', parent_id: `demo-c2-${postId}`, body: 'No drift = no chaos. Love it.', created_at: t2 },
-  ];
-}
-
 function fmtTime(ts) {
   try {
     const d = new Date(ts);
-    // short-ish
     return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
   } catch {
     return '';
   }
 }
 
-function displayNameForUserId(userId) {
-  if (!userId) return 'Unknown';
-  if (userId.startsWith('demo-user-')) return userId.replace('demo-user-', 'Demo ');
-  return 'User ' + String(userId).slice(0, 6);
+function bumpStats(statsRow, prevKey, nextKey){
+  const s = { ...statsRow };
+  const field = (k) => ({
+    fire:'reactions_fire',
+    flex:'reactions_flex',
+    heart:'reactions_heart',
+    clap:'reactions_clap',
+    check:'reactions_check',
+  })[k];
+
+  if(prevKey){
+    const f = field(prevKey);
+    s[f] = Math.max(0, (Number(s[f]||0) - 1));
+    s.reactions_total = Math.max(0, (Number(s.reactions_total||0) - 1));
+  }
+  if(nextKey){
+    const f = field(nextKey);
+    s[f] = Number(s[f]||0) + 1;
+    s.reactions_total = Number(s.reactions_total||0) + 1;
+  }
+  return s;
 }
 
-function renderComments({ listEl, emptyEl, countEl, comments, onReply }) {
+async function resolveMediaUrls(sb, post){
+  const posts = [post];
+  const cache = new Map();
+
+  async function urlFor(path){
+    if(!path) return null;
+    if(cache.has(path)) return cache.get(path);
+
+    try{
+      const { data, error } = await sb.storage.from('post-media').createSignedUrl(path, 60*30);
+      if(!error && data?.signedUrl){
+        cache.set(path, data.signedUrl);
+        return data.signedUrl;
+      }
+    }catch(_){ }
+
+    try{
+      const { data } = sb.storage.from('post-media').getPublicUrl(path);
+      if(data?.publicUrl){
+        cache.set(path, data.publicUrl);
+        return data.publicUrl;
+      }
+    }catch(_){ }
+
+    cache.set(path, null);
+    return null;
+  }
+
+  for(const p of posts){
+    const m = (p.post_media && p.post_media[0]) ? p.post_media[0] : null;
+    if(!m) continue;
+    if(m.storage_path){
+      m.resolvedUrl = await urlFor(m.storage_path);
+    }
+  }
+}
+
+function renderComments({ listEl, emptyEl, countEl, comments, profilesMap, onReply }) {
   listEl.innerHTML = '';
   const byParent = new Map();
   const top = [];
@@ -64,28 +97,34 @@ function renderComments({ listEl, emptyEl, countEl, comments, onReply }) {
   }
   top.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
+  const nameFor = (userId) => {
+    const p = profilesMap?.get(userId);
+    return p?.full_name || p?.display_name || (p?.handle ? '@'+p.handle : null) || ('User ' + String(userId).slice(0, 6));
+  };
+
   const makeCard = (c, isReply = false) => {
     const card = document.createElement('div');
     card.className = 'comment-card' + (isReply ? ' reply' : '');
-    const who = displayNameForUserId(c.user_id);
+    const who = nameFor(c.user_id);
     const initial = who.trim().slice(0, 1).toUpperCase();
 
     card.innerHTML = `
       <div class="comment-avatar" aria-hidden="true">${initial}</div>
       <div class="comment-body">
         <div class="comment-meta">
-          <div class="comment-name">${who}</div>
-          <div class="comment-time">${fmtTime(c.created_at)}</div>
+          <div class="comment-name"></div>
+          <div class="comment-time"></div>
         </div>
         <div class="comment-text"></div>
         <div class="comment-actions"></div>
       </div>
     `;
 
+    card.querySelector('.comment-name').textContent = who;
+    card.querySelector('.comment-time').textContent = fmtTime(c.created_at);
     card.querySelector('.comment-text').textContent = c.body || '';
 
     const actions = card.querySelector('.comment-actions');
-    // Reply only for top-level comments
     if (!isReply) {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -117,21 +156,19 @@ function renderComments({ listEl, emptyEl, countEl, comments, onReply }) {
   if (emptyEl) emptyEl.hidden = count > 0;
 }
 
-async function fetchComments({ sb, postId, demoMode }) {
-  if (demoMode) return demoComments(postId);
-
+async function fetchComments({ sb, postId }) {
   const { data, error } = await sb
     .from('post_comments')
-    .select('id, post_id, user_id, parent_id, body, created_at')
+    .select('id, post_id, user_id, parent_id, body, created_at, deleted_at')
     .eq('post_id', postId)
-    .eq('is_deleted', false)
+    .is('deleted_at', null)
     .order('created_at', { ascending: true });
 
   if (error) throw error;
   return data || [];
 }
 
-function setupComposer({ sb, postId, demoMode }) {
+function setupComposer({ sb, postId, user }) {
   const composer = document.querySelector('[data-comment-composer]');
   const form = document.querySelector('[data-comment-form]');
   const input = document.querySelector('[data-comment-input]');
@@ -199,19 +236,8 @@ function setupComposer({ sb, postId, demoMode }) {
 
     if (!ensureAck()) return;
 
-    if (demoMode) {
-      toast('Demo: comment added (not saved)');
-      input.value = '';
-      autosize();
-      updateSubmit();
-      clearReply();
-      return;
-    }
-
-    const user = await getUser();
     if (!user) {
-      const next = encodeURIComponent(window.location.pathname + window.location.search);
-      window.location.href = `/auth/login.html?next=${next}`;
+      redirectToLogin();
       return;
     }
 
@@ -242,37 +268,29 @@ function setupComposer({ sb, postId, demoMode }) {
     }
   });
 
-  // login link should preserve next
-  if (loginLink && !demoMode) {
+  if (loginLink) {
     const next = encodeURIComponent(window.location.pathname + window.location.search);
     loginLink.href = `/auth/login.html?next=${next}`;
   }
 
-  return { setReply, setLoggedIn: (loggedIn) => {
-    if (demoMode) return;
+  const setLoggedIn = (loggedIn) => {
     if (form) form.hidden = !loggedIn;
     if (loginBox) loginBox.hidden = !!loggedIn;
     if (composer) composer.hidden = false;
-  } };
+  };
+
+  setLoggedIn(!!user);
+
+  return { setReply, setLoggedIn };
 }
 
 export async function init() {
-  const demoMode = qbool('demo') || qs('src') === 'demo';
   markActiveNav('post');
 
   const sb = await getSupabase();
   const status = document.querySelector('[data-post-status]');
 
-  let id = pathPostId();
-  if (!id && demoMode) {
-    try {
-      const posts = await getDemoPosts();
-      id = posts?.[0]?.id || null;
-    } catch {
-      // ignore
-    }
-  }
-
+  const id = pathPostId();
   if (!id) {
     if (status) status.textContent = 'Missing id';
     const box = document.querySelector('[data-post]');
@@ -282,42 +300,24 @@ export async function init() {
 
   if (status) status.textContent = 'Loading…';
 
-  const user = demoMode ? null : await getUser();
+  const user = await getUser();
+  if (user) await ensureProfile(user);
 
-  // detail query
-  let row;
+  // Fetch post
+  let post;
   try {
-    if (demoMode) {
-      const posts = await getDemoPosts();
-      row = posts.find((p) => p.id === id) || posts[0];
-      if (!row) throw new Error('Demo post not found');
-      // normalize shape to match live query
-      row = {
-        id: row.id,
-        content_text: row.content_text,
-        created_at: row.created_at,
-        author_user_id: row.author_user_id,
-        visibility: row.visibility,
-        post_media: row.media_url ? [{ storage_path: null, media_type: row.media_type, resolvedUrl: row.media_url }] : [],
-        post_stats: [{ like_count: row.stats?.like_count || 0, fire_count: row.stats?.fire_count || 0, sweat_count: row.stats?.sweat_count || 0, clap_count: row.stats?.clap_count || 0, comment_count: row.stats?.comment_count || 0 }],
-        viewer_reaction: row.viewer_reaction || null,
-      };
-    } else {
-      const { data, error } = await sb
-        .from('posts')
-        .select(`
-          id, content_text, created_at, author_user_id, author_tenant_id, visibility,
-          post_media:post_media ( storage_path, media_type, sort_order ),
-          post_stats:post_stats ( like_count, fire_count, sweat_count, clap_count, comment_count ),
-          viewer_reaction:post_reactions ( reaction )
-        `)
-        .eq('id', id)
-        .maybeSingle();
+    const { data, error } = await sb
+      .from('posts')
+      .select('id,created_at,visibility,content_text,kind,author_user_id,author_tenant_id,tenant_context_id,workout_ref,post_media(id,media_type,storage_path,width,height,duration_ms,created_at),post_stats(post_id,reactions_total,reactions_fire,reactions_clap,reactions_flex,reactions_heart,reactions_check,comments_count)')
+      .eq('id', id)
+      .eq('is_deleted', false)
+      .maybeSingle();
 
-      if (error) throw error;
-      if (!data) throw new Error('Post not found');
-      row = data;
-    }
+    if (error) throw error;
+    if (!data) throw new Error('Post not found');
+    post = data;
+
+    await resolveMediaUrls(sb, post);
   } catch (err) {
     console.error(err);
     if (status) status.textContent = 'Not found';
@@ -326,62 +326,102 @@ export async function init() {
     return;
   }
 
-  // normalize viewer_reaction
-  const hydrated = {
-    ...row,
-    viewer_reaction: row.viewer_reaction?.[0]?.reaction || row.viewer_reaction || null,
-    post_stats: row.post_stats?.[0] || row.post_stats || { like_count: 0, fire_count: 0, sweat_count: 0, clap_count: 0, comment_count: 0 },
-    post_media: Array.isArray(row.post_media) ? row.post_media.slice().sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)) : [],
-  };
+  // Fetch author/tenant display info
+  const profilesMap = new Map();
+  const tenantsMap = new Map();
+  try {
+    if (post.author_user_id) {
+      const { data } = await sb.from('profiles').select('user_id,handle,full_name,display_name,avatar_url').eq('user_id', post.author_user_id).maybeSingle();
+      if (data) profilesMap.set(data.user_id, data);
+    }
+    if (post.author_tenant_id) {
+      const { data } = await sb.from('tenants').select('id,name,slug,avatar_url').eq('id', post.author_tenant_id).maybeSingle();
+      if (data) tenantsMap.set(data.id, data);
+    }
+  } catch (_) {
+    /* ignore */
+  }
 
-  // media url resolve (first media only for now)
-  if (!demoMode && hydrated.post_media?.length) {
-    for (const m of hydrated.post_media) {
-      if (!m.storage_path) continue;
-      // bucket assumed
-      try {
-        // Prefer signed URL (works with private buckets and policies)
-        const { data } = await sb.storage.from('post-media').createSignedUrl(m.storage_path, 60 * 30);
-        if (data?.signedUrl) m.resolvedUrl = data.signedUrl;
-      } catch {
-        // ignore
-      }
+  // Viewer reaction
+  let viewerReaction = null;
+  if (user) {
+    try {
+      const { data } = await sb.from('post_reactions').select('reaction').eq('post_id', post.id).eq('user_id', user.id).maybeSingle();
+      viewerReaction = data?.reaction || null;
+    } catch (_) {
+      viewerReaction = null;
     }
   }
 
-  if (status) status.textContent = demoMode ? 'Demo' : 'Ready';
+  if (status) status.textContent = 'Ready';
 
   const container = document.querySelector('[data-post]');
-  const onReactHandler = async (postId, nextType) => {
-    // demo: optimistic only
-    if (demoMode) {
-      hydrated.post_stats = bumpStats(hydrated.post_stats, hydrated.viewer_reaction, nextType);
-      hydrated.viewer_reaction = nextType;
-      renderPostCard({ container, post: hydrated, user, canReact: true, onReact: onReactHandler });
+  if (!container) return;
+
+  const author = post.author_user_id ? profilesMap.get(post.author_user_id) : null;
+  const tenant = post.author_tenant_id ? tenantsMap.get(post.author_tenant_id) : null;
+
+  const state = {
+    post,
+    statsRow: (post.post_stats && post.post_stats[0]) ? post.post_stats[0] : (post.post_stats || {}),
+    viewerReaction,
+  };
+
+  async function onReact(postId, reactionKey){
+    if(!user){
+      redirectToLogin();
       return;
     }
 
-    if (!user) return;
+    const prev = state.viewerReaction || null;
+    const next = (prev === reactionKey) ? null : reactionKey;
 
-    const { error } = await sb
-      .from('post_reactions')
-      .upsert({ post_id: postId, user_id: user.id, reaction: nextType }, { onConflict: 'post_id,user_id' });
-    if (error) throw error;
+    // optimistic
+    state.statsRow = bumpStats(state.statsRow || {}, prev, next);
+    state.viewerReaction = next;
 
-    hydrated.post_stats = bumpStats(hydrated.post_stats, hydrated.viewer_reaction, nextType);
-    hydrated.viewer_reaction = nextType;
+    render();
 
-    // re-render just the post card (keeps comments below)
-    renderPostCard({ container, post: hydrated, user, canReact: true, onReact: onReactHandler });
-  };
+    try{
+      if(next === null){
+        const { error } = await sb.from('post_reactions').delete().eq('post_id', postId).eq('user_id', user.id);
+        if(error) throw error;
+      }else{
+        const { error } = await sb
+          .from('post_reactions')
+          .upsert({ post_id: postId, user_id: user.id, reaction: next }, { onConflict: 'post_id,user_id' });
+        if(error) throw error;
+      }
+    }catch(err){
+      console.warn('[NDYRA] react failed', err);
+      toast('Could not save reaction');
+    }
+  }
 
-  renderPostCard({
-    container,
-    post: hydrated,
-    user,
-    canReact: Boolean(user) || demoMode,
-    onReact: onReactHandler,
-  });
+  function render(){
+    container.innerHTML = '';
+    const p = { ...state.post, post_stats: [state.statsRow] };
+    const card = renderPostCard({
+      post: p,
+      author,
+      tenant,
+      viewerReaction: state.viewerReaction,
+      canReact: !!user,
+      onReact: onReact,
+    });
+    container.appendChild(card);
+
+    // Patch media src (if needed)
+    try{
+      const m = (p.post_media && p.post_media[0]) ? p.post_media[0] : null;
+      if(m?.resolvedUrl){
+        const mediaEl = card.querySelector('img[data-media-path],video[data-media-path]');
+        if(mediaEl) mediaEl.src = m.resolvedUrl;
+      }
+    }catch(_){ }
+  }
+
+  render();
 
   // Comments
   const listEl = document.querySelector('[data-comment-list]');
@@ -389,8 +429,7 @@ export async function init() {
   const countEl = document.querySelector('[data-comment-count]');
   const errEl = document.querySelector('[data-comment-error]');
 
-  const composerApi = setupComposer({ sb, postId: hydrated.id, demoMode });
-  composerApi?.setLoggedIn(Boolean(user) || demoMode);
+  const composerApi = setupComposer({ sb, postId: state.post.id, user });
 
   const refresh = async () => {
     if (!listEl) return;
@@ -400,14 +439,27 @@ export async function init() {
     }
 
     try {
-      const comments = await fetchComments({ sb, postId: hydrated.id, demoMode });
+      const comments = await fetchComments({ sb, postId: state.post.id });
+
+      // load comment author profiles (best-effort)
+      const ids = [...new Set(comments.map(c => c.user_id).filter(Boolean))];
+      const pm = new Map();
+      if(ids.length){
+        const { data } = await sb.from('profiles').select('user_id,handle,full_name,display_name').in('user_id', ids);
+        (data||[]).forEach(r => pm.set(r.user_id, r));
+      }
+
       renderComments({
         listEl,
         emptyEl,
         countEl,
         comments,
+        profilesMap: pm,
         onReply: ({ id, who }) => composerApi?.setReply({ id, who }),
       });
+
+      // Update composer login state if auth changed
+      composerApi?.setLoggedIn(!!(await getUser()));
     } catch (err) {
       console.error(err);
       if (errEl) {
@@ -419,23 +471,4 @@ export async function init() {
 
   document.addEventListener('ndyra:comments:refresh', refresh);
   await refresh();
-}
-
-// shared helper (local-only)
-function bumpStats(stats, prevReaction, nextReaction) {
-  const clone = { ...stats };
-  const map = {
-    like: 'like_count',
-    fire: 'fire_count',
-    sweat: 'sweat_count',
-    clap: 'clap_count',
-  };
-
-  if (prevReaction && map[prevReaction]) {
-    clone[map[prevReaction]] = Math.max(0, (clone[map[prevReaction]] || 0) - 1);
-  }
-  if (nextReaction && map[nextReaction]) {
-    clone[map[nextReaction]] = (clone[map[nextReaction]] || 0) + 1;
-  }
-  return clone;
 }

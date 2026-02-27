@@ -1,14 +1,13 @@
 const { test, expect } = require('@playwright/test');
 
 test('member timer can skip into REST mode (smoke)', async ({ page }) => {
-  // E2E: mark this browser as a MEMBER before the first page loads,
-  // otherwise the app's guard will redirect to /login.html.
+  // This test is best-effort: timer is a prototype surface.
   await page.addInitScript(() => {
     try { localStorage.setItem('hiit56_role', 'member'); } catch {}
   });
 
-  // Use explicit index.html to avoid directory fallback quirks
-  await page.goto('/app/timer/index.html?src=demo:online_quick');
+  // Use explicit path
+  await page.goto('/app/timer/');
 
   // Sanity: correct template
   await expect(page.locator('body[data-page="member-timer"]')).toHaveCount(1);
@@ -28,7 +27,7 @@ test('member timer can skip into REST mode (smoke)', async ({ page }) => {
 
   // Skip until we hit REST mode (avoid assuming exact segment ordering)
   for (let i = 0; i < 12; i++) {
-    const hasRest = await wrap.evaluate(el => el.classList.contains('mode-rest'));
+    const hasRest = await wrap.evaluate((el) => el.classList.contains('mode-rest'));
     if (hasRest) break;
     await skip.click();
     await page.waitForTimeout(90);

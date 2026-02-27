@@ -63,10 +63,12 @@ def main() -> int:
 
     required_pages = [
         SITE / "index.html",
+        SITE / "preview" / "index.html",
         SITE / "login.html",
         SITE / "pricing.html",
         SITE / "join.html",
         SITE / "gym" / "join" / "index.html",
+        SITE / "gym" / "profile" / "index.html",
         SITE / "app" / "book" / "class" / "index.html",
         SITE / "biz" / "check-in" / "index.html",
         SITE / "biz" / "migrate" / "index.html",
@@ -115,6 +117,7 @@ def main() -> int:
 
     required_rewrites = [
         ("/gym/*/join", "/gym/join/index.html"),
+        ("/gym/*", "/gym/profile/index.html"),
         ("/app/book/class/*", "/app/book/class/index.html"),
         ("/app/post/*", "/app/post/index.html"),
         ("/app/profile/*", "/app/profile/index.html"),
@@ -135,6 +138,7 @@ def main() -> int:
 
     required_routes = [
         ("pattern: '/gym/:slug/join'", "to: '/gym/join/index.html'"),
+        ("pattern: '/gym/:slug'", "to: '/gym/profile/index.html'"),
         ("pattern: '/app/book/class/:class_session_id'", "to: '/app/book/class/index.html'"),
         ("pattern: '/app/post/:id'", "to: '/app/post/index.html'"),
         ("pattern: '/app/profile/:handle'", "to: '/app/profile/index.html'"),

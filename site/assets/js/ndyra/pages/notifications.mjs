@@ -1,14 +1,9 @@
 import { requireAuth, getSupabase } from '../lib/supabase.mjs';
-import { makeEl, toast, formatTimeAgo } from '../lib/utils.mjs';
+import { makeEl, toast, formatTimeAgo, markActiveNav } from '../lib/utils.mjs';
 
 const PAGE_SIZE = 30;
 
 function qs(sel, root=document){ return root.querySelector(sel); }
-function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
-
-function isDemoMode(){
-  return new URLSearchParams(location.search).get('src') === 'demo';
-}
 
 function iconFor(type){
   const t = String(type || '').toLowerCase();
@@ -24,10 +19,9 @@ function labelFor(n){
   const payload = n?.payload || {};
 
   if(t === 'reaction'){
-    const r = payload?.reaction_type || 'reaction';
+    const r = payload?.reaction_type || payload?.reaction || 'reaction';
     return `Someone reacted (${r}) to your post`;
   }
-
   if(t === 'comment') return 'New comment on your post';
   if(t === 'follow') return 'New follower';
 
@@ -35,21 +29,21 @@ function labelFor(n){
 }
 
 function buildLink(n){
-  if(n?.target_post_id) return `/app/post/?id=${encodeURIComponent(n.target_post_id)}`;
+  if(n?.target_post_id) return `/app/post/${encodeURIComponent(n.target_post_id)}`;
   return '/app/profile/';
 }
 
 function renderNotif(n){
   const read = Boolean(n?.read_at);
 
-  const card = makeEl('div', { className: `notif-card ${read ? 'read' : 'unread'}` });
+  const card = makeEl('div', { class: `notif-card ${read ? 'read' : 'unread'}` });
   card.dataset.notifId = n?.id || '';
 
-  const left = makeEl('div', { className:'notif-icon', ariaHidden:'true' }, [iconFor(n?.type)]);
-  const main = makeEl('div', { className:'notif-main' });
+  const left = makeEl('div', { class:'notif-icon', 'aria-hidden':'true' }, [iconFor(n?.type)]);
+  const main = makeEl('div', { class:'notif-main' });
 
-  const title = makeEl('a', { className:'notif-title', href: buildLink(n) }, [labelFor(n)]);
-  const meta = makeEl('div', { className:'notif-meta muted' }, [
+  const title = makeEl('a', { class:'notif-title', href: buildLink(n) }, [labelFor(n)]);
+  const meta = makeEl('div', { class:'notif-meta muted' }, [
     n?.created_at ? formatTimeAgo(n.created_at) : '—',
     read ? ' • Read' : ' • Unread',
   ]);
@@ -57,10 +51,10 @@ function renderNotif(n){
   main.appendChild(title);
   main.appendChild(meta);
 
-  const actions = makeEl('div', { className:'notif-actions' });
+  const actions = makeEl('div', { class:'notif-actions' });
 
   if(!read){
-    const btn = makeEl('button', { className:'btn outline', type:'button' }, ['Mark read']);
+    const btn = makeEl('button', { class:'btn outline', type:'button' }, ['Mark read']);
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -76,17 +70,8 @@ function renderNotif(n){
   return card;
 }
 
-function demoNotifications(){
-  const now = Date.now();
-  return [
-    { id:'demo-n-1', recipient_user_id:'demo', type:'reaction', target_post_id:'demo-post-1', payload:{ reaction_type:'fire' }, created_at: new Date(now-1000*60*7).toISOString(), read_at:null },
-    { id:'demo-n-2', recipient_user_id:'demo', type:'comment', target_post_id:'demo-post-2', payload:{}, created_at: new Date(now-1000*60*22).toISOString(), read_at:null },
-    { id:'demo-n-3', recipient_user_id:'demo', type:'follow', actor_user_id:'demo-user-b', payload:{}, created_at: new Date(now-1000*60*90).toISOString(), read_at: new Date(now-1000*60*30).toISOString() },
-  ];
-}
-
 export async function init(){
-  const demo = isDemoMode();
+  markActiveNav('notifications');
 
   const status = qs('[data-notifs-status]');
   const list = qs('[data-notifs-list]');
@@ -94,26 +79,18 @@ export async function init(){
   const markAllBtn = qs('[data-notifs-markall]');
   const loadMoreBtn = qs('[data-notifs-loadmore]');
 
-  let user = null;
-  let supabase = null;
+  const user = await requireAuth(location.pathname + location.search);
+  if(!user) return;
 
-  if(!demo){
-    user = await requireAuth({ next: location.pathname + location.search });
-    if(!user) return;
-    supabase = getSupabase();
-  }
+  const supabase = await getSupabase();
 
   let cursor = null;
   let loaded = 0;
 
-  function setStatus(t){ if(status) status.textContent = t; }
+  function setStatus(t){ if(status) status.textContent = t || ''; }
   function clear(){ if(list) list.innerHTML = ''; loaded = 0; cursor = null; }
 
   async function fetchBatch(){
-    if(demo){
-      return demoNotifications();
-    }
-
     let q = supabase
       .from('notifications')
       .select('*')
@@ -149,10 +126,7 @@ export async function init(){
       }
 
       setStatus(`${loaded} loaded`);
-
-      if(loadMoreBtn){
-        loadMoreBtn.hidden = demo ? true : batch.length < PAGE_SIZE;
-      }
+      if(loadMoreBtn) loadMoreBtn.hidden = batch.length < PAGE_SIZE;
 
     } catch (e) {
       console.warn('[NDYRA] notifications load failed', e);
@@ -166,11 +140,6 @@ export async function init(){
     const id = e?.detail?.id;
     if(!id) return;
 
-    if(demo){
-      toast('Demo mode: cannot mark read');
-      return;
-    }
-
     try {
       const { error } = await supabase
         .from('notifications')
@@ -180,54 +149,46 @@ export async function init(){
 
       if(error) throw error;
 
-      // Optimistic UI
-      const card = qs(`.notif-card[data-notif-id="${id}"]`);
+      const card = list?.querySelector(`[data-notif-id="${id}"]`);
       if(card){
         card.classList.remove('unread');
         card.classList.add('read');
-        const btn = card.querySelector('.notif-actions .btn');
-        btn?.remove?.();
-        const meta = card.querySelector('.notif-meta');
-        if(meta && !meta.textContent.includes('Read')) meta.textContent += ' • Read';
+        const btn = card.querySelector('button');
+        if(btn) btn.remove();
       }
-    } catch (err) {
-      console.warn('[NDYRA] mark read failed', err);
+    } catch (e2) {
+      console.warn('[NDYRA] mark read failed', e2);
       toast('Could not mark read');
     }
   });
 
-  async function refresh(){
+  markAllBtn?.addEventListener('click', async () => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read_at: new Date().toISOString() })
+        .eq('recipient_user_id', user.id)
+        .is('read_at', null);
+
+      if(error) throw error;
+
+      toast('All marked read');
+      clear();
+      if(loadMoreBtn) loadMoreBtn.hidden = false;
+      await renderMore();
+    } catch (e) {
+      console.warn('[NDYRA] mark all failed', e);
+      toast('Could not mark all read');
+    }
+  });
+
+  refreshBtn?.addEventListener('click', async () => {
     clear();
+    if(loadMoreBtn) loadMoreBtn.hidden = false;
     await renderMore();
-  }
+  });
 
-  if(refreshBtn) refreshBtn.addEventListener('click', refresh);
-  if(loadMoreBtn) loadMoreBtn.addEventListener('click', renderMore);
-
-  if(markAllBtn){
-    markAllBtn.addEventListener('click', async () => {
-      if(demo){
-        toast('Demo mode: cannot mark all read');
-        return;
-      }
-
-      try {
-        const { error } = await supabase
-          .from('notifications')
-          .update({ read_at: new Date().toISOString() })
-          .eq('recipient_user_id', user.id)
-          .is('read_at', null);
-
-        if(error) throw error;
-
-        toast('All marked read');
-        await refresh();
-      } catch (e) {
-        console.warn('[NDYRA] mark all read failed', e);
-        toast('Could not mark all read');
-      }
-    });
-  }
+  loadMoreBtn?.addEventListener('click', renderMore);
 
   await renderMore();
 }

@@ -9,7 +9,7 @@
 
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53">
 </head>
 <body data-page="member-timer">
   <div class="header">
@@ -37,13 +37,13 @@
 
     <div class="banner" data-taxonomy-banner>
       <strong>Prototype note</strong>
-      This is a prototype timer page for QA. Move videos are placeholders from the move demo library until the full Move Library + Template Builder is wired.
+      This is a prototype timer page for QA. Move videos are placeholders from the move sample library until the full Move Library + Template Builder is wired.
     </div>
 
     <div class="timer-config card">
       <div class="meta" style="padding:16px">
         <div class="title">Setup</div>
-        <p class="small">Choose a demo (or a saved workout), optionally apply a time cap, set beep volume, then tap Start (required to enable audio on mobile).</p>
+        <p class="small">Choose a sample (or a saved workout), optionally apply a time cap, set beep volume, then tap Start (required to enable audio on mobile).</p>
           <div class="row" style="margin-top:8px">
             <button class="btn btn-small btn-ghost" data-open-builder>Workout Builder</button>
             <button class="btn btn-small btn-ghost" data-open-myworkouts>My Workouts</button>
@@ -52,7 +52,7 @@
         <div class="form-grid">
           <label>
             <div class="small">Demo</div>
-            <select data-demo-select></select>
+            <select data-sample-select></select>
           </label>
 
           <label>
@@ -230,6 +230,6 @@
       window.addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="/assets/js/site.js?v=2026-02-24_50" defer></script>
+  <script src="/assets/js/site.js?v=2026-02-26_53" defer></script>
 </body>
 </html>

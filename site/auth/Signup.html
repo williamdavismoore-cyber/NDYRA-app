@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53">
 </head>
 <body data-page="auth-signup">
   <div class="header">
@@ -50,7 +50,7 @@
     async function loadSupabaseCfg(){
       // 1) Deployed env (Netlify): dynamic config from env vars
       try{
-        const r = await fetch('/api/public-config', { cache: 'no-store' });
+        const r = await fetch('/api/public_config', { cache: 'no-store' });
         if(r.ok){
           const j = await r.json();
           if(j?.supabase_url && j?.supabase_anon_key) return j;

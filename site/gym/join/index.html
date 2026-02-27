@@ -3,44 +3,37 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDYRA — Quick Join</title>
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-24_50" />
+  <title>Join Gym — NDYRA</title>
+  <link rel="icon" href="/assets/branding/favicon.ico" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png" />
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53" />
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
 </head>
-<body data-page="ndyra-gym-join">
-
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a class="logo" href="/">NDYRA</a>
-      <nav class="topnav">
-        <a href="/login.html">Login</a>
-        <a href="/join.html">Join</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container" style="max-width: 980px">
-    <h1 style="margin-top: 24px">Quick Join</h1>
-    <p class="muted">Account → Waiver → Payment → Confirmation</p>
-
-    <div id="join-root" class="card" style="padding: 16px"></div>
-
-    <p class="join-note">Tip: add <code>?src=demo</code> to run this page without Supabase while you&apos;re wiring the backend.</p>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-left">
-          <strong>NDYRA</strong>
-          <span class="muted">Build preview (<span data-build-label>CP??</span>)</span>
-        </div>
-        <div class="footer-right">
-          <a href="/assets/build.json" class="muted">build.json</a>
-        </div>
+<body data-page="ndyra-gym-join" class="ndyra">
+  <div class="ndyra-shell">
+    <div class="ndyra-topbar">
+      <div class="inner">
+        <a class="ndyra-brand" href="/">
+          <img src="/assets/branding/app-icon-192.png" alt="NDYRA" />
+          <span class="wordmark">NDYRA</span>
+        </a>
+        <nav class="ndyra-topnav" aria-label="Primary">
+          <a href="/gym/profile/">Gyms</a>
+          <a href="/app/fyp/">App</a>
+          <a href="/auth/login.html">Log in</a>
+        </nav>
       </div>
     </div>
-  </footer>
+
+    <main class="ndyra-main">
+      <div class="inner">
+        <div id="join-root"></div>
+      </div>
+    </main>
+
+    <div class="footer">NDYRA • Gym membership flow (core build)</div>
+  </div>
 
   <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
 </body>

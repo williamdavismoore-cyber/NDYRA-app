@@ -39,7 +39,7 @@ Blueprint sections referenced:
 Changes:
 - Implemented `/app/following/` feed using the same PostCard contract as `/app/fyp/`.
 - Supports:
-  - **Demo mode** via `?src=demo` (for deterministic E2E without Supabase)
+  - **Demo mode** via `` (for deterministic E2E without Supabase)
   - Real mode requires auth + pulls posts from:
     - `follows_users` (followed people)
     - `follows_tenants` (followed gyms/tenants)
@@ -64,7 +64,7 @@ Blueprint sections referenced:
 
 Implemented (per blueprint route map):
 - `/gym/{slug}/join` — Quick Join (account → waiver → payment → confirmation)
-  - Demo mode: `?src=demo` (no Supabase required)
+  - Demo mode: `` (no Supabase required)
   - Real mode wiring:
     - fetch tenant by `slug`
     - load active waiver template
@@ -309,3 +309,43 @@ Changes:
 - **Playwright reliability:** renamed config to `playwright.config.js` so projects are always detected (fixes `--project` not found on some setups).
 - **Rebrand cleanup:** removed shipped `Hiit56 |` prefixes from demo video titles, and migrated telemetry/session naming to **NDYRA** (legacy session id preserved via one-way migration).
 - **Timer systems intentionally unchanged** in this checkpoint (being built separately).
+
+---
+
+## CP50 (2026-02-24_50) — v4.6
+
+Changes:
+- Social Shell polish + QA stability hardening:
+  - Runbook clarifications for local QA + E2E runs.
+  - Project naming consistency + cache-busting alignment to build_id.
+  - No new routes / DB drift in this checkpoint.
+
+Notes:
+- Timer systems intentionally remained separate (being built in the Timer blueprint chat).
+
+---
+
+## CP51 (2026-02-24_52) — v4.7
+
+Blueprint sections referenced:
+- **3. Non-Gym User Experience (Social-First Shell)** — “For You by default” behavior
+- **6. Gym / Club surfaces** — public gym profile surface (route family)
+
+Changes:
+- **NDYRA-first entry (QA clarity):**
+  - `/` now routes QA to the Social Shell (For You) by default.
+  - Previous marketing/preview landing moved to `/preview/` (no content loss).
+- **Gym Profile route added (Blueprint-aligned):**
+  - New route family: `/gym/:slug` → `/gym/profile/index.html`.
+  - `_redirects` and local `tools/static_server.cjs` route map updated + asserted by smoke QA.
+  - Added a public gym profile surface with Signals strip + Timer integration hooks (placeholders).
+- **Build label visibility inside the Social Shell:**
+  - Added a small build “pill” (data-build-label) inside the left nav for For You / Following.
+  - Updated E2E smoke to validate the build label from within the Social Shell.
+- **Load harness gate (no deps):**
+  - Added `tools/load_harness.mjs` + `npm run qa:load`.
+  - `qa:all` now includes the load harness as an early regression tripwire.
+
+Notes:
+- Timers are still being built separately; CP51 only adds integration points on the public gym surface.
+- No competitor UI cloning: gym profile uses NDYRA-native cards + layout.

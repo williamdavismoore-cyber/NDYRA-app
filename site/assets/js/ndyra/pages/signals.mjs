@@ -1,6 +1,6 @@
 // NDYRA — Signals (CP36)
 
-import { loadDemoSignals, renderSignalStrip } from '../components/signalStrip.mjs';
+import { renderSignalStrip } from '../components/signalStrip.mjs';
 import { renderHeader, wireHeaderAndNav } from '../components/header.mjs';
 import { renderBottomNav, markActiveNav } from '../components/bottomNav.mjs';
 
@@ -87,12 +87,9 @@ export async function init(){
   renderBottomNav();
   markActiveNav();
 
-  // Demo strip for QA.
+
   const mount = qs('[data-signal-strip]');
-  if(mount){
-    const signals = await loadDemoSignals();
-    renderSignalStrip(mount, signals);
-  }
+  if(mount) renderSignalStrip(mount, []);
 
   // Recorder controls.
   qs('[data-signal-rec-start]')?.addEventListener('click', () => {

@@ -1439,3 +1439,87 @@ body[data-page="ndyra-post"]{
     min-height:280px;
   }
 }
+
+/* ---------------------------------------------------------
+   NDYRA Entry (root)
+   --------------------------------------------------------- */
+.ndyra-entry{
+  min-height: calc(100vh - 64px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 32px 16px;
+}
+.ndyra-entry__card{
+  width: min(760px, 100%);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+.ndyra-entry__brand{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+}
+.ndyra-entry__mark{
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #000;
+}
+.ndyra-entry__title{
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-size: 20px;
+}
+.ndyra-entry__sub{
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 2px;
+}
+.ndyra-entry__actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.ndyra-entry__note{
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* NDYRA build pill (visible inside Social Shell for QA sanity) */
+.ndyra-leftnav__build{
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.ndyra-buildpill{
+  display:inline-flex;
+  align-items:center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  color: rgba(255,255,255,0.82);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Simple utility layouts used by Gym Profile (public) */
+.ndyra-signal-row{
+  display:flex;
+  gap: 10px;
+  overflow:auto;
+  padding: 2px 0 8px;
+}
+.ndyra-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}

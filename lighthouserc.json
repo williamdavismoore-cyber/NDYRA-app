@@ -7,7 +7,7 @@
         "http://localhost:4173/pricing.html",
         "http://localhost:4173/workouts/",
         "http://localhost:4173/workouts/category.html?c=hiit",
-        "http://localhost:4173/app/timer/?src=demo:online_quick"
+        "http://localhost:4173/app/timer/"
       ],
       "numberOfRuns": 1,
       "settings": {

@@ -14,19 +14,19 @@
 
 // Bump this when you want to force-refresh caches globally.
 // (HTML is network-first, so this is mostly for static assets.)
-const CACHE_NAME = 'ndyra-static-2026-02-24_50';
+const CACHE_NAME = 'ndyra-static-2026-02-26_53';
 
 // Keep precache small + safe (install should not fail on a 404).
 const PRECACHE_URLS = [
   '/offline.html',
   '/assets/build.json',
-  '/assets/css/styles.css?v=2026-02-24_50',
-  '/assets/js/site.js?v=2026-02-24_50',
+  '/assets/css/styles.css?v=2026-02-26_53',
+  '/assets/js/site.js?v=2026-02-26_53',
   '/manifest.webmanifest',
   '/assets/branding/app-icon-192.png',
   '/assets/branding/app-icon-512.png',
-  '/assets/branding/Desktop%20Poster.webp?v=2026-02-24_50',
-  '/assets/branding/Mobile%20Poster.webp?v=2026-02-24_50',
+  '/assets/branding/Desktop%20Poster.webp?v=2026-02-26_53',
+  '/assets/branding/Mobile%20Poster.webp?v=2026-02-26_53',
 ];
 
 // Always fetch these fresh (avoid stale checkpoint shell issues).

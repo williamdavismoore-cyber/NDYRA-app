@@ -1082,8 +1082,8 @@ async function loadJSON(path){
 // Build info + cache-busting (CP42)
 // =========================
 // NOTE: Values must match /assets/build.json.
-const NDYRA_BUILD_ID = '2026-02-24_50';
-const NDYRA_BUILD_LABEL = 'CP50';
+const NDYRA_BUILD_ID = '2026-02-26_53';
+const NDYRA_BUILD_LABEL = 'CP52';
 let NDYRA_BUILD = { label: NDYRA_BUILD_LABEL, build_id: NDYRA_BUILD_ID };
 window.__ndyraBuild = NDYRA_BUILD;
 
@@ -1190,7 +1190,7 @@ async function startStripeCheckout({tier, plan, email, tenant_slug='', tenant_na
   async function loadSupabaseCfg(){
     // 1) Deployed env (Netlify): dynamic config from env vars
     try{
-      const r = await fetch('/api/public-config', { cache: 'no-store' });
+      const r = await fetch('/api/public_config', { cache: 'no-store' });
       if(r.ok){
         const j = await r.json();
         if(j?.supabase_url && j?.supabase_anon_key) return j;
@@ -2214,10 +2214,10 @@ async function pageMemberTimer(){
   await loadEquipmentCatalog();
   await loadMovesCatalog();
 
-  const data = await loadJSON('/assets/data/timer_demos.json');
+  const data = await loadJSON('/assets/data/timer_samples.json');
   const demos = (data.demos || []).filter(d => d.mode === 'online');
 
-  const demoSel = qs('[data-demo-select]');
+  const demoSel = qs('[data-sample-select]');
   const capMin = qs('[data-cap-min]');
   const capPool = qs('[data-cap-pool]');
   const capUnder = qs('[data-cap-under]');
@@ -3716,10 +3716,10 @@ async function pageBizGymTimer(){
   const tenant = getTenant() || {slug:'global', name:'NDYRA'};
   const tenantSlug = tenant.slug || 'global';
 
-  const data = await loadJSON('/assets/data/timer_demos.json');
+  const data = await loadJSON('/assets/data/timer_samples.json');
   const demos = (data.demos || []).filter(d => d.mode === 'gym');
 
-  const demoSel = qs('[data-demo-select]');
+  const demoSel = qs('[data-sample-select]');
   const capMin = qs('[data-cap-min]');
   const capPool = qs('[data-cap-pool]');
   const capUnder = qs('[data-cap-under]');
@@ -4463,7 +4463,7 @@ async function pageLogin(){
         }else{
           setTenant({slug:'', name:''});
           setRole('member');
-          localStorage.setItem('hiit56_member_plan_demo', plan);
+          localStorage.setItem('hiit56_member_plan', plan);
           if(isStripeCheckoutSessionId(session_id)) setMemberCheckoutSessionId(session_id);
           injectBanner(`<strong>Checkout complete.</strong> Member plan set to <span class="badge">${plan}</span> (demo entitlements until Supabase sync).`);
         }
@@ -5114,7 +5114,7 @@ function pageJoin(){
       // Demo fallback (until Supabase entitlement sync is wired)
       setRole('member');
       setTenant({slug:'', name:''});
-      localStorage.setItem('hiit56_member_plan_demo', chosenPlan);
+      localStorage.setItem('hiit56_member_plan', chosenPlan);
       location.href = '/app/';
     });
   }

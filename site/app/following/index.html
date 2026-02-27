@@ -7,102 +7,107 @@
   <link rel="icon" href="/assets/branding/favicon.ico" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-24_50" />
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53" />
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
 </head>
-<body data-page="ndyra-following" class="ndyra-social-page">
+<body data-page="ndyra-following" class="ndyra ndyra-social-page">
+  <div class="ndyra-shell">
 
-  <header class="ndyra-header ndyra-header--social">
-    <div class="inner">
-      <a class="brand" href="/" aria-label="NDYRA home">
-        <img src="/assets/branding/NDYRA_Icon_DarkCircle_512.png" alt="NDYRA" width="26" height="26" />
-        <span>NDYRA</span>
-      </a>
+    <header class="ndyra-header">
+      <div class="inner" style="display:flex; align-items:center; justify-content:space-between; gap: 14px; flex-wrap: wrap">
+        <a class="ndyra-brand" href="/app/fyp/">
+          <img src="/assets/branding/app-icon-192.png" alt="NDYRA" />
+          <span class="wordmark">NDYRA</span>
+        </a>
 
-      <div class="ndyra-header__center" role="navigation" aria-label="Feed">
-        <a class="ndyra-pill" href="/app/fyp/">For You</a>
-        <span class="ndyra-pill is-active" aria-current="page">Following</span>
+        <nav class="ndyra-header__pills" aria-label="Core" style="display:flex; gap: 8px; flex-wrap: wrap; align-items:center; justify-content:center">
+          <a class="ndyra-pill" data-nav href="/app/fyp/">For You</a>
+          <a class="ndyra-pill" data-nav href="/app/following/">Following</a>
+          <a class="ndyra-pill" data-nav href="/app/create/">Create</a>
+        </nav>
+
+        <nav class="ndyra-header__actions" aria-label="Actions" style="display:flex; gap: 8px; flex-wrap: wrap; align-items:center; justify-content:flex-end">
+          <a class="ndyra-pill" data-nav href="/app/signals/">Signals</a>
+          <a class="ndyra-pill" data-nav href="/app/notifications/">Alerts</a>
+          <a class="ndyra-pill" data-nav href="/app/profile/">Profile</a>
+        </nav>
       </div>
+    </header>
 
-      <div class="ndyra-header__right">
-        <a class="ndyra-pill" href="/app/create/">Create</a>
-        <a class="ndyra-pill" href="/app/notifications/">Alerts</a>
-        <a class="ndyra-pill" href="/app/profile/">Me</a>
-      </div>
-    </div>
-  </header>
+    <div class="ndyra-social-layout">
+      <aside class="ndyra-leftnav" aria-label="Left navigation">
+        <a class="ndyra-leftnav__item" data-nav href="/app/fyp/">For You</a>
+        <a class="ndyra-leftnav__item" data-nav href="/app/following/">Following</a>
+        <a class="ndyra-leftnav__item" data-nav href="/app/create/">Create</a>
+        <a class="ndyra-leftnav__item" data-nav href="/app/signals/">Signals</a>
+        <a class="ndyra-leftnav__item" data-nav href="/app/profile/">Profile</a>
+        <a class="ndyra-leftnav__item" data-nav href="/biz/check-in/">Business</a>
+      </aside>
 
-  <main class="ndyra-main">
-  <div class="ndyra-social-layout">
-    <aside class="ndyra-leftnav" aria-label="NDYRA navigation">
-      <a class="ndyra-leftnav__item" href="/app/fyp/" data-nav="fyp"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5v10a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 20.5v-10z"/><path d="M9.5 22V14.5h5V22"/></svg></span><span class="ndyra-leftnav__label">For You</span></a>
-          <a class="ndyra-leftnav__item is-active" href="/app/following/" data-nav="following"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M2 21v-1.2a6 6 0 0 1 12 0V21"/><circle cx="17" cy="9" r="2.5"/><path d="M14 21v-1a4.8 4.8 0 0 1 8.5-3"/></svg></span><span class="ndyra-leftnav__label">Following</span></a>
-          <a class="ndyra-leftnav__item" href="/app/signals/" data-nav="signals"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M13 7l-4 6h4l-2 6 4-6h-4z"/></svg></span><span class="ndyra-leftnav__label">Signals</span></a>
-          <a class="ndyra-leftnav__item" href="/app/create/" data-nav="create"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Create</span></a>
-          <a class="ndyra-leftnav__item" href="/app/notifications/" data-nav="alerts"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Alerts</span></a>
-          <a class="ndyra-leftnav__item" href="/app/profile/" data-nav="me"><span class="ndyra-leftnav__ico"><svg class="ndyra-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="ndyra-leftnav__label">Me</span></a>
-          <div class="ndyra-leftnav__sep"></div>
-          <a class="ndyra-leftnav__item" href="/gym/demo-gym/join?src=demo" data-nav="join"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Quick Join</span></a>
-          <a class="ndyra-leftnav__item" href="/biz/check-in?src=demo" data-nav="biz"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Business</span></a>
-          <a class="ndyra-leftnav__item" href="/workouts/" data-nav="fitness"><span class="ndyra-leftnav__dot"></span><span class="ndyra-leftnav__label">Fitness</span></a>
-    </aside>
-
-    <main class="ndyra-social-main" aria-label="Feed">
-      <h1 class="sr-only">NDYRA — Following</h1>
-
-      <!-- Signals (Stories) -->
-      <section class="ndyra-signal-strip" data-signal-strip aria-label="Signals"></section>
-
-      <!-- Feed -->
-      <div class="ndyra-feed" data-ndyra-feed></div>
-      <div class="ndyra-sentinel" data-ndyra-sentinel></div>
-
-      <div class="ndyra-empty-state" data-ndyra-empty hidden>
-        <h2>Nothing yet</h2>
-        <p class="muted">This feed is empty in your current mode.</p>
-      </div>
-    </main>
-
-    <aside class="ndyra-rightrail" aria-label="Right rail">
-      <div class="ndyra-railcard">
-          <div class="ndyra-railcard__title">NDYRA Signals</div>
-          <div class="ndyra-railcard__body muted">
-            Stories, disciplined. Muted by default — tap to hear.
-          </div>
-          <div class="ndyra-railcard__actions">
-            <a class="btn small" href="/app/signals/?src=demo">Open Signals</a>
-          </div>
-        </div>
-
-        <div class="ndyra-railcard">
-          <div class="ndyra-railcard__title">Quick QA shortcuts</div>
-          <div class="ndyra-railcard__body">
-            <div class="rail-links">
-              <a href="/gym/demo-gym/join?src=demo">/gym/demo-gym/join</a>
-              <a href="/app/book/class/demo?src=demo">/app/book/class/:id</a>
-              <a href="/biz/check-in?src=demo">/biz/check-in</a>
-              <a href="/biz/migrate?src=demo">/biz/migrate</a>
+      <main class="ndyra-social-main">
+        <section class="ndyra-feedwrap">
+          <div class="feed-head">
+            <h1>Following</h1>
+            <div class="feed-meta">
+              <span class="badge">Feed</span>
+              <span class="badge" data-ndyra-status></span>
             </div>
           </div>
-        </div>
 
+          <div class="signal-strip" data-signal-strip></div>
+
+          <div class="ndyra-feed" data-ndyra-feed></div>
+          <div data-ndyra-sentinel style="height: 1px;"></div>
+        </section>
+      </main>
+
+      <aside class="ndyra-rightrail" aria-label="Right rail">
         <div class="ndyra-railcard">
-          <div class="ndyra-railcard__title">Need access?</div>
-          <div class="ndyra-railcard__body muted">
-            If a page asks for login, use <a href="/login.html">Login</a> and flip to <strong>QA Master</strong>.
+          <div class="card__head">
+            <div class="card__title">Search</div>
+          </div>
+          <div class="card__body">
+            <input class="input" placeholder="Search people, gyms, posts" disabled />
+            <div class="muted" style="margin-top: 8px">Search UI is staged; wire server-side search / vector search.</div>
           </div>
         </div>
-    </aside>
+
+        <div class="ndyra-railcard" style="margin-top: 12px">
+          <div class="card__head">
+            <div class="card__title">Follow suggestions</div>
+          </div>
+          <div class="card__body">
+            <div class="muted">Suggestions will appear after you follow a few people/gyms.</div>
+          </div>
+        </div>
+
+        <div class="ndyra-railcard" style="margin-top: 12px">
+          <div class="card__head">
+            <div class="card__title">Your signals</div>
+          </div>
+          <div class="card__body">
+            <div class="muted">Signals strip is shared with For You. Customize coming soon.</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <nav class="ndyra-bottomnav" aria-label="Bottom">
+      <div class="inner">
+        <a data-nav href="/app/fyp/"><span class="ico">🜂</span><span>For You</span></a>
+        <a data-nav href="/app/following/"><span class="ico">⟡</span><span>Following</span></a>
+        <a data-nav href="/app/create/"><span class="ico">＋</span><span>Create</span></a>
+        <a data-nav href="/app/notifications/"><span class="ico">⚑</span><span>Alerts</span></a>
+        <a data-nav href="/app/profile/"><span class="ico">⦿</span><span>Me</span></a>
+      </div>
+    </nav>
+
+    <div class="footer">
+      NDYRA — build preview (<span data-build-label>CP??</span>). Social Core build in progress.
+    </div>
+
   </div>
-</main>
 
-  <nav class="ndyra-bottomnav" aria-label="Primary">
-    <a class="" href="/app/fyp/">For You</a>
-    <a class="active" href="/app/following/">Following</a>
-    <a href="/app/create/">Create</a>
-    <a href="/app/notifications/">Alerts</a>
-    <a href="/app/profile/">Me</a>
-  </nav>
-
-  <script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-02-24_50"></script>
+  <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
 </body>
 </html>

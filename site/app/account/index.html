@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53">
 </head>
 <body data-page="member-account">
 
@@ -33,7 +33,7 @@
 <div class="container">
   <div class="section-title">
     <h2>Account</h2>
-    <div class="small">Member tier (demo)</div>
+    <div class="small">Member tier</div>
   </div>
 
   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
@@ -42,7 +42,7 @@
         <div class="title">Identity</div>
         <p class="small">Email: <span class="badge" data-account-email>—</span></p>
         <p class="small">Role: <span class="badge" data-account-role>—</span></p>
-        <p class="small">Plan: <span class="badge"><span id="planOut">Demo</span></span></p>
+        <p class="small">Plan: <span class="badge"><span id="planOut">Monthly</span></span></p>
       </div>
     </div>
 
@@ -112,12 +112,12 @@
     }
   </script>
 
-  <script src="/assets/js/site.js?v=2026-02-24_50" defer></script>
+  <script src="/assets/js/site.js?v=2026-02-26_53" defer></script>
   <script>
-    // show demo plan string without needing JS build
-    const plan = localStorage.getItem('ndyra_member_plan_demo') || localStorage.getItem('hiit56_member_plan_demo') || 'monthly';
+    // show plan string without needing JS build
+    const plan = localStorage.getItem('ndyra_member_plan') || localStorage.getItem('hiit56_member_plan') || 'monthly';
     const p = document.getElementById('planOut');
-    if(p) p.textContent = plan === 'annual' ? 'Annual (demo)' : 'Monthly (demo)';
+    if(p) p.textContent = plan === 'annual' ? 'Annual' : 'Monthly';
   </script>
 </body>
 </html>

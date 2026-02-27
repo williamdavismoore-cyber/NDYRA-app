@@ -1,19 +1,11 @@
 const { test, expect } = require('@playwright/test');
 
-test('NDYRA For You feed renders in demo mode', async ({ page }) => {
-  await page.goto('/app/fyp/?src=demo');
+test('FYP requires auth (redirect to login when logged out)', async ({ page }) => {
+  await page.goto('/app/fyp/');
 
-  // Sanity: correct page
-  await expect(page).toHaveTitle(/For You/i);
+  // Should land on /auth/login.html in a fresh context
+  await expect(page).toHaveURL(/\/auth\/login\.html/);
 
-  // At least one post card should render
-  const cards = page.locator('.post-card');
-  await expect(cards.first()).toBeVisible();
-
-  // Reaction buttons exist (disabled for guest/demo)
-  const firstReacts = cards.first().locator('.react-btn');
-  await expect(firstReacts).toHaveCount(5);
-
-  // Since demo mode does not authenticate, buttons should be disabled
-  await expect(firstReacts.first()).toBeDisabled();
+  await expect(page.locator('body[data-page="auth-login"]')).toHaveCount(1);
+  await expect(page.locator('[data-auth-login]')).toBeVisible();
 });

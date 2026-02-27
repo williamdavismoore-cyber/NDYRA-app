@@ -63,7 +63,23 @@ npx playwright show-report
 
 ---
 
-## 2) Lighthouse Gate
+## 2) Load Harness (quick regression tripwire)
+
+This runs a short local concurrency sweep against key surfaces.
+
+```bash
+npm run qa:load
+```
+
+(If you want to tune it)
+
+```bash
+npm run qa:load -- --duration 6 --concurrency 18 --paths /,/app/fyp/,/assets/build.json
+```
+
+---
+
+## 3) Lighthouse Gate
 
 ```bash
 npm run qa:lighthouse
@@ -72,7 +88,7 @@ npm run qa:lighthouse
 
 ---
 
-## 2.5) IP Gate (IP_GUARDRAILS.md) — **LAW**
+## 3.5) IP Gate (IP_GUARDRAILS.md) — **LAW**
 
 If a PR touches **Signals / Aftermath / media editing / GIFs / stickers / music / camera capture / smoothing filters / booking + token UX**, you must run the IP gate checklist.
 
@@ -91,7 +107,7 @@ If it fails, treat it as a **hard fail**.
 
 ---
 
-## 3) Supabase Gate A — Anti‑Drift Audit
+## 4) Supabase Gate A — Anti‑Drift Audit
 
 Open Supabase → SQL Editor → New query → paste and run:
 
@@ -101,7 +117,7 @@ If it raises an exception, treat it as a **hard fail**.
 
 ---
 
-## 4) Supabase Gate B — RLS Regression Tests
+## 5) Supabase Gate B — RLS Regression Tests
 
 1) Create two test users in Supabase Auth:
 

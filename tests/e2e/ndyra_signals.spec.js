@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test('NDYRA Signals strip renders and is muted by default', async ({ page }) => {
-  await page.goto('/app/fyp/?src=demo');
+  await page.goto('/app/fyp/');
 
   const strip = page.locator('[data-signal-strip]');
   await expect(strip).toBeVisible();

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NDYRA — Gym</title>
+  <link rel="icon" type="image/png" href="/assets/ndyra/ndyra_mark.png" />
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53" />
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
+</head>
+<body data-page="ndyra-gym-profile">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="logo" href="/">NDYRA</a>
+      <nav class="topnav">
+        <a href="/app/fyp/">For You</a>
+        <a href="/app/following/">Following</a>
+        <a href="/auth/login.html">Log in</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="max-width: 980px">
+    <div id="gymProfileRoot" class="card" style="padding:16px; margin-top: 18px"></div>
+
+    <section style="margin-top: 22px">
+      <div id="gymSignals"></div>
+    </section>
+
+    <section style="margin-top: 22px">
+      <h2 style="margin: 0 0 8px">Timers</h2>
+      <p class="muted" style="margin: 0 0 12px">Next: gym sample timers, member-perk timers, and class-tied timers.</p>
+      <div id="gymTimers" class="ndyra-grid"></div>
+    </section>
+
+    <section style="margin-top: 22px; margin-bottom: 30px">
+      <h2 style="margin: 0 0 8px">About</h2>
+      <div id="gymAbout" class="card" style="padding: 14px"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <strong>NDYRA</strong>
+          <span class="muted">Build preview (<span data-build-label>CP??</span>)</span>
+        </div>
+        <div class="footer-right">
+          <a href="/assets/build.json" class="muted">build.json</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-02-26_53"></script>
+  <script type="module" src="/assets/js/ndyra/pages/gymProfile.mjs?v=2026-02-26_53"></script>
+</body>
+</html>

@@ -8,6 +8,9 @@ Blueprint amendment (binding constraints):
 
 - `docs/ndyra/NDYRA_Amendment_Signals_Aftermath_Aelric_v3_NoAIVoice.pdf`
 
+- `docs/ndyra/NDYRA_Amendment_UI_Emulation_ConstellationRating_v1.docx`
+- `docs/ndyra/NDYRA_Amendment_UI_Emulation_ConstellationRating_v2_Icons.docx`
+
 
 - `supabase/migrations/2026-02-22_000000_NDYRA_CP38_Booking_Scale_v7.3.1.sql`
 

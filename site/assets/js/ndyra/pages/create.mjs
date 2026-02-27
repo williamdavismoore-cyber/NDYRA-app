@@ -1,5 +1,5 @@
-import { qs, qbool, toast, markActiveNav } from '../lib/utils.mjs';
-import { getSupabase, requireAuth, getUser } from '../lib/supabase.mjs';
+import { toast, markActiveNav } from '../lib/utils.mjs';
+import { getSupabase, requireAuth } from '../lib/supabase.mjs';
 
 function sanitizeFileName(name = '') {
   return (name || '')
@@ -61,7 +61,6 @@ function renderPreviews(previewsEl, files, onRemove) {
 }
 
 export async function init() {
-  const demoMode = qbool('demo') || qs('src') === 'demo';
   markActiveNav('create');
 
   const sb = await getSupabase();
@@ -79,15 +78,11 @@ export async function init() {
   let files = [];
   let posting = false;
 
-  // Auth gate (real mode)
-  if (!demoMode) {
-    if (status) status.textContent = 'Auth…';
-    const u = await requireAuth();
-    if (!u) return; // requireAuth will redirect
-    if (status) status.textContent = 'Ready';
-  } else {
-    if (status) status.textContent = 'Demo';
-  }
+  // Auth gate
+  if (status) status.textContent = 'Auth…';
+  const user = await requireAuth();
+  if (!user) return; // requireAuth redirects
+  if (status) status.textContent = 'Ready';
 
   const setError = (msg) => {
     if (!errorEl) return;
@@ -151,19 +146,6 @@ export async function init() {
     if (status) status.textContent = 'Posting…';
 
     try {
-      if (demoMode) {
-        toast('Demo: post created (not saved)');
-        window.location.href = '/app/fyp/?src=demo';
-        return;
-      }
-
-      const user = await getUser();
-      if (!user) {
-        const next = encodeURIComponent(window.location.pathname + window.location.search);
-        window.location.href = `/auth/login.html?next=${next}`;
-        return;
-      }
-
       // 1) create post row
       const { data: post, error: postErr } = await sb
         .from('posts')
@@ -198,7 +180,6 @@ export async function init() {
               post_id: post.id,
               storage_path: path,
               media_type,
-              sort_order: i,
             });
 
           if (pmErr) throw pmErr;

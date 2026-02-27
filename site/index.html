@@ -1,142 +1,47 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NDYRA — Preview</title>
-  <link rel="icon" href="/assets/branding/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png">
-  
-  <meta name="theme-color" content="#000000">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-24_50">
-  <style>
-  .hero-video .mobile{display:none}
-  @media (max-width:700px){ .hero-video .desktop{display:none} .hero-video .mobile{display:block} }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NDYRA</title>
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
+  <meta name="color-scheme" content="dark" />
 </head>
-<body data-page="home">
-  <div class="header">
-  <div class="header-inner">
-    <a class="logo" href="/">
-      <img src="/assets/branding/app-icon-192.png" alt="NDYRA">
-    </a>
-    <div class="nav">
-      <a href="/app/fyp/" title="NDYRA App">App</a>
-      <a href="/workouts/" title="Public workout previews">Workouts</a>
-            <a href="/pricing.html">Pricing</a>
-      <a href="/for-gyms/">For Gyms</a>
-<a href="/join.html">Join</a>
-<a href="/auth/login.html" class="primary">Log in</a>
-      <a href="/biz/" title="Staff/Admin only">Business</a>
-      <span class="badge" data-role-pill>Guest</span>
-      <span class="badge" data-tenant-pill style="display:none"></span>
-    </div>
-  </div>
-</div>
-  
-<div class="container">
-  <div class="hero">
-    <div class="hero-grid">
+<body class="ndyra-bg">
+  <main class="ndyra-shell" style="max-width: 920px; margin: 0 auto; padding: 28px 18px">
+    <header style="display:flex; align-items:center; justify-content:space-between; gap: 16px; flex-wrap: wrap">
       <div>
-        <div class="badge">Public Preview</div>
-        <h1>NDYRA</h1>
-        <p>NDYRA preview build: Social Core (For You / Following), Signals (disciplined Stories), Quick Join (gym onboarding), and the evolving member + business portals. Legacy workout previews remain accessible while we finish the NDYRA-first home experience.</p>
-        <div class="btn-row">
-          <a class="btn primary" href="/app/fyp/?src=demo">Open NDYRA demo feed</a>
-          <a class="btn" href="/app/following/?src=demo">Following</a>
-          <a class="btn" href="/app/signals/?src=demo">Signals</a>
-          <a class="btn" href="/gym/demo-gym/join">Quick Join</a>
-          <a class="btn" href="/workouts/">Workout previews</a>
+        <div style="font-weight: 900; letter-spacing: .04em; font-size: 22px">NDYRA</div>
+        <div class="muted" style="margin-top: 4px">Core build (no simulation / demo mode).</div>
+      </div>
+      <div style="display:flex; gap: 10px; flex-wrap: wrap">
+        <a class="btn btn-primary" href="/app/fyp/">Enter App</a>
+        <a class="btn btn-ghost" href="/auth/login.html">Log In</a>
+        <a class="btn btn-ghost" href="/auth/signup.html">Sign Up</a>
+      </div>
+    </header>
+
+    <section style="margin-top: 22px" class="card" style="padding: 16px">
+      <div class="card" style="padding: 16px">
+        <div style="font-weight: 800">Quick routes</div>
+        <div class="muted" style="margin-top: 6px">
+          If you&apos;re wiring backend config, start with auth then open For You.
         </div>
-        <div class="banner" style="margin-top:16px">
-          <strong>Note</strong>
-          Categories are now <span class="badge">APPROVED</span>. Hero + teaser videos are auto-selected from the latest 10 uploads per category until dedicated hero loops are delivered.
+
+        <div style="margin-top: 12px; display:flex; gap: 10px; flex-wrap: wrap">
+          <a class="btn outline" href="/app/fyp/">For You</a>
+          <a class="btn outline" href="/app/following/">Following</a>
+          <a class="btn outline" href="/app/create/">Create</a>
+          <a class="btn outline" href="/app/signals/">Signals</a>
+          <a class="btn outline" href="/app/notifications/">Notifications</a>
+          <a class="btn outline" href="/app/profile/">Profile</a>
         </div>
       </div>
-      <div class="hero-video" aria-label="Homepage hero">
-        <picture class="desktop">
-          <img src="/assets/branding/Desktop Poster.webp?v=2026-02-24_50" alt="NDYRA preview" loading="lazy">
-        </picture>
-        <picture class="mobile">
-          <img src="/assets/branding/Mobile Poster.webp?v=2026-02-24_50" alt="NDYRA preview" loading="lazy">
-        </picture>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="section-title">
-    <h2>NDYRA Surfaces to QA</h2>
-    <div class="small">These are the routes we actively validate in E2E + Lighthouse.</div>
-  </div>
-  <div class="grid">
-    <a class="card" href="/app/fyp/?src=demo">
-      <div class="thumb"><img src="/assets/branding/app-icon-192.png" alt="NDYRA For You" loading="lazy"></div>
-      <div class="meta">
-        <div class="title">For You feed</div>
-        <p class="small">Demo mode feed render + post cards.</p>
-      </div>
-      <div class="pill">NDYRA</div>
-    </a>
-
-    <a class="card" href="/app/following/?src=demo">
-      <div class="thumb"><img src="/assets/branding/app-icon-192.png" alt="NDYRA Following" loading="lazy"></div>
-      <div class="meta">
-        <div class="title">Following feed</div>
-        <p class="small">Demo mode following view.</p>
-      </div>
-      <div class="pill">NDYRA</div>
-    </a>
-
-    <a class="card" href="/gym/demo-gym/join">
-      <div class="thumb"><img src="/assets/branding/app-icon-192.png" alt="Quick Join" loading="lazy"></div>
-      <div class="meta">
-        <div class="title">Quick Join</div>
-        <p class="small">Account → Waiver → Payment → Confirmation.</p>
-      </div>
-      <div class="pill">Join</div>
-    </a>
-
-    <a class="card" href="/app/signals/?src=demo">
-      <div class="thumb"><img src="/assets/branding/app-icon-192.png" alt="Signals" loading="lazy"></div>
-      <div class="meta">
-        <div class="title">Signals</div>
-        <p class="small">Muted by default · tap to hear · curated fonts.</p>
-      </div>
-      <div class="pill">NDYRA</div>
-    </a>
-
-    <a class="card" href="/workouts/">
-      <div class="thumb"><img src="/assets/branding/Desktop Poster.webp?v=2026-02-24_50" alt="Workout previews" loading="lazy"></div>
-      <div class="meta">
-        <div class="title">Workout previews</div>
-        <p class="small">Legacy teaser browsing (still useful for conversion QA).</p>
-      </div>
-      <div class="pill">Preview</div>
-    </a>
-  </div>
-</div>
-
-  <div class="modal" id="videoModal" aria-hidden="true">
-  <div class="modal-inner">
-    <div class="modal-head">
-      <div class="title" data-modal-title>Video</div>
-      <button class="modal-close" data-modal-close>Close</button>
-    </div>
-    <div class="modal-body" data-modal-body></div>
-  </div>
-</div>
-  <div class="footer">
-  <div class="container">
-    <div>NDYRA — build preview (<span data-build-label>CP??</span>). Signals are now in QA (muted by default).</div>
-  </div>
-</div>
-  
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}));
-    }
-  </script>
-  <script src="/assets/js/site.js?v=2026-02-24_50" defer></script>
+    <footer style="margin-top: 18px" class="muted">
+      <small>Build: 2026-02-26_53 • CP53</small>
+    </footer>
+  </main>
 </body>
 </html>

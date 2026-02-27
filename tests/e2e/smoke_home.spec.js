@@ -1,15 +1,14 @@
 const { test, expect } = require('@playwright/test');
 
-test('home loads and header nav renders', async ({ page }) => {
+// NOTE: NDYRA-first entry
+// Root (/) should send QA to the Social Shell (For You) quickly.
+
+test('root entry routes to Social Shell (For You)', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/NDYRA/i);
+  await page.waitForURL('**/app/fyp/**');
 
-  // Header exists
-  await expect(page.locator('.header')).toBeVisible();
-
-  // The Workouts link exists in multiple places; we want the one in the header nav.
-  const workoutsNav = page.locator('.header .nav a[href="/workouts/"]').first();
-  await expect(workoutsNav).toBeVisible();
+  await expect(page.locator('[data-ndyra-nav="fyp"]')).toBeVisible();
+  await expect(page.locator('h1')).toContainText('For You');
 });
 
 test('build label matches build.json', async ({ page, request }) => {
@@ -17,9 +16,7 @@ test('build label matches build.json', async ({ page, request }) => {
   expect(res.ok()).toBeTruthy();
   const build = await res.json();
 
-  await page.goto('/');
-  const footer = page.locator('.footer');
-
-  // Expect CP label from build.json to appear in footer text (ex: "CP26")
-  await expect(footer).toContainText(new RegExp(`\\b${build.label}\\b`));
+  await page.goto('/app/fyp/');
+  const pill = page.locator('[data-build-label]').first();
+  await expect(pill).toContainText(build.label);
 });

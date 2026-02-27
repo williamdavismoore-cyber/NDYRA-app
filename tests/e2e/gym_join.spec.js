@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test('Gym Quick Join renders (demo mode)', async ({ page }) => {
-  await page.goto('/gym/demo-gym/join?src=demo');
+  await page.goto('/gym/demo-gym/join');
   await expect(page).toHaveTitle(/Quick Join/i);
 
   const root = page.locator('#join-root');
