@@ -1,0 +1,62 @@
+{
+  "build_label": "CP122",
+  "build_id": "2026-03-16_122",
+  "site_url": "",
+  "deploy_id": "",
+  "git_commit_or_archive_hash": "",
+  "netlify_context": "production",
+  "supabase_project_ref": "",
+  "stripe_mode": "test",
+  "schema_runtime_truth": {
+    "cp115_entitlement_migration_applied": false,
+    "stripe_events_table_present": false,
+    "portal_config_present": false,
+    "api_health_snapshot": "",
+    "public_config_snapshot": "",
+    "admin_status_snapshot": "",
+    "admin_execute_snapshot": ""
+  },
+  "billing_entitlements": {
+    "member_checkout_result": "pending",
+    "business_checkout_result": "pending",
+    "portal_return_result": "pending",
+    "token_top_up_result": "pending",
+    "timer_pack_entitlement_result": "pending",
+    "plan_swap_cleanup_result": "pending"
+  },
+  "browser_device_matrix": [
+    {
+      "surface": "Public pricing and join",
+      "browser": "Desktop Chromium",
+      "result": "pending",
+      "notes": ""
+    },
+    {
+      "surface": "Member app shell + inbox/notifications",
+      "browser": "Mobile Safari",
+      "result": "pending",
+      "notes": ""
+    },
+    {
+      "surface": "Wallet, purchases, timer library",
+      "browser": "Android Chrome",
+      "result": "pending",
+      "notes": ""
+    },
+    {
+      "surface": "Admin status + execute",
+      "browser": "Desktop Chromium",
+      "result": "pending",
+      "notes": ""
+    }
+  ],
+  "performance": {
+    "lighthouse_or_perf_summary": "",
+    "blocking_perf_issues": []
+  },
+  "release_decision": {
+    "release_status": "pending",
+    "remaining_blockers": [],
+    "operator_notes": ""
+  }
+}

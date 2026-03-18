@@ -1,0 +1,643 @@
+{
+  "version": "cp122",
+  "shared": {
+    "reference_doc": "docs/ndyra_bizgym/BIZGYM_MODULE_CONTRACT_v0.3_2026-03-05_BIZ03.md",
+    "module_boundary_note": "NDYRA Core keeps public acquisition, billing truth, entitlements, and admin wiring surfaces. BizGym owns gym-ops runtime. Timer runtime remains separate."
+  },
+  "surfaces": [
+    {
+      "key": "business_home",
+      "eyebrow": "Boundary surface",
+      "title": "Business Boundary",
+      "summary": "This shell stays in NDYRA Core so public acquisition, billing truth, and admin wiring remain coherent while gym-ops runtime continues to live in BizGym.",
+      "ownership": "NDYRA Core owns public for-gyms acquisition, business billing truth, and live wiring/admin status. BizGym owns operational check-in, schedule, settings, migrations, and day-to-day gym tools.",
+      "available_now": [
+        "Public acquisition is live under /for-gyms/, /for-gyms/pricing.html, and /for-gyms/start.html.",
+        "Business billing truth stays here at /biz/account/ and reflects runtime/config readiness honestly.",
+        "Admin deployment truth stays here at /admin/status/, /admin/wiring/, and /admin/execute/."
+      ],
+      "owned_elsewhere": [
+        "Front-desk and staff check-in runtime",
+        "Schedule ops and staff assignment",
+        "Gym settings, kiosk controls, waivers, and migration commit/cutover flows"
+      ],
+      "next_steps": [
+        "Use the public for-gyms flow to stage acquisition and billing setup.",
+        "Use /admin/execute/ to run the deployment confidence checklist and release closeout packet.",
+        "Use the BizGym handoff docs when gym-ops runtime work resumes."
+      ],
+      "links": [
+        {
+          "label": "Biz account",
+          "href": "/biz/account/"
+        },
+        {
+          "label": "For gyms",
+          "href": "/for-gyms/"
+        },
+        {
+          "label": "Admin execute",
+          "href": "/admin/execute/"
+        },
+        {
+          "label": "Release closeout packet",
+          "href": "/assets/data/release_closeout_packet.json"
+        }
+      ]
+    },
+    {
+      "key": "checkin",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Check-In Boundary",
+      "summary": "Check-In remains paused in NDYRA Core and intentionally stops at the shared routing shell. The real operational flow continues to belong to BizGym.",
+      "ownership": "Shared platform/backend spine is acknowledged here, but member/business runtime for check-in is not duplicated in Core.",
+      "available_now": [
+        "Billing truth and deployment readiness remain available through /biz/account/ and /admin/execute/.",
+        "Public gym acquisition remains available through /for-gyms/ and /gym/:slug/join."
+      ],
+      "owned_elsewhere": [
+        "Front-desk kiosk flow",
+        "Live issue radar and staff overrides",
+        "Operational waiver/membership enforcement"
+      ],
+      "next_steps": [
+        "Keep Check-In paused in Core until explicitly resumed.",
+        "Use the BizGym module contract before changing any check-in behavior."
+      ],
+      "links": [
+        {
+          "label": "Kiosk boundary",
+          "href": "/biz/check-in/kiosk/"
+        },
+        {
+          "label": "Live boundary",
+          "href": "/biz/check-in/live/"
+        },
+        {
+          "label": "Biz account",
+          "href": "/biz/account/"
+        },
+        {
+          "label": "Admin execute",
+          "href": "/admin/execute/"
+        }
+      ]
+    },
+    {
+      "key": "checkin_kiosk",
+      "eyebrow": "Paused in Core",
+      "title": "Check-In Kiosk Boundary",
+      "summary": "The kiosk route is preserved so IA and rewrites stay stable, but kiosk runtime is intentionally not forked into NDYRA Core.",
+      "ownership": "BizGym owns the kiosk experience, front-desk flow, and waiver/membership guardrails.",
+      "available_now": [
+        "The route is present for QA, architecture continuity, and future reintegration.",
+        "Core still exposes plan/billing truth and deployment readiness elsewhere."
+      ],
+      "owned_elsewhere": [
+        "Big-screen/front-desk kiosk runtime",
+        "Member resolution and override controls",
+        "Operational audit trail for staff actions"
+      ],
+      "next_steps": [
+        "Verify route presence only; do not treat this as active kiosk runtime.",
+        "Refer to the BizGym handoff before adding kiosk behavior."
+      ],
+      "links": [
+        {
+          "label": "Back to Check-In",
+          "href": "/biz/check-in/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        },
+        {
+          "label": "Admin execute",
+          "href": "/admin/execute/"
+        }
+      ]
+    },
+    {
+      "key": "checkin_live",
+      "eyebrow": "Paused in Core",
+      "title": "Live Check-In Boundary",
+      "summary": "This route preserves the live queue entry point without pretending the live issue radar or override system exists in Core.",
+      "ownership": "BizGym owns the live queue, staff overrides, and issue management.",
+      "available_now": [
+        "The route remains for architecture continuity and QA navigation.",
+        "Core still carries billing truth, acquisition, and admin deployment controls."
+      ],
+      "owned_elsewhere": [
+        "Live queue monitoring",
+        "Issue triage and staff override tools",
+        "Operational logging of check-in exceptions"
+      ],
+      "next_steps": [
+        "Keep this route as a boundary shell unless Check-In is explicitly resumed here.",
+        "Use /admin/execute/ for deployment readiness, not this page, to judge launch state."
+      ],
+      "links": [
+        {
+          "label": "Back to Check-In",
+          "href": "/biz/check-in/"
+        },
+        {
+          "label": "Admin execute",
+          "href": "/admin/execute/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "schedule",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Schedule Boundary",
+      "summary": "Schedule operations are intentionally left with BizGym so NDYRA Core does not fork a second staff scheduling engine.",
+      "ownership": "BizGym owns class/session operations, capacity, staff assignment, and schedule management.",
+      "available_now": [
+        "Public gym discovery and member event surfaces stay available in Core.",
+        "Business billing truth and acquisition flows remain available in Core."
+      ],
+      "owned_elsewhere": [
+        "Class/session CRUD",
+        "Capacity and roster controls",
+        "Staff assignment and ops calendars"
+      ],
+      "next_steps": [
+        "Use member-facing event and public gym surfaces here in Core.",
+        "Use the BizGym contract for any future schedule ops work."
+      ],
+      "links": [
+        {
+          "label": "Events in member app",
+          "href": "/app/events/"
+        },
+        {
+          "label": "Gym public profile",
+          "href": "/gym/profile/?slug=redline-athletica"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        },
+        {
+          "label": "Biz account",
+          "href": "/biz/account/"
+        }
+      ]
+    },
+    {
+      "key": "settings",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Settings Boundary",
+      "summary": "Business settings stay intentionally routed but not reimplemented here. NDYRA Core does not fork staff, kiosk, waiver, or payout settings from BizGym.",
+      "ownership": "BizGym owns gym settings, staff management, kiosks, waivers, payouts, and token-rule operations.",
+      "available_now": [
+        "Public acquisition and plan selection remain in Core.",
+        "Business billing truth stays in /biz/account/."
+      ],
+      "owned_elsewhere": [
+        "Staff and branding controls",
+        "Waiver and kiosk settings",
+        "Payout and gym-specific token rules"
+      ],
+      "next_steps": [
+        "Use /for-gyms/start.html to stage a plan selection.",
+        "Use BizGym docs when settings runtime resumes."
+      ],
+      "links": [
+        {
+          "label": "For gyms start",
+          "href": "/for-gyms/start.html?biz_tier=starter&plan=monthly"
+        },
+        {
+          "label": "Biz account",
+          "href": "/biz/account/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "migrate_hub",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Migration Boundary",
+      "summary": "Migration routing stays visible in Core so the architecture and deploy story remain coherent, but import/verify/commit/cutover runtime is not duplicated here.",
+      "ownership": "BizGym owns migration tooling. NDYRA Core only preserves the IA shell, live wiring truth, and billing/admin context around it.",
+      "available_now": [
+        "Admin live execution and wiring truth remain available here for deployment prep.",
+        "Public acquisition can still onboard gyms before migration runtime resumes."
+      ],
+      "owned_elsewhere": [
+        "Member import processing",
+        "Schedule import processing",
+        "Verify/commit/cutover execution"
+      ],
+      "next_steps": [
+        "Use these routes as QA-visible placeholders for architecture continuity only.",
+        "Use /admin/execute/ and the release closeout packet to track real deployment progress."
+      ],
+      "links": [
+        {
+          "label": "Members import boundary",
+          "href": "/biz/migrate/members/"
+        },
+        {
+          "label": "Schedule import boundary",
+          "href": "/biz/migrate/schedule/"
+        },
+        {
+          "label": "Verify boundary",
+          "href": "/biz/migrate/verify/"
+        },
+        {
+          "label": "Admin execute",
+          "href": "/admin/execute/"
+        }
+      ]
+    },
+    {
+      "key": "migrate_members",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Migration Members Boundary",
+      "summary": "Member import logic is intentionally held out of Core. This route exists so the migration IA and routing map stay stable until BizGym runtime is attached.",
+      "ownership": "BizGym owns member import, normalization, and QA reconciliation flows.",
+      "available_now": [
+        "Business acquisition, billing truth, and deployment/admin truth remain live in Core."
+      ],
+      "owned_elsewhere": [
+        "CSV/member import runtime",
+        "Conflict resolution and reconciliation",
+        "Operational import audit trail"
+      ],
+      "next_steps": [
+        "Do not treat this route as an active import tool.",
+        "Use the BizGym contract before reactivating import behavior."
+      ],
+      "links": [
+        {
+          "label": "Migration hub",
+          "href": "/biz/migrate/"
+        },
+        {
+          "label": "Commit boundary",
+          "href": "/biz/migrate/commit/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "migrate_schedule",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Migration Schedule Boundary",
+      "summary": "Schedule import remains a boundary shell in Core so route continuity survives without forking schedule-ops logic out of BizGym.",
+      "ownership": "BizGym owns schedule import, mapping, and verification flows.",
+      "available_now": [
+        "Public gym profiles and member events remain available in Core."
+      ],
+      "owned_elsewhere": [
+        "Schedule import runtime",
+        "Instructor/capacity mapping",
+        "Operational migration QA"
+      ],
+      "next_steps": [
+        "Use this page as a route-presence shell only.",
+        "Use the BizGym handoff before enabling any schedule import actions."
+      ],
+      "links": [
+        {
+          "label": "Migration hub",
+          "href": "/biz/migrate/"
+        },
+        {
+          "label": "Verify boundary",
+          "href": "/biz/migrate/verify/"
+        },
+        {
+          "label": "Events",
+          "href": "/app/events/"
+        }
+      ]
+    },
+    {
+      "key": "migrate_verify",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Migration Verify Boundary",
+      "summary": "Verification remains part of the BizGym migration toolchain. NDYRA Core keeps the route but does not invent a second verification engine.",
+      "ownership": "BizGym owns data verification, exception handling, and operator approval steps.",
+      "available_now": [
+        "Live wiring/admin truth and public acquisition remain active in Core."
+      ],
+      "owned_elsewhere": [
+        "Verification runtime",
+        "Exception review workflow",
+        "Operator approvals tied to migration execution"
+      ],
+      "next_steps": [
+        "Track deployment progress through /admin/execute/, not through this placeholder route.",
+        "Use BizGym migration docs for runtime behavior."
+      ],
+      "links": [
+        {
+          "label": "Migration hub",
+          "href": "/biz/migrate/"
+        },
+        {
+          "label": "Commit boundary",
+          "href": "/biz/migrate/commit/"
+        },
+        {
+          "label": "Admin execute",
+          "href": "/admin/execute/"
+        }
+      ]
+    },
+    {
+      "key": "migrate_commit",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Migration Commit Boundary",
+      "summary": "Commit/cutover actions remain intentionally out of Core. This page preserves the route without pretending the irreversible migration step is active here.",
+      "ownership": "BizGym owns commit execution and operational safeguards.",
+      "available_now": [
+        "Admin execution truth and business billing truth remain available in Core."
+      ],
+      "owned_elsewhere": [
+        "Commit execution runtime",
+        "Operational locking and rollback guardrails",
+        "Staff confirmation flows"
+      ],
+      "next_steps": [
+        "Treat this as a route-presence shell only.",
+        "Use the release closeout packet for deployment evidence, not this page."
+      ],
+      "links": [
+        {
+          "label": "Verify boundary",
+          "href": "/biz/migrate/verify/"
+        },
+        {
+          "label": "Cutover boundary",
+          "href": "/biz/migrate/cutover/"
+        },
+        {
+          "label": "Release closeout packet",
+          "href": "/assets/data/release_closeout_packet.json"
+        }
+      ]
+    },
+    {
+      "key": "migrate_cutover",
+      "eyebrow": "BizGym-owned runtime",
+      "title": "Migration Cutover Boundary",
+      "summary": "Cutover remains a protected BizGym runtime concern. NDYRA Core preserves the route for continuity but does not imitate the actual cutover flow.",
+      "ownership": "BizGym owns cutover, rollback readiness, and operator-run release sequencing.",
+      "available_now": [
+        "Admin execute and the release closeout packet remain available for deployment evidence capture."
+      ],
+      "owned_elsewhere": [
+        "Cutover orchestration",
+        "Rollback readiness and final operator checks",
+        "Migration-runtime release sequencing"
+      ],
+      "next_steps": [
+        "Keep this route as a boundary shell until BizGym runtime is attached.",
+        "Use /admin/execute/ plus the release closeout packet to drive launch evidence."
+      ],
+      "links": [
+        {
+          "label": "Commit boundary",
+          "href": "/biz/migrate/commit/"
+        },
+        {
+          "label": "Admin execute",
+          "href": "/admin/execute/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "gym_timer",
+      "eyebrow": "Timer runtime separate",
+      "title": "Gym Timer Boundary",
+      "summary": "The shared gym-timer route stays visible, but NDYRA Core does not fork the separate Timer module runtime. Core only carries timer entitlements and member-side library access.",
+      "ownership": "Timer runtime and gym timer authoring remain separate. NDYRA Core owns entitlements, catalog visibility, wallet/purchases, and member library unlocks.",
+      "available_now": [
+        "Members can access owned timer content through /app/library/timers/.",
+        "Public/member marketplace surfaces remain in Core."
+      ],
+      "owned_elsewhere": [
+        "Gym timer run engine",
+        "Gym timer builder runtime",
+        "Deep timer authoring workflows"
+      ],
+      "next_steps": [
+        "Use member-side timer library and wallet/purchases here in Core.",
+        "Do not interpret this page as the timer engine itself."
+      ],
+      "links": [
+        {
+          "label": "Timer library",
+          "href": "/app/library/timers/"
+        },
+        {
+          "label": "Member timer",
+          "href": "/app/timer/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        },
+        {
+          "label": "Shop",
+          "href": "/app/shop/"
+        }
+      ]
+    },
+    {
+      "key": "gym_timer_builder",
+      "eyebrow": "Timer runtime separate",
+      "title": "Gym Timer Builder Boundary",
+      "summary": "Builder authoring remains intentionally outside NDYRA Core. This route preserves navigation continuity without duplicating the Timer module.",
+      "ownership": "Timer module owns builder runtime. NDYRA Core owns entitlements, purchases, and member library access around it.",
+      "available_now": [
+        "Timer purchases and entitlements still surface through wallet, shop, and timer library in Core."
+      ],
+      "owned_elsewhere": [
+        "Builder editing runtime",
+        "Authoring controls and gym-timer publish flow",
+        "Engine-specific preview logic"
+      ],
+      "next_steps": [
+        "Use the separate Timer module for builder runtime when attached.",
+        "Use Core only for acquisition, ownership, and unlock state."
+      ],
+      "links": [
+        {
+          "label": "Timer library",
+          "href": "/app/library/timers/"
+        },
+        {
+          "label": "Wallet",
+          "href": "/app/wallet/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "shop",
+      "eyebrow": "BizGym-owned seller ops",
+      "title": "Biz Shop Boundary",
+      "summary": "Seller-side shop management remains a BizGym concern. NDYRA Core already owns public pricing, checkout truth, entitlements, purchases, and member-side marketplace access.",
+      "ownership": "NDYRA Core owns acquisition, checkout readiness truth, wallet/purchases, and member library unlocks. BizGym owns seller-side product ops and shop management.",
+      "available_now": [
+        "Members can browse and purchase through /app/shop/, /app/wallet/, and /app/purchases/.",
+        "Public/business acquisition and plan selection remain live in Core."
+      ],
+      "owned_elsewhere": [
+        "Seller-side catalog management",
+        "Tenant inventory and publish controls",
+        "Gym-ops marketplace workflows"
+      ],
+      "next_steps": [
+        "Use /biz/account/ to verify billing runtime truth.",
+        "Use BizGym docs before extending seller-side operations here."
+      ],
+      "links": [
+        {
+          "label": "Member shop",
+          "href": "/app/shop/"
+        },
+        {
+          "label": "Biz account",
+          "href": "/biz/account/"
+        },
+        {
+          "label": "For gyms pricing",
+          "href": "/for-gyms/pricing.html"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "timer_packs",
+      "eyebrow": "BizGym-owned seller ops",
+      "title": "Biz Timer Packs Boundary",
+      "summary": "Timer-pack selling remains seller-side ops and therefore stays out of Core runtime. Core already carries purchase, entitlement, and member library access for owned packs.",
+      "ownership": "NDYRA Core owns timer entitlements, wallet/purchases, and member library access. Seller-side timer-pack management belongs to BizGym plus the separate Timer module.",
+      "available_now": [
+        "Members can access owned timer content and timer-related entitlements in Core."
+      ],
+      "owned_elsewhere": [
+        "Seller-side timer-pack upload and publish",
+        "Business-side pack pricing ops",
+        "Pack authoring workflows tied to the Timer module"
+      ],
+      "next_steps": [
+        "Use Core for purchase/access truth only.",
+        "Use BizGym/Timer module docs before adding pack management runtime."
+      ],
+      "links": [
+        {
+          "label": "Timer library",
+          "href": "/app/library/timers/"
+        },
+        {
+          "label": "Purchases",
+          "href": "/app/purchases/"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "moves",
+      "eyebrow": "BizGym-owned ops detail",
+      "title": "Biz Moves Boundary",
+      "summary": "Move-detail ops remain a BizGym concern. NDYRA Core already carries public workouts and member-side workouts surfaces without duplicating gym-ops authoring.",
+      "ownership": "NDYRA Core owns public workouts marketing and member workout browsing. BizGym owns business-side move ops and deeper gym content tooling.",
+      "available_now": [
+        "Public workouts live under /workouts/.",
+        "Member workout browsing lives under /app/workouts/."
+      ],
+      "owned_elsewhere": [
+        "Business-side move management",
+        "Gym-ops move detail tooling",
+        "Operational authoring workflows"
+      ],
+      "next_steps": [
+        "Use the public/member workouts surfaces in Core for current browsing flows.",
+        "Do not treat this page as a business content editor."
+      ],
+      "links": [
+        {
+          "label": "Public workouts",
+          "href": "/workouts/"
+        },
+        {
+          "label": "Member workouts",
+          "href": "/app/workouts/"
+        },
+        {
+          "label": "Move detail boundary",
+          "href": "/biz/moves/move.html"
+        },
+        {
+          "label": "Business boundary",
+          "href": "/biz/"
+        }
+      ]
+    },
+    {
+      "key": "move_detail",
+      "eyebrow": "BizGym-owned ops detail",
+      "title": "Biz Move Detail Boundary",
+      "summary": "The business move-detail route is preserved for IA continuity but intentionally stops short of recreating business authoring/runtime inside Core.",
+      "ownership": "BizGym owns the business move detail/editor runtime. NDYRA Core keeps only public/member workout discovery surfaces.",
+      "available_now": [
+        "Current workout discovery remains available in /workouts/ and /app/workouts/."
+      ],
+      "owned_elsewhere": [
+        "Business-side move detail runtime",
+        "Content-editing and ops metadata",
+        "Staff-side publishing workflows"
+      ],
+      "next_steps": [
+        "Use this as a route-presence shell only.",
+        "Use BizGym docs before adding any authoring/runtime behavior."
+      ],
+      "links": [
+        {
+          "label": "Biz moves boundary",
+          "href": "/biz/moves/"
+        },
+        {
+          "label": "Public workouts",
+          "href": "/workouts/"
+        },
+        {
+          "label": "Member workouts",
+          "href": "/app/workouts/"
+        }
+      ]
+    }
+  ]
+}

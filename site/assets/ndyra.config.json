@@ -1,0 +1,64 @@
+{
+  "supabaseUrl": "https://YOUR-PROJECT.supabase.co",
+  "supabaseAnonKey": "YOUR_SUPABASE_ANON_KEY",
+  "stripePublishableKey": "YOUR_STRIPE_PUBLISHABLE_KEY",
+  "stripePortalConfigurationId": "YOUR_OPTIONAL_PORTAL_CONFIGURATION_ID",
+  "memberPlans": [
+    {
+      "key": "member_monthly",
+      "label": "NDYRA Member Monthly",
+      "price_id": "PRICE_ID_MEMBER_MONTHLY"
+    },
+    {
+      "key": "member_annual",
+      "label": "NDYRA Member Annual",
+      "price_id": "PRICE_ID_MEMBER_ANNUAL"
+    }
+  ],
+  "businessPlans": [
+    {
+      "key": "business_starter_monthly",
+      "label": "NDYRA Biz Starter Monthly",
+      "price_id": "PRICE_ID_BIZ_STARTER_MONTHLY"
+    },
+    {
+      "key": "business_starter_annual",
+      "label": "NDYRA Biz Starter Annual",
+      "price_id": "PRICE_ID_BIZ_STARTER_ANNUAL"
+    },
+    {
+      "key": "business_pro_monthly",
+      "label": "NDYRA Biz Pro Monthly",
+      "price_id": "PRICE_ID_BIZ_PRO_MONTHLY"
+    },
+    {
+      "key": "business_pro_annual",
+      "label": "NDYRA Biz Pro Annual",
+      "price_id": "PRICE_ID_BIZ_PRO_ANNUAL"
+    }
+  ],
+  "tokenPacks": [
+    {
+      "key": "pack_100",
+      "label": "100 Tokens",
+      "tokens": 100,
+      "display_price": "$9.99",
+      "price_id": "PRICE_ID_TOKEN_PACK_100"
+    },
+    {
+      "key": "pack_250",
+      "label": "250 Tokens",
+      "tokens": 250,
+      "display_price": "$19.99",
+      "price_id": "PRICE_ID_TOKEN_PACK_250"
+    },
+    {
+      "key": "pack_500",
+      "label": "500 Tokens",
+      "tokens": 500,
+      "display_price": "$34.99",
+      "price_id": "PRICE_ID_TOKEN_PACK_500"
+    }
+  ],
+  "build": "2026-03-16_122"
+}

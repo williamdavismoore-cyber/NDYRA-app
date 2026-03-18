@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "id": "n_seed_001",
+      "type": "system",
+      "entity_type": "badge",
+      "entity_id": "badge_legendary_01",
+      "title": "Badge unlocked",
+      "body": "You earned \"First Rep\". Keep the chain alive.",
+      "is_read": false,
+      "created_at": "2026-03-06T14:15:00Z",
+      "actor": {"full_name":"NDYRA","handle":"system","avatar_url":""}
+    },
+    {
+      "id": "n_seed_002",
+      "type": "booking",
+      "entity_type": "event",
+      "entity_id": "event_seed_001",
+      "title": "Event RSVP confirmed",
+      "body": "You’re going. Add it to your calendar and bring the energy.",
+      "is_read": false,
+      "created_at": "2026-03-06T12:10:00Z",
+      "actor": {"full_name":"Coach Mara","handle":"coach.mara","avatar_url":""}
+    },
+    {
+      "id": "n_seed_003",
+      "type": "system",
+      "entity_type": "purchase",
+      "entity_id": "purchase_seed_001",
+      "title": "Purchase complete",
+      "body": "Your timer pack is ready in Library.",
+      "is_read": true,
+      "created_at": "2026-03-05T23:12:00Z",
+      "actor": {"full_name":"NDYRA Shop","handle":"shop","avatar_url":""}
+    },
+    {
+      "id": "n_seed_004",
+      "type": "comment",
+      "entity_type": "aftermath",
+      "entity_id": "af_001",
+      "title": "New support on your recap",
+      "body": "A gym mate reacted to your Aftermath story.",
+      "is_read": true,
+      "created_at": "2026-03-05T19:03:00Z",
+      "actor": {"full_name":"Jules Bennett","handle":"jules","avatar_url":""}
+    },
+    {
+      "id": "n_seed_005",
+      "type": "message",
+      "entity_type": "message",
+      "entity_id": "thread_seed_001",
+      "title": "New message request",
+      "body": "Someone wants to talk challenge strategy.",
+      "is_read": false,
+      "created_at": "2026-03-05T17:46:00Z",
+      "actor": {"full_name":"Leo Varga","handle":"leo","avatar_url":""}
+    }
+  ]
+}

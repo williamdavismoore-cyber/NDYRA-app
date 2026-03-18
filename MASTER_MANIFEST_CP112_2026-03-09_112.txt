@@ -1,0 +1,33 @@
+NDYRA MASTER MANIFEST — CP112
+Build ID: 2026-03-09_112
+Kit Version: v10.3
+Date: 2026-03-09
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP112_2026-03-09_112.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP112_CoreBuild_2026-03-09_112.zip
+  Site-focused core build package.
+
+- NDYRA_QA_PREVIEW_site_CP112_2026-03-09_112.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook + QA
+- NDYRA_Buildbook_Kit_CP112_v10.3_CHECKPOINT_2026-03-09_112.zip
+- NDYRA_Buildbook_MemoryPack_CP112_2026-03-09_112.docx
+- NDYRA_Buildbook_MemoryPack_CP112_2026-03-09_112.pdf
+- NDYRA_QA_REPORT_CP112_2026-03-09_112.txt
+- NDYRA_QA_RUNBOOK_CP112_2026-03-09_112.md
+- MASTER_MANIFEST_CP112_2026-03-09_112.txt
+
+Notes
+- CP112 is the runtime/deployment hardening checkpoint.
+- Runtime/config truth is now surfaced explicitly across admin, billing, wallet, shop, purchases, and timer library.
+- No generated graphics were added in this checkpoint.
+- Build completion estimate: ~97% complete / ~3% remaining.
+
+Master split deliverables
+- NDYRA_MASTER_DELIVERABLES_CP112_2026-03-09_112_PART1_REPO.zip
+- NDYRA_MASTER_DELIVERABLES_CP112_2026-03-09_112_PART2_BUILDBOOK.zip
+- NDYRA_MASTER_DELIVERABLES_CP112_2026-03-09_112_PART3_EVERYTHING_ELSE.zip

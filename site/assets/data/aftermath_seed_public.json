@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "af_001",
+      "kind": "workout",
+      "title": "Intervals Session",
+      "subtitle": "You stayed smooth in the transitions.",
+      "occurred_at": "2026-03-06T12:40:00Z",
+      "rating": 5,
+      "stats": [
+        {"label":"Total time","value":"38:12"},
+        {"label":"Rounds","value":"8"},
+        {"label":"Avg HR","value":"154"},
+        {"label":"Streak","value":"6 days"}
+      ]
+    },
+    {
+      "id": "af_002",
+      "kind": "challenge",
+      "title": "March Consistency Challenge",
+      "subtitle": "Logged today — keeping the chain alive.",
+      "occurred_at": "2026-03-06T10:15:00Z",
+      "rating": 4,
+      "stats": [
+        {"label":"Day","value":"6 / 30"},
+        {"label":"Rank","value":"#12"},
+        {"label":"Points today","value":"+5"},
+        {"label":"Best streak","value":"6"}
+      ]
+    },
+    {
+      "id": "af_003",
+      "kind": "event",
+      "title": "Community Class RSVP",
+      "subtitle": "You’re in. Show up hungry.",
+      "occurred_at": "2026-03-05T23:05:00Z",
+      "rating": 5,
+      "stats": [
+        {"label":"Starts","value":"Sat 9:00 AM"},
+        {"label":"Location","value":"Connected Gym"},
+        {"label":"Attending","value":"23"},
+        {"label":"Your status","value":"Going"}
+      ]
+    }
+  ]
+}

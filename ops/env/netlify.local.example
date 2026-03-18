@@ -1,0 +1,14 @@
+SUPABASE_URL=<your-supabase-url>
+SUPABASE_ANON_KEY=<your-supabase-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<your-supabase-service-role-key>
+STRIPE_PUBLISHABLE_KEY=<your-stripe-publishable-key>
+STRIPE_SECRET_KEY=<your-stripe-secret-key>
+STRIPE_WEBHOOK_SIGNING_SECRET=<your-stripe-webhook-secret>
+PRICE_ID_MEMBER_MONTHLY=<price_member_monthly>
+PRICE_ID_BIZ_STARTER_MONTHLY=<price_biz_starter_monthly>
+PRICE_ID_BIZ_STARTER_ANNUAL=<price_biz_starter_annual>
+PRICE_ID_BIZ_PRO_MONTHLY=<price_biz_pro_monthly>
+PRICE_ID_BIZ_PRO_ANNUAL=<price_biz_pro_annual>
+PRICE_ID_TOKEN_PACK_100=<price_token_pack_100>
+PRICE_ID_TOKEN_PACK_250=<price_token_pack_250>
+PRICE_ID_TOKEN_PACK_500=<price_token_pack_500>

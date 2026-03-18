@@ -1,0 +1,86 @@
+NDYRA QA REPORT - CP118
+Build ID: 2026-03-12_118
+Kit Version: v10.3
+
+Process:
+1) Re-QA previous build state (CP117) from the actual extracted repo tree before any CP118 work
+2) Correct the module ownership map using the uploaded Timer build as reference only (no Timer code merged)
+3) Implement the first real migration on the Core side: user profiles + preferences
+4) Restamp the active site/build surfaces to CP118
+5) Re-run the full automated gate suite on the stamped CP118 tree
+
+Notes:
+- QA-first rule was honored before any CP118 build work started.
+- The uploaded Timer package was absorbed for architecture reference only.
+- No Timer runtime code was integrated into NDYRA Core.
+- No generated graphics were added in CP118.
+- One carried-forward issue surfaced during final QA: `ops/env/live_release_closeout.example.json` still had CP117 identifiers. That was corrected and the full gate suite was rerun clean.
+
+What changed in CP118
+- Removed the incorrect Core-owned `workoutLibrary` module.
+- Added `site/assets/js/ndyra/modules/timerBoundary/index.mjs` as the observed Timer boundary contract.
+- Rebuilt `site/assets/data/core_module_contracts.json` with `timer_module_boundary`, `user_profile_prefs`, and `token_system`.
+- Expanded `site/assets/js/ndyra/modules/userProfilePrefs/index.mjs` to own profile-level workout refs and legacy migration.
+- Migrated real consumers onto `userProfilePrefs`: Settings, Profile, and My Workouts.
+- Rebuilt Timer Library as an honest boundary shell rather than a fake Core-owned import/runtime surface.
+- Added `docs/ndyra/NDYRA_Core_Modularization_Plan_CP118_2026-03-12.md` and updated the implementation log.
+- Rewrote `tools/core_module_contract_check.py` to enforce the corrected boundary model.
+
+Build completion
+- NDYRA Core overall: 100% code-side complete / ~99.9% overall including external credentialed live verification
+- Modularization request: ~50% complete
+
+QA Gates
+- build_stamp PASS
+- qa_smoke PASS
+- qa_super PASS
+- brand_gate_check PASS
+- ip_gate_check PASS
+- wiring_consistency_check PASS
+- qa_accessibility PASS
+- deployment_confidence_check PASS
+- live_verification_check PASS
+- public_surface_check PASS
+- core_module_contract_check PASS
+- module_boundary_surface_check PASS
+- release_closeout_check PASS
+
+Captured QA Output
+$ node tools/build_stamp.cjs
+[build_stamp] OK: build.json validated + normalized
+
+$ python3 tools/qa_smoke.py
+PASS
+
+$ python3 tools/qa_super.py
+SUPER QA PASS
+
+$ python3 tools/brand_gate_check.py
+BRAND GATE PASS
+
+$ python3 tools/ip_gate_check.py
+IP GATE PASS
+
+$ python3 tools/wiring_consistency_check.py
+WIRING CONSISTENCY PASS
+
+$ python3 tools/qa_accessibility.py
+ACCESSIBILITY QA PASS
+
+$ python3 tools/deployment_confidence_check.py
+DEPLOYMENT CONFIDENCE CHECK PASS
+
+$ python3 tools/live_verification_check.py
+LIVE VERIFICATION CHECK PASS
+
+$ python3 tools/public_surface_check.py
+PUBLIC SURFACE CHECK PASS
+
+$ python3 tools/core_module_contract_check.py
+CORE MODULE CONTRACT CHECK PASS
+
+$ python3 tools/module_boundary_surface_check.py
+MODULE BOUNDARY SURFACE CHECK PASS
+
+$ python3 tools/release_closeout_check.py
+RELEASE CLOSEOUT CHECK PASS

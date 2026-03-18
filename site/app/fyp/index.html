@@ -1,113 +1,38 @@
-<!doctype html>
-<html lang="en">
+<!doctype html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDYRA — For You</title>
-  <link rel="icon" href="/assets/branding/favicon.ico" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png" />
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For You</title>
+  <link rel="icon" href="/assets/branding/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-03-16_122">
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-03-16_122">
+  <style>
+    .avatar-fallback{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:rgba(225,6,0,.12);border:1px solid rgba(225,6,0,.35);font-weight:800;color:#fff}
+    .pill{display:flex;justify-content:space-between;gap:10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 10px;background:rgba(255,255,255,.03)}
+  </style>
 </head>
-<body data-page="ndyra-fyp" class="ndyra ndyra-social-page">
-  <div class="ndyra-shell">
-
-    <header class="ndyra-header">
-      <div class="inner" style="display:flex; align-items:center; justify-content:space-between; gap: 14px; flex-wrap: wrap">
-        <a class="ndyra-brand" href="/app/fyp/">
-          <img src="/assets/branding/app-icon-192.png" alt="NDYRA" />
-          <span class="wordmark">NDYRA</span>
-        </a>
-
-        <nav class="ndyra-header__pills" aria-label="Core" style="display:flex; gap: 8px; flex-wrap: wrap; align-items:center; justify-content:center">
-          <a class="ndyra-pill" data-nav href="/app/fyp/">For You</a>
-          <a class="ndyra-pill" data-nav href="/app/following/">Following</a>
-          <a class="ndyra-pill" data-nav href="/app/create/">Create</a>
-        </nav>
-
-        <nav class="ndyra-header__actions" aria-label="Actions" style="display:flex; gap: 8px; flex-wrap: wrap; align-items:center; justify-content:flex-end">
-          <a class="ndyra-pill" data-nav href="/app/signals/">Signals</a>
-          <a class="ndyra-pill" data-nav href="/app/notifications/">Alerts</a>
-          <a class="ndyra-pill" data-nav href="/app/profile/">Profile</a>
-        </nav>
+<body class="ndyra-bg" data-page="ndyra-fyp"><a class="skip-link" href="#main-content">Skip to content</a>
+<header class="header"><div class="brand"><strong>NDYRA</strong></div><nav class="nav" aria-label="Primary navigation"><a href="/workouts/">Workouts</a><a class="primary" href="/app/">App</a><a href="/biz/">Business</a><a href="/admin/">Admin</a></nav></header>
+<main id="main-content" class="page container">
+  <div class="ndyra-card" style="padding:16px; margin-bottom:14px;">
+    <div class="ndyra-row" style="justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+      <div>
+        <div class="small" data-fyp-mode>Loading…</div>
+        <h1 class="ndyra-h2" style="margin-top:6px;">For You</h1>
+        <div class="muted">The familiar member home: stories, recaps, and proof of work from people showing up.</div>
       </div>
-    </header>
-
-    <div class="ndyra-social-layout">
-      <aside class="ndyra-leftnav" aria-label="Left navigation">
-        <a class="ndyra-leftnav__item" data-nav href="/app/fyp/">For You</a>
-        <a class="ndyra-leftnav__item" data-nav href="/app/following/">Following</a>
-        <a class="ndyra-leftnav__item" data-nav href="/app/create/">Create</a>
-        <a class="ndyra-leftnav__item" data-nav href="/app/signals/">Signals</a>
-        <a class="ndyra-leftnav__item" data-nav href="/app/profile/">Profile</a>
-        <a class="ndyra-leftnav__item" data-nav href="/biz/check-in/">Business</a>
-      </aside>
-
-      <main class="ndyra-social-main">
-        <section class="ndyra-feedwrap">
-          <div class="feed-head">
-            <h1>For You</h1>
-            <div class="feed-meta">
-              <span class="badge">Feed</span>
-              <span class="badge" data-ndyra-status></span>
-            </div>
-          </div>
-
-          <div class="signal-strip" data-signal-strip></div>
-
-          <div class="ndyra-feed" data-ndyra-feed></div>
-          <div data-ndyra-sentinel style="height: 1px;"></div>
-        </section>
-      </main>
-
-      <aside class="ndyra-rightrail" aria-label="Right rail">
-        <div class="ndyra-railcard">
-          <div class="card__head">
-            <div class="card__title">Search</div>
-          </div>
-          <div class="card__body">
-            <input class="input" placeholder="Search people, gyms, posts" disabled />
-            <div class="muted" style="margin-top: 8px">Search UI is staged; wire server-side search / vector search.</div>
-          </div>
-        </div>
-
-        <div class="ndyra-railcard" style="margin-top: 12px">
-          <div class="card__head">
-            <div class="card__title">Workout reference</div>
-          </div>
-          <div class="card__body">
-            <div class="muted">When a post includes a workout_ref, this rail will surface the referenced workout and quick actions.</div>
-          </div>
-        </div>
-
-        <div class="ndyra-railcard" style="margin-top: 12px">
-          <div class="card__head">
-            <div class="card__title">Recommended</div>
-          </div>
-          <div class="card__body">
-            <div class="muted">Suggestions load once follows/tenants are populated.</div>
-          </div>
-        </div>
-      </aside>
-    </div>
-
-    <nav class="ndyra-bottomnav" aria-label="Bottom">
-      <div class="inner">
-        <a data-nav href="/app/fyp/"><span class="ico">🜂</span><span>For You</span></a>
-        <a data-nav href="/app/following/"><span class="ico">⟡</span><span>Following</span></a>
-        <a data-nav href="/app/create/"><span class="ico">＋</span><span>Create</span></a>
-        <a data-nav href="/app/notifications/"><span class="ico">⚑</span><span>Alerts</span></a>
-        <a data-nav href="/app/profile/"><span class="ico">⦿</span><span>Me</span></a>
+      <div class="ndyra-row" style="gap:10px;flex-wrap:wrap;">
+        <a class="btn" href="/app/stories/">Stories</a>
+        <a class="btn" href="/app/aftermath/">My Aftermath</a>
+        <a class="btn" href="/app/home/">Simple Home</a>
       </div>
-    </nav>
-
-    <div class="footer">
-      NDYRA — build preview (<span data-build-label>CP??</span>). Social Core build in progress.
     </div>
-
   </div>
-
-  <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
+  <div class="ndyra-feed" data-fyp-feed>
+    <div class="ndyra-card" style="padding:16px;"><div class="ndyra-h2">Loading feed…</div></div>
+  </div>
+</main>
+<div class="footer">NDYRA build preview (<span data-build-label>CP122</span>)</div>
+<script src="/assets/js/site.js?v=2026-03-16_122"></script>
+<script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-03-16_122"></script>
 </body>
 </html>

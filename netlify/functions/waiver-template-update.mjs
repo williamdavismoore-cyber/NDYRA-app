@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import { enforceTenantBusinessPlan } from './_lib/planGate.mjs';
+import { getSupabaseEnv } from './_lib/env.mjs';
 
 function json(statusCode, obj) {
   return {
@@ -24,12 +26,10 @@ export async function handler(event) {
       return json(405, { error: 'method_not_allowed' });
     }
 
-    const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SECRET_KEY;
-    const SUPABASE_ANON = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const { url: SUPABASE_URL, serviceRoleKey: SUPABASE_SERVICE_ROLE, anonKey: SUPABASE_ANON } = getSupabaseEnv();
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE || !SUPABASE_ANON) {
-      return json(500, { error: 'missing_env', hint: 'Set SUPABASE_URL, SUPABASE_SECRET_KEY, VITE_SUPABASE_PUBLISHABLE_KEY' });
+      return json(500, { error: 'missing_env', hint: 'Set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ANON_KEY' });
     }
 
     const token = getBearerToken(event.headers);
@@ -79,6 +79,29 @@ export async function handler(event) {
 
     if (!isStaff) {
       return json(403, { error: 'forbidden', hint: 'tenant staff required' });
+    }
+
+    // CP82: Hard gate — active Business plan required (Gym Starter/Pro)
+    const planGate = await enforceTenantBusinessPlan({ supabase: supaAdmin, tenantId: tenant_id });
+    if (!planGate.ok) {
+      await supaAdmin
+        .from('audit_log')
+        .insert({
+          tenant_id,
+          actor_user_id,
+          action: 'waiver_template_update_blocked',
+          details: { reason: 'plan_required', required_plans: planGate.required_plans, gate_errors: planGate.errors || [] },
+        });
+
+      return json(402, {
+        ok: false,
+        error: 'plan_required',
+        required_plans: planGate.required_plans,
+        hint: 'Activate Gym Starter or Gym Pro to edit waivers.',
+        subscription: planGate.subscription || null,
+        entitlements: planGate.entitlements || [],
+        gate_errors: planGate.errors || [],
+      });
     }
 
     // 3) Determine next version (strictly increments)

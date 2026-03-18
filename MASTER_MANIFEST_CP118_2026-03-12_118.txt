@@ -1,0 +1,34 @@
+NDYRA MASTER MANIFEST - CP118
+Build ID: 2026-03-12_118
+Kit Version: v10.3
+Date: 2026-03-12
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP118_2026-03-12_118.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP118_CoreBuild_2026-03-12_118.zip
+  Core app package with site, tools, Netlify functions, Supabase migrations, ops templates, and supporting docs.
+
+- NDYRA_QA_PREVIEW_site_CP118_2026-03-12_118.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook + QA
+- NDYRA_Buildbook_Kit_CP118_v10.3_CHECKPOINT_2026-03-12_118.zip
+- NDYRA_Buildbook_MemoryPack_CP118_2026-03-12_118.docx
+- NDYRA_Buildbook_MemoryPack_CP118_2026-03-12_118.pdf
+- NDYRA_QA_REPORT_CP118_2026-03-12_118.txt
+- NDYRA_QA_RUNBOOK_CP118_2026-03-12_118.md
+- MASTER_MANIFEST_CP118_2026-03-12_118.txt
+
+Notes
+- CP118 corrects the Timer/Profile ownership map after reviewing the separate Timer build.
+- QA-first was honored: CP117 was re-QAed from the actual extracted repo tree before CP118 work began.
+- No generated graphics were added in this checkpoint.
+- NDYRA Core overall completion: 100% code-side complete / ~99.9% overall including external credentialed live verification.
+- Modularization request status: ~50% complete.
+
+Master split deliverables
+- NDYRA_MASTER_DELIVERABLES_CP118_2026-03-12_118_PART1_REPO.zip
+- NDYRA_MASTER_DELIVERABLES_CP118_2026-03-12_118_PART2_BUILDBOOK.zip
+- NDYRA_MASTER_DELIVERABLES_CP118_2026-03-12_118_PART3_EVERYTHING_ELSE.zip

@@ -1,0 +1,152 @@
+{
+  "groups": [
+    {
+      "key": "checkout_and_billing",
+      "label": "Checkout + Billing",
+      "items": [
+        {
+          "key": "member_checkout_live",
+          "label": "Member checkout live pass",
+          "path": "/pricing.html",
+          "requirements": ["apiConfigReady", "priceMatrixReady", "billingReady"],
+          "steps": [
+            "Open /pricing.html while signed in as a member account.",
+            "Start monthly and annual checkout from the public member pricing cards.",
+            "Confirm Stripe opens on-origin return URLs and success returns to /app/account/."
+          ],
+          "expect": [
+            "Only configured plans are clickable.",
+            "Success state lands in account with checkout=success and session_id present.",
+            "Account billing mirror reflects the active member plan."
+          ]
+        },
+        {
+          "key": "business_checkout_live",
+          "label": "Business checkout live pass",
+          "path": "/for-gyms/start.html",
+          "requirements": ["apiConfigReady", "priceMatrixReady", "billingReady"],
+          "steps": [
+            "Open /for-gyms/start.html and capture gym identity with starter and pro flows.",
+            "Start checkout with a resolvable tenant slug or tenant id.",
+            "Confirm success returns to /biz/account/ without cross-origin drift."
+          ],
+          "expect": [
+            "Checkout stays blocked when tenant identity is weak.",
+            "Billing mirror resolves to the intended tenant subject.",
+            "No BizGym runtime is duplicated during acquisition."
+          ]
+        },
+        {
+          "key": "billing_portal_live",
+          "label": "Billing portal open + return",
+          "path": "/app/account/",
+          "requirements": ["apiConfigReady", "billingReady", "portalReady"],
+          "optional_requirements": ["executionReady"],
+          "steps": [
+            "Open member or business account billing controls.",
+            "Launch the Stripe billing portal.",
+            "Return to the correct NDYRA account route."
+          ],
+          "expect": [
+            "Portal session opens only when Stripe portal configuration exists.",
+            "Return path stays inside the matching account surface.",
+            "Cancellation/update actions later reflect through webhook sync."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "marketplace_and_entitlements",
+      "label": "Marketplace + Entitlements",
+      "items": [
+        {
+          "key": "token_topup_live",
+          "label": "Token top-up receipt + wallet credit",
+          "path": "/app/wallet/",
+          "requirements": ["apiConfigReady", "priceMatrixReady", "marketplaceReady", "webhookReady"],
+          "steps": [
+            "Buy each token pack from the wallet surface.",
+            "Confirm checkout.session.completed creates a token_topups receipt row.",
+            "Confirm credit_tokens writes exactly one ledger entry and the wallet balance updates."
+          ],
+          "expect": [
+            "Repeated webhook delivery does not double-credit the wallet.",
+            "Wallet, purchases, and receipt UI all reflect the same session id.",
+            "Token pack price ids must be present for all exposed packs."
+          ]
+        },
+        {
+          "key": "plan_swap_entitlement_cleanup",
+          "label": "Plan swap entitlement cleanup",
+          "path": "/admin/execute/",
+          "requirements": ["apiConfigReady", "billingReady", "webhookReady"],
+          "steps": [
+            "Upgrade or downgrade a member or business plan in Stripe.",
+            "Wait for customer.subscription.updated or invoice.* events to arrive.",
+            "Check subscriptions + entitlements mirrors for the same subject."
+          ],
+          "expect": [
+            "Exactly one active plan entitlement remains for the subject family after the swap.",
+            "Prior sibling plan entitlements are marked inactive and linked to the replacement.",
+            "The active subscription mirror tier matches the active entitlement feature_key."
+          ]
+        },
+        {
+          "key": "timer_entitlement_payload_access",
+          "label": "Timer pack entitlement + payload access",
+          "path": "/app/library/timers/",
+          "requirements": ["marketplaceReady", "apiConfigReady"],
+          "optional_requirements": ["executionReady"],
+          "steps": [
+            "Purchase a timer pack with tokens.",
+            "Reload the timer library and open the entitled payload.",
+            "Confirm non-entitled users remain blocked."
+          ],
+          "expect": [
+            "purchase_with_tokens grants the timer_pack entitlement exactly once.",
+            "The entitled user can access timer_pack_payloads.",
+            "Plan-only users without the pack do not get the payload by accident."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "deployment_truth",
+      "label": "Deployment Truth + Launch Confidence",
+      "items": [
+        {
+          "key": "admin_truth_surfaces",
+          "label": "Admin truth surfaces all green",
+          "path": "/admin/status/",
+          "requirements": ["apiConfigReady", "deployedConfigReady", "executionReady"],
+          "steps": [
+            "Open /admin/status/, /admin/wiring/, and /admin/execute/ on the deployed host.",
+            "Confirm the deployment badge, confidence checklist, and runtime surfaces all agree.",
+            "Confirm no placeholder warnings remain in the config warnings panel."
+          ],
+          "expect": [
+            "Status badge reads Deployment Ready only when all required runtime sections are green.",
+            "Execute page shows no live blockers.",
+            "Public config source is API / deploy, not local fallback."
+          ]
+        },
+        {
+          "key": "browser_device_finish",
+          "label": "Final browser / device finish pass",
+          "path": "/preview/",
+          "requirements": ["executionReady"],
+          "steps": [
+            "Run the final iPhone, Android, and desktop pass on the deployed target.",
+            "Re-check auth, public pricing, account, wallet, purchases, inbox, events, and profile flows.",
+            "Run the agreed perf/a11y/browser gates on the live build."
+          ],
+          "expect": [
+            "No stale checkpoint labels or cache drift remain.",
+            "No browser-specific layout break appears on the public or app surfaces.",
+            "This is the final non-code pass before announcement."
+          ]
+        }
+      ]
+    }
+  ]
+}

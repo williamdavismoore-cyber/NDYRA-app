@@ -1,0 +1,496 @@
+{
+  "build_label": "CP122",
+  "build_id": "2026-03-16_122",
+  "host_policy": {
+    "default_member_mode": "for_you_with_simple_home_backup",
+    "default_comfort_mode": false,
+    "hide_advanced_until_requested": true,
+    "max_primary_cards": 4,
+    "acceptance_rules": [
+      "Every new module must declare audience, slot, owner, status, one plain-language label, one-sentence description, and one primary link before it can appear in NDYRA.",
+      "External modules stay off the simple member home until they are intentionally bridged or explicitly approved as boundary shells.",
+      "Operator-only tools never appear in the public or member on-ramp.",
+      "If a module brings multiple tools, the simple home only gets one primary action. The rest belongs on the More page.",
+      "Member-facing copy on first-run surfaces should avoid acronyms and internal jargon whenever possible.",
+      "Signals are alerts. Stories are content. Do not blur the two when adding new social surfaces.",
+      "Biometric data stays private by default and may only surface through explicit member controls.",
+      "For returning members, For You is the familiar default entry. Simple Home stays available as the calmer backup."
+    ],
+    "default_launch_surface": "for_you"
+  },
+  "experience_defaults": {
+    "mode": "simple",
+    "comfort_mode": false,
+    "hide_advanced_until_requested": true,
+    "launch_surface": "for_you"
+  },
+  "slots": [
+    {
+      "key": "public_home_primary",
+      "audience": "public",
+      "max_items": 3,
+      "description": "Large first-run choices for people who are brand new to NDYRA."
+    },
+    {
+      "key": "member_home_primary",
+      "audience": "member",
+      "max_items": 4,
+      "description": "Essential next actions only. No overload. No jargon."
+    },
+    {
+      "key": "member_more_tools",
+      "audience": "member",
+      "description": "Expanded tools once the member explicitly asks for more."
+    },
+    {
+      "key": "member_settings_extensions",
+      "audience": "member",
+      "description": "Device-side experience controls and future module settings bridges."
+    },
+    {
+      "key": "operator_module_truth",
+      "audience": "operator",
+      "description": "Operator-only module truth and release wiring."
+    },
+    {
+      "key": "integration_boundaries",
+      "audience": "operator_or_member_notice",
+      "description": "External modules and paused seams that should not silently leak into the simple flow."
+    }
+  ],
+  "public_choices": [
+    {
+      "key": "join_member",
+      "label": "I want to join as a member",
+      "description": "See member pricing and start with the basics.",
+      "path": "/join.html"
+    },
+    {
+      "key": "already_member",
+      "label": "I already have an account",
+      "description": "Go straight to sign in and pick up where you left off.",
+      "path": "/login/"
+    },
+    {
+      "key": "for_gyms",
+      "label": "I run a gym",
+      "description": "Use the separate gym path without mixing it into the member flow.",
+      "path": "/for-gyms/"
+    }
+  ],
+  "modules": [
+    {
+      "key": "gym_network_public",
+      "label": "Find my gym",
+      "plain_label": "Find my gym",
+      "owner": "NDYRA Core",
+      "status": "active",
+      "integration_mode": "internal",
+      "visibility": "member",
+      "category": "basics",
+      "slot": "member_home_primary",
+      "home_order": 1,
+      "description": "Choose the gym NDYRA should center around for classes, community, and challenges.",
+      "plain_description": "Pick your gym first so NDYRA knows what to show you.",
+      "primary_link": {
+        "label": "Open gyms",
+        "path": "/app/gyms/"
+      },
+      "links": [
+        {
+          "label": "Open gyms",
+          "path": "/app/gyms/"
+        },
+        {
+          "label": "See members",
+          "path": "/app/members/"
+        },
+        {
+          "label": "View a public gym",
+          "path": "/gym/profile/?slug=redline-athletica"
+        }
+      ],
+      "kill_switch_key": "gym_network_public",
+      "default_enabled": true
+    },
+    {
+      "key": "messaging_notifications",
+      "label": "Messages and alerts",
+      "plain_label": "Messages and alerts",
+      "owner": "NDYRA Core",
+      "status": "active",
+      "integration_mode": "internal",
+      "visibility": "member",
+      "category": "basics",
+      "slot": "member_home_primary",
+      "home_order": 2,
+      "description": "Keep direct messages, requests, announcements, and alerts in one calm place. Signals stay alerts, not story content.",
+      "plain_description": "Read your messages and alerts in one place. Stories live somewhere else on purpose.",
+      "primary_link": {
+        "label": "Open inbox",
+        "path": "/app/inbox/"
+      },
+      "links": [
+        {
+          "label": "Open inbox",
+          "path": "/app/inbox/"
+        },
+        {
+          "label": "Open alerts",
+          "path": "/app/notifications/"
+        }
+      ],
+      "kill_switch_key": "messaging_notifications",
+      "default_enabled": true
+    },
+    {
+      "key": "profile_preferences_identity",
+      "label": "My profile and settings",
+      "plain_label": "My profile and settings",
+      "owner": "NDYRA Core",
+      "status": "active",
+      "integration_mode": "internal",
+      "visibility": "member",
+      "category": "basics",
+      "slot": "member_home_primary",
+      "home_order": 3,
+      "description": "Manage your profile, privacy, health-device settings, fitness bio mounts, timezone, and comfort settings from one place.",
+      "plain_description": "This is where you manage your account, device settings, privacy, and how NDYRA feels on this device.",
+      "primary_link": {
+        "label": "Open profile",
+        "path": "/app/profile/"
+      },
+      "links": [
+        {
+          "label": "Open profile",
+          "path": "/app/profile/"
+        },
+        {
+          "label": "Open settings",
+          "path": "/app/settings/#health-data"
+        },
+        {
+          "label": "Open performance",
+          "path": "/app/performance/"
+        }
+      ],
+      "kill_switch_key": "profile_preferences_identity",
+      "default_enabled": true
+    },
+    {
+      "key": "workouts_timer_boundary",
+      "label": "My workouts",
+      "plain_label": "My workouts",
+      "owner": "NDYRA Core + Timer boundary",
+      "status": "active_with_external_boundary",
+      "integration_mode": "internal_plus_boundary",
+      "visibility": "member",
+      "category": "basics",
+      "slot": "member_home_primary",
+      "home_order": 4,
+      "description": "Profile-level workout refs live here, while the full video workout library stays in the separate Timer module.",
+      "plain_description": "Keep the workouts you saved. The full video library is still part of the separate Timer module.",
+      "primary_link": {
+        "label": "Open My Workouts",
+        "path": "/app/timer/my-workouts/"
+      },
+      "links": [
+        {
+          "label": "Open My Workouts",
+          "path": "/app/timer/my-workouts/"
+        },
+        {
+          "label": "Open Timer boundary",
+          "path": "/app/library/timers/"
+        }
+      ],
+      "kill_switch_key": "workouts_timer_boundary",
+      "default_enabled": true
+    },
+    {
+      "key": "social_core_aftermath",
+      "label": "For You, stories, and recaps",
+      "plain_label": "For You, stories, and recaps",
+      "owner": "NDYRA Core",
+      "status": "active",
+      "integration_mode": "internal",
+      "visibility": "member",
+      "category": "community",
+      "slot": "member_more_tools",
+      "home_order": 10,
+      "description": "Follow people and gyms, browse For You, open Stories, and see shareable workout recaps without crowding the calm backup home.",
+      "plain_description": "Open the social side of NDYRA when you want the main feed, stories, and recap sharing.",
+      "primary_link": {
+        "label": "Open For You",
+        "path": "/app/fyp/"
+      },
+      "links": [
+        {
+          "label": "For You",
+          "path": "/app/fyp/"
+        },
+        {
+          "label": "Stories",
+          "path": "/app/stories/"
+        },
+        {
+          "label": "Following",
+          "path": "/app/following/"
+        },
+        {
+          "label": "Aftermath",
+          "path": "/app/aftermath/"
+        }
+      ],
+      "kill_switch_key": "social_core_aftermath",
+      "default_enabled": true
+    },
+    {
+      "key": "challenges_events",
+      "label": "Challenges and events",
+      "plain_label": "Challenges and events",
+      "owner": "NDYRA Core",
+      "status": "active",
+      "integration_mode": "internal",
+      "visibility": "member",
+      "category": "progress",
+      "slot": "member_more_tools",
+      "home_order": 11,
+      "description": "Join challenges, track progress, and RSVP to events once the member wants more than the essentials.",
+      "plain_description": "Use this when you want goals, events, and momentum tools.",
+      "primary_link": {
+        "label": "Open challenges",
+        "path": "/app/challenges/"
+      },
+      "links": [
+        {
+          "label": "Challenges",
+          "path": "/app/challenges/"
+        },
+        {
+          "label": "Events",
+          "path": "/app/events/"
+        }
+      ],
+      "kill_switch_key": "challenges_events",
+      "default_enabled": true
+    },
+    {
+      "key": "biometrics_performance",
+      "label": "Performance and biometrics",
+      "plain_label": "Performance and biometrics",
+      "owner": "BIO01 separate workflow + PROF01 mounts",
+      "status": "host_ready_waiting_module",
+      "integration_mode": "internal_host_ready",
+      "visibility": "member",
+      "category": "progress",
+      "slot": "member_more_tools",
+      "home_order": 12,
+      "description": "Reserved dashboard, device settings, and fitness bio surfaces for the biometrics module without pretending ingestion is already integrated.",
+      "plain_description": "This area is ready for fitness data, charts, and a performance dashboard once the biometrics module hands back cleanly.",
+      "primary_link": {
+        "label": "Open performance",
+        "path": "/app/performance/"
+      },
+      "links": [
+        {
+          "label": "Open performance",
+          "path": "/app/performance/"
+        },
+        {
+          "label": "Health device settings",
+          "path": "/app/settings/#health-data"
+        },
+        {
+          "label": "Open profile",
+          "path": "/app/profile/"
+        }
+      ],
+      "kill_switch_key": "biometrics_performance",
+      "default_enabled": true
+    },
+    {
+      "key": "commerce_tokens_entitlements",
+      "label": "Wallet, shop, and receipts",
+      "plain_label": "Wallet, shop, and receipts",
+      "owner": "NDYRA Core",
+      "status": "active",
+      "integration_mode": "internal",
+      "visibility": "member",
+      "category": "money",
+      "slot": "member_more_tools",
+      "home_order": 13,
+      "description": "Top up tokens, browse the shop, review purchases, and inspect account entitlements without pushing money surfaces into the first screen.",
+      "plain_description": "Open this when you need tokens, purchases, or account billing.",
+      "primary_link": {
+        "label": "Open wallet",
+        "path": "/app/wallet/"
+      },
+      "links": [
+        {
+          "label": "Wallet",
+          "path": "/app/wallet/"
+        },
+        {
+          "label": "Shop",
+          "path": "/app/shop/"
+        },
+        {
+          "label": "Purchases",
+          "path": "/app/purchases/"
+        },
+        {
+          "label": "Account",
+          "path": "/app/account/"
+        }
+      ],
+      "kill_switch_key": "commerce_tokens_entitlements",
+      "default_enabled": true
+    },
+    {
+      "key": "timer_boundary",
+      "label": "Timer module boundary",
+      "plain_label": "Separate Timer module",
+      "owner": "Timer system (external module)",
+      "status": "observed_not_integrated",
+      "integration_mode": "external_boundary",
+      "visibility": "member_boundary_notice",
+      "category": "external",
+      "slot": "integration_boundaries",
+      "home_order": 20,
+      "description": "The full Timer runtime stays separate. Core only shows the boundary honestly while BRG01 prepares the recap and replay bridge.",
+      "plain_description": "Timer is a separate module right now. Core only shows the boundary and the future replay bridge honestly.",
+      "primary_link": {
+        "label": "Open Timer boundary",
+        "path": "/app/library/timers/"
+      },
+      "links": [
+        {
+          "label": "Timer boundary",
+          "path": "/app/library/timers/"
+        },
+        {
+          "label": "My Workouts",
+          "path": "/app/timer/my-workouts/"
+        }
+      ],
+      "kill_switch_key": "timer_boundary",
+      "default_enabled": true
+    },
+    {
+      "key": "bizgym_boundary",
+      "label": "For gyms / business tools",
+      "plain_label": "For gyms",
+      "owner": "BizGym (external workflow)",
+      "status": "boundary_shell",
+      "integration_mode": "external_boundary",
+      "visibility": "public",
+      "category": "external",
+      "slot": "integration_boundaries",
+      "home_order": 21,
+      "description": "Business operations stay in their own workflow instead of leaking into the member on-ramp.",
+      "plain_description": "Gyms follow a separate path so members do not get overwhelmed.",
+      "primary_link": {
+        "label": "Open For Gyms",
+        "path": "/for-gyms/"
+      },
+      "links": [
+        {
+          "label": "For gyms",
+          "path": "/for-gyms/"
+        },
+        {
+          "label": "Business boundary",
+          "path": "/biz/"
+        }
+      ],
+      "kill_switch_key": "bizgym_boundary",
+      "default_enabled": true
+    },
+    {
+      "key": "live_ops_admin",
+      "label": "Admin and release tools",
+      "plain_label": "Admin and release tools",
+      "owner": "NDYRA Core",
+      "status": "operator_only",
+      "integration_mode": "internal",
+      "visibility": "operator_only",
+      "category": "operator",
+      "slot": "operator_module_truth",
+      "home_order": 30,
+      "description": "Operator-only status, wiring, execute, and release closeout truth surfaces.",
+      "plain_description": "Only operators should see this.",
+      "primary_link": {
+        "label": "Open Admin Status",
+        "path": "/admin/status/"
+      },
+      "links": [
+        {
+          "label": "Admin Status",
+          "path": "/admin/status/"
+        },
+        {
+          "label": "Admin Wiring",
+          "path": "/admin/wiring/"
+        },
+        {
+          "label": "Admin Execute",
+          "path": "/admin/execute/"
+        },
+        {
+          "label": "Module registry JSON",
+          "path": "/assets/data/module_host_registry.json"
+        }
+      ],
+      "kill_switch_key": "live_ops_admin",
+      "default_enabled": true
+    },
+    {
+      "key": "checkin_spine",
+      "label": "Check-In / attendance spine",
+      "plain_label": "Check-In / attendance spine",
+      "owner": "Shared future boundary",
+      "status": "paused_boundary_shell_ready",
+      "integration_mode": "paused_future",
+      "visibility": "hidden_until_ready",
+      "category": "external",
+      "slot": "integration_boundaries",
+      "home_order": 40,
+      "description": "Paused shared platform/backend spine. Core now keeps both member and business boundary shells honest until the lane is formally resumed.",
+      "plain_description": "Check-In is still paused, but both the member and business boundary shells are now in place.",
+      "primary_link": {
+        "label": "Open member Check-In boundary",
+        "path": "/app/check-in/"
+      },
+      "links": [
+        {
+          "label": "Member boundary",
+          "path": "/app/check-in/"
+        },
+        {
+          "label": "Business boundary",
+          "path": "/biz/check-in/"
+        },
+        {
+          "label": "Kiosk boundary",
+          "path": "/biz/check-in/kiosk/"
+        },
+        {
+          "label": "Live boundary",
+          "path": "/biz/check-in/live/"
+        }
+      ],
+      "kill_switch_key": "checkin_spine",
+      "default_enabled": true
+    }
+  ],
+  "kill_switch_policy": {
+    "enabled": true,
+    "source": "/assets/data/module_kill_switches.json",
+    "notes": [
+      "Core can hide or disable a module lane at the host level without rewriting the shared shell.",
+      "A disabled module must fail locally and never take down unrelated Core routes.",
+      "Kill switches are host safety controls, not proof that a module is integrated."
+    ]
+  }
+}

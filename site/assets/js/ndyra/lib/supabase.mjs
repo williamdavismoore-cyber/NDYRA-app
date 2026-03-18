@@ -1,113 +1,95 @@
-import { safeText } from './utils.mjs';
+let _clientPromise = null;
+import { loadPublicConfig, resolveSupabaseConfig } from './publicConfig.mjs';
 
-let _cfg = null;
-let _sb = null;
-
-async function ensureSupabaseSdk(){
-  if (window.supabase?.createClient) return;
-  await new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = '/assets/vendor/supabase/supabase.js';
-    s.async = true;
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error('Failed to load Supabase SDK'));
-    document.head.appendChild(s);
-  });
-  if (!window.supabase?.createClient) {
-    throw new Error('Supabase SDK missing createClient');
+async function loadSupabaseModule(){
+  try{
+    return await import('https://esm.sh/@supabase/supabase-js@2.49.8?bundle');
+  }catch(e){
+    throw new Error('Unable to load Supabase browser client. Check internet access for local preview.');
   }
 }
 
-async function loadCfg(){
-  if (_cfg) return _cfg;
+function getNextPath(next){
+  if(next) return String(next);
+  return location.pathname + location.search + location.hash;
+}
 
-  // 1) Netlify Function (preferred)
-  try {
-    const r = await fetch('/api/public_config', { cache: 'no-store' });
-    if (r.ok) {
-      _cfg = await r.json();
-      // Back-compat snake_case
-      if (_cfg && !_cfg.supabaseUrl && _cfg.supabase_url) _cfg.supabaseUrl = _cfg.supabase_url;
-      if (_cfg && !_cfg.supabaseAnonKey && _cfg.supabase_anon_key) _cfg.supabaseAnonKey = _cfg.supabase_anon_key;
-      if (_cfg?.supabaseUrl && _cfg?.supabaseAnonKey) return _cfg;
-    }
-  } catch (_) {
-    /* ignore */
-  }
-
-  // 2) Local fallback file (for local preview)
-  try {
-    const r2 = await fetch('/assets/data/supabase_public_test.json', { cache: 'no-store' });
-    if (r2.ok) {
-      const j = await r2.json();
-      _cfg = j;
-      if (_cfg && !_cfg.supabaseUrl && _cfg.supabase_url) _cfg.supabaseUrl = _cfg.supabase_url;
-      if (_cfg && !_cfg.supabaseAnonKey && _cfg.supabase_anon_key) _cfg.supabaseAnonKey = _cfg.supabase_anon_key;
-      // Require that placeholder keys are replaced.
-      if (_cfg?.supabaseUrl && _cfg?.supabaseAnonKey && !_cfg.supabaseAnonKey.startsWith('YOUR_')) return _cfg;
-    }
-  } catch (_) {
-    /* ignore */
-  }
-
-  throw new Error('Supabase public config not available');
+export async function isConfigured(){
+  const cfg = resolveSupabaseConfig(await loadPublicConfig());
+  return !!(cfg.url && cfg.anonKey);
 }
 
 export async function getSupabase(){
-  if (_sb) return _sb;
-  await ensureSupabaseSdk();
-  const cfg = await loadCfg();
-  _sb = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-  });
-  return _sb;
+  if(_clientPromise) return _clientPromise;
+  _clientPromise = (async()=>{
+    const cfg = resolveSupabaseConfig(await loadPublicConfig());
+    if(!cfg.url || !cfg.anonKey){
+      throw new Error('Missing Supabase public configuration.');
+    }
+    const mod = await loadSupabaseModule();
+    const createClient = mod.createClient || mod.default?.createClient;
+    if(!createClient) throw new Error('Supabase client loader failed.');
+    return createClient(cfg.url, cfg.anonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    });
+  })();
+  return _clientPromise;
+}
+
+export async function getSession(){
+  const sb = await getSupabase();
+  const { data, error } = await sb.auth.getSession();
+  if(error) throw error;
+  return data?.session || null;
 }
 
 export async function getUser(){
-  try {
-    const sb = await getSupabase();
-    const { data, error } = await sb.auth.getUser();
-    if (error) return null;
-    return data?.user || null;
-  } catch (_) {
-    return null;
-  }
+  const session = await getSession().catch(()=>null);
+  return session?.user || null;
 }
 
-export async function ensureProfile(user){
-  if (!user) return { ok:false, reason: 'no-user' };
-
-  const sb = await getSupabase();
-
-  const row = {
-    user_id: user.id,
-    email: user.email ?? null,
-    full_name: user.user_metadata?.full_name ?? null,
-    updated_at: new Date().toISOString(),
-  };
-
-  const { error } = await sb
-    .from('profiles')
-    .upsert(row, { onConflict: 'user_id' });
-
-  if (error) {
-    console.warn('[NDYRA] ensureProfile failed', error);
-    return { ok:false, reason: safeText(error.message) };
-  }
-  return { ok:true };
-}
-
-export function redirectToLogin(nextUrl = window.location.pathname + window.location.search){
-  const next = encodeURIComponent(nextUrl);
-  window.location.href = `/auth/login.html?next=${next}`;
-}
-
-export async function requireAuth(next = null) {
+export async function ensureProfile(){
   const user = await getUser();
-  if (!user) {
-    redirectToLogin(next || (window.location.pathname + window.location.search));
-    return null;
-  }
-  await ensureProfile(user);
-  return user;
+  if(!user) return null;
+  const sb = await getSupabase();
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  let existing = null;
+  try{
+    const { data } = await sb.from('profiles').select('id,timezone,timezone_source').eq('id', user.id).maybeSingle();
+    existing = data || null;
+  }catch(_e){ }
+  const payload = {
+    id: user.id,
+    email: user.email || null,
+    full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+    handle: user.user_metadata?.handle || null,
+  };
+  try{
+    const source = String(existing?.timezone_source || 'device');
+    if(source !== 'manual'){
+      payload.timezone = tz;
+      payload.timezone_source = 'device';
+    }
+  }catch(_){ }
+  try{
+    await sb.from('profiles').upsert(payload, { onConflict: 'id' });
+  }catch(_e){ }
+  return payload;
+}
+
+export async function signOut(){
+  const sb = await getSupabase();
+  await sb.auth.signOut();
+}
+
+export async function requireAuth(next){
+  const user = await getUser().catch(()=>null);
+  if(user) return user;
+  const target = `/auth/login.html?next=${encodeURIComponent(getNextPath(next))}`;
+  location.href = target;
+  return null;
 }

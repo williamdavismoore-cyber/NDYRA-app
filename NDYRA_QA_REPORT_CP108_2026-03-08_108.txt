@@ -1,0 +1,29 @@
+NDYRA QA REPORT — CP108
+Build ID: 2026-03-08_108
+Kit Version: v9.9
+Date: 2026-03-08
+
+QA order
+1) QA'd previous build baseline first
+2) Applied CP108 changes
+3) Re-ran full gate suite
+
+Automated gate results
+- build_stamp: PASS
+- qa_smoke: PASS
+- qa_super: PASS
+- brand_gate_check: PASS
+- ip_gate_check: PASS
+
+Checkpoint summary
+- Surfaced the follow graph in Members, Profile, and Gyms.
+- Added follow/unfollow actions for users and gyms in live mode.
+- No generated graphics this checkpoint.
+
+Completion estimate
+- ~93% complete
+- ~7% remaining
+
+Notes
+- Local preview will render the UI, but follow writes require real auth and Supabase config.
+- This checkpoint intentionally avoids introducing new demo/sim behavior.

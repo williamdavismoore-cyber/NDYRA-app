@@ -1,78 +1,25 @@
-<!doctype html>
-<html lang="en">
+<!doctype html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDYRA — Post</title>
-  <link rel="icon" href="/assets/branding/favicon.ico" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon-180.png" />
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Post</title>
+  <link rel="icon" href="/assets/branding/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-03-16_122">
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-03-16_122">
 </head>
-<body data-page="ndyra-post" class="ndyra">
-  <div class="ndyra-shell">
-
-    <div class="ndyra-topbar">
-      <div class="inner">
-        <a class="ndyra-brand" href="/app/fyp/">
-          <img src="/assets/branding/app-icon-192.png" alt="NDYRA" />
-          <span class="wordmark">NDYRA</span>
-        </a>
-
-        <nav class="ndyra-topnav" aria-label="Primary">
-          <a data-nav href="/app/fyp/">For You</a>
-          <a data-nav href="/app/following/">Following</a>
-          <a data-nav href="/app/create/">Create</a>
-          <a data-nav href="/app/notifications/">Alerts</a>
-          <a data-nav href="/app/profile/">Me</a>
-        </nav>
-      </div>
+<body class="ndyra-bg" data-page="ndyra-post"><a class="skip-link" href="#main-content">Skip to content</a>
+<header class="header"><div class="brand"><strong>NDYRA</strong></div><nav class="nav" aria-label="Primary navigation"><a href="/workouts/">Workouts</a><a class="primary" href="/app/">App</a><a href="/biz/">Business</a><a href="/admin/">Admin</a></nav></header>
+<main id="main-content" class="page container">
+  <div class="ndyra-pagehead">
+    <div>
+      <h1>Post</h1>
+      <div class="small" data-post-mode>Loading…</div>
     </div>
-
-    <main class="ndyra-main">
-      <div class="inner">
-        
-  <div class="ndyra-feed" data-ndyra-post></div>
-  <div class="muted" data-ndyra-status style="margin-top:12px;color:var(--ndyra-text-500);"></div>
-
-      </div>
-    </main>
-      <div class="comment-composer" data-comment-composer>
-        <div class="reply-pill" data-reply-pill hidden>
-          Replying to <span data-reply-to></span>
-          <button type="button" class="pill-x" data-reply-cancel aria-label="Cancel reply">×</button>
-        </div>
-
-        <form class="comment-form" data-comment-form>
-          <textarea class="comment-input" data-comment-input rows="1" placeholder="Write a comment…" maxlength="280"></textarea>
-          <button class="btn primary" type="submit" data-comment-submit disabled>Send</button>
-        </form>
-
-        <div class="comment-login" data-comment-login hidden>
-          <a class="btn primary" data-login-link href="/auth/login.html">Log in to comment</a>
-        </div>
-
-        <div class="tiny muted" data-comment-submit-status hidden></div>
-      </div>
-
-
-    <nav class="ndyra-bottomnav" aria-label="Bottom">
-      <div class="inner">
-        <a data-nav href="/app/fyp/"><span class="ico">🜂</span><span>For You</span></a>
-        <a data-nav href="/app/following/"><span class="ico">⟡</span><span>Following</span></a>
-        <a data-nav href="/app/create/"><span class="ico">＋</span><span>Create</span></a>
-        <a data-nav href="/app/notifications/"><span class="ico">⚑</span><span>Alerts</span></a>
-        <a data-nav href="/app/profile/"><span class="ico">⦿</span><span>Me</span></a>
-      </div>
-    </nav>
-
-    <div class="footer">
-      NDYRA — build preview (<span data-build-label>CP??</span>). Social Core build in progress. Gates enforced (Audit + RLS).
-    </div>
-
+    <div class="ndyra-pagehead-actions"><a class="btn" href="/app/fyp/">Back to feed</a></div>
   </div>
-
-  <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
+  <div class="ndyra-stack ndyra-mt-3" data-post-root></div>
+</main>
+<div class="footer">NDYRA build preview (<span data-build-label>CP122</span>)</div>
+<script src="/assets/js/site.js?v=2026-03-16_122"></script>
+<script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-03-16_122"></script>
 </body>
 </html>

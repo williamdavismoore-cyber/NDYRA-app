@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "key": "local_preview",
+      "label": "1. Local preview",
+      "steps": [
+        "Copy site/assets/ndyra.config.example.json to site/assets/ndyra.config.json.",
+        "Replace placeholder supabaseUrl, supabaseAnonKey, and stripePublishableKey values.",
+        "Run the local preview server and confirm /admin/status/ shows Local Config looks wired.",
+        "Open /admin/execute/ and confirm the runtime surface matrix and live verification matrix match the local-preview flows you expect to test."
+      ]
+    },
+    {
+      "key": "staging",
+      "label": "2. Staging deploy",
+      "steps": [
+        "Apply the migration order from live_wiring_manifest.json on staging Supabase, including the CP115 entitlement lifecycle migration.",
+        "Set Netlify env vars using netlify/env/netlify.staging.example.",
+        "Register the Stripe webhook endpoint for staging and copy the signing secret into Netlify.",
+        "Open /admin/status/ and confirm deployment badge, exact price-matrix truth, billing readiness, marketplace readiness, and webhook readiness are green.",
+        "Open /admin/execute/ and verify the live verification matrix is unblocked for member checkout, business checkout, token top-ups, and plan-swap entitlement cleanup."
+      ]
+    },
+    {
+      "key": "production",
+      "label": "3. Production deploy (prelaunch sandbox)",
+      "steps": [
+        "Copy production values only after staging passes end-to-end.",
+        "Use netlify/env/netlify.production.example as the canonical source for env var names.",
+        "Keep Stripe on sandbox/test keys, prices, portal config, and webhook secrets until launch day. Do not cut live mode here.",
+        "Verify /api/health and /api/public_config on the deployed domain before announcing the prelaunch environment internally.",
+        "Run the full QA gate suite one more time after production deploy, re-check /admin/execute/, complete the release closeout packet, and prepare a separate launch-day cutover checklist for live mode."
+      ]
+    }
+  ]
+}

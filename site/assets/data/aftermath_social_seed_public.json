@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "id": "af_seed_101",
+      "user_id": "seed-user-1",
+      "kind": "workout",
+      "title": "Morning Speed Session",
+      "subtitle": "Crisp splits. Zero excuses.",
+      "occurred_at": "2026-03-06T14:15:00Z",
+      "rating": 5,
+      "stats": [
+        {
+          "label": "Total time",
+          "value": "42:18"
+        },
+        {
+          "label": "Rounds",
+          "value": "10"
+        },
+        {
+          "label": "Avg HR",
+          "value": "151"
+        },
+        {
+          "label": "Streak",
+          "value": "9 days"
+        }
+      ],
+      "visibility": "public",
+      "author_name": "Jules Bennett",
+      "author_handle": "jules.bennett",
+      "author_avatar_url": "",
+      "shared_post_id": "post_seed_101"
+    },
+    {
+      "id": "af_seed_102",
+      "user_id": "seed-user-2",
+      "kind": "challenge",
+      "title": "Consistency check-in",
+      "subtitle": "Another day stacked. Another point banked.",
+      "occurred_at": "2026-03-06T12:00:00Z",
+      "rating": 4,
+      "stats": [
+        {
+          "label": "Day",
+          "value": "7 / 30"
+        },
+        {
+          "label": "Rank",
+          "value": "#8"
+        },
+        {
+          "label": "Points today",
+          "value": "+5"
+        },
+        {
+          "label": "Best streak",
+          "value": "7"
+        }
+      ],
+      "visibility": "public",
+      "author_name": "Mara Keene",
+      "author_handle": "mara.keene",
+      "author_avatar_url": "",
+      "shared_post_id": "post_seed_102"
+    },
+    {
+      "id": "af_seed_103",
+      "user_id": "seed-user-3",
+      "kind": "event",
+      "title": "Saturday community class",
+      "subtitle": "RSVP locked. Showing up with energy.",
+      "occurred_at": "2026-03-05T22:30:00Z",
+      "rating": 5,
+      "stats": [
+        {
+          "label": "Starts",
+          "value": "Sat 9:00 AM"
+        },
+        {
+          "label": "Location",
+          "value": "Connected Gym"
+        },
+        {
+          "label": "Attending",
+          "value": "23"
+        },
+        {
+          "label": "Status",
+          "value": "Going"
+        }
+      ],
+      "visibility": "public",
+      "author_name": "Noor Haddad",
+      "author_handle": "noor.haddad",
+      "author_avatar_url": "",
+      "shared_post_id": null
+    }
+  ]
+}

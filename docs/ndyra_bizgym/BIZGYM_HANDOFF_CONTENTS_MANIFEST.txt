@@ -1,0 +1,127 @@
+AELRIC ARCHITECT BIZGYM HANDOFF MANIFEST
+Build: BizGym Module v0.3.0 / 2026-03-05_BIZ03
+Status: NOT FINISHED BUILD
+
+[00_READ_FIRST]
+- 00_READ_FIRST/NOTE_TO_AELRIC_ARCHITECT.txt | sha256:8d20935bbcf4
+- 00_READ_FIRST/READ_FIRST_NOT_FINISHED_BIZ03.md | sha256:08af6778c24d
+- 00_READ_FIRST/READ_FIRST_NOT_FINISHED_BIZ03.txt | sha256:545ce5631162
+
+[01_CURRENT_MODULE_BUILD]
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/README.md | sha256:8b8fc1f2fdc2
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/README_QA_FIRST.md | sha256:af537640ae7a
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/docs/ndyra_bizgym/BIZGYM_ASSETS_NEEDED_NEXT_BIZ04.md | sha256:6328ba9b5a90
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/docs/ndyra_bizgym/BIZGYM_BUILD_STATUS_v0.3_2026-03-05_BIZ03.md | sha256:8a00aa468d41
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/docs/ndyra_bizgym/BIZGYM_LOCAL_QA_RUNBOOK_v0.3_2026-03-05_BIZ03.md | sha256:15b600447cfe
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/docs/ndyra_bizgym/BIZGYM_MODULE_CONTRACT_v0.3_2026-03-05_BIZ03.md | sha256:c1693156ba46
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/docs/ndyra_bizgym/BIZGYM_QA_REPORT_v0.3_2026-03-05_BIZ03.txt | sha256:75008a60da06
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/package.json | sha256:b96cec210870
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/run-qa-smoke.bat | sha256:1aa4a45814a3
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/app/check-in/index.html | sha256:6d60e8c56a10
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/biz_build.json | sha256:4947708bb138
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/branding/NDYRA_Icon_DarkCircle_512.png | sha256:e4a97449a9d6
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/branding/app-icon-192.png | sha256:e5b5289da196
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/branding/apple-touch-icon-180.png | sha256:6287dd2ae407
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/branding/favicon-32.png | sha256:81d03e3eb69f
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/branding/favicon.ico | sha256:f658a5dc9b40
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/build.json | sha256:3a076439ab7c
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/css/ndyra.css | sha256:0f3d32d65e4a
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/css/styles.css | sha256:0a36ed8148c5
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/data/supabase_public_test.json | sha256:3c4ad10ccd12
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/boot.mjs | sha256:86fdf8629465
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/lib/supabase.mjs | sha256:5c567961f33b
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/lib/utils.mjs | sha256:1042372d8ded
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizCheckin.mjs | sha256:7c1c0f73c6a5
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizCheckinLive.mjs | sha256:f9e3b84d5592
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizKiosk.mjs | sha256:ea67d107b1a5
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizSchedule.mjs | sha256:3b3c7ec3b3ce
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizSettings.mjs | sha256:cd6865fa146a
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/js/ndyra/pages/checkIn.mjs | sha256:8c6ae204388e
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/assets/vendor/supabase/supabase.js | sha256:dc5248430f47
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/auth/login.html | sha256:4408261b7938
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/auth/qa.html | sha256:17b8b57088e8
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/auth/signup.html | sha256:d6693d4cd339
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/biz/check-in/index.html | sha256:99368dc02e1a
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/biz/check-in/kiosk/index.html | sha256:53a40e713f12
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/biz/check-in/live/index.html | sha256:b133f099a808
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/biz/index.html | sha256:9f02c30db8b9
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/biz/schedule/index.html | sha256:516ace7c6a74
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/biz/settings/index.html | sha256:4cb820fd1e61
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/favicon.ico | sha256:f658a5dc9b40
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/index.html | sha256:d1b8d74ea671
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/site/manifest.webmanifest | sha256:56b5b0c1bc6a
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/start-preview.bat | sha256:78e2800ab8a5
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/start-preview.command | sha256:2b7703e7e14b
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/start-preview.sh | sha256:695a90b85423
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/start-real-login.bat | sha256:cf650e6aa43c
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/supabase/migrations/2026-03-04_000000_NDYRA_BIZGYM_Checkin_Core_v0.1.sql | sha256:52bf62f01539
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/supabase/migrations/2026-03-04_000001_NDYRA_BIZGYM_Overrides_RPC_v0.2.sql | sha256:3e064cd40e2c
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/supabase/migrations/2026-03-05_000002_NDYRA_BIZGYM_Schedule_And_Digest_v0.3.sql | sha256:842a8e7e49c8
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/tools/qa_smoke_bizgym.mjs | sha256:ddaf6655056c
+- 01_CURRENT_MODULE_BUILD/NDYRA_BizGym_Module_v0.3.0_BIZ03/tools/static_server.cjs | sha256:a4ab7e067730
+
+[02_QA_PACK]
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/README_QA_FIRST.md | sha256:af537640ae7a
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/docs/ndyra_bizgym/BIZGYM_LOCAL_QA_RUNBOOK_v0.3_2026-03-05_BIZ03.md | sha256:15b600447cfe
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/docs/ndyra_bizgym/BIZGYM_QA_REPORT_v0.3_2026-03-05_BIZ03.txt | sha256:75008a60da06
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/package.json | sha256:b96cec210870
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/run-qa-smoke.bat | sha256:1aa4a45814a3
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/app/check-in/index.html | sha256:6d60e8c56a10
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/biz_build.json | sha256:4947708bb138
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/branding/NDYRA_Icon_DarkCircle_512.png | sha256:e4a97449a9d6
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/branding/app-icon-192.png | sha256:e5b5289da196
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/branding/apple-touch-icon-180.png | sha256:6287dd2ae407
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/branding/favicon-32.png | sha256:81d03e3eb69f
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/branding/favicon.ico | sha256:f658a5dc9b40
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/build.json | sha256:3a076439ab7c
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/css/ndyra.css | sha256:0f3d32d65e4a
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/css/styles.css | sha256:0a36ed8148c5
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/data/supabase_public_test.json | sha256:3c4ad10ccd12
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/boot.mjs | sha256:86fdf8629465
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/lib/supabase.mjs | sha256:5c567961f33b
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/lib/utils.mjs | sha256:1042372d8ded
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizCheckin.mjs | sha256:7c1c0f73c6a5
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizCheckinLive.mjs | sha256:f9e3b84d5592
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizKiosk.mjs | sha256:ea67d107b1a5
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizSchedule.mjs | sha256:3b3c7ec3b3ce
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/pages/bizSettings.mjs | sha256:cd6865fa146a
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/js/ndyra/pages/checkIn.mjs | sha256:8c6ae204388e
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/assets/vendor/supabase/supabase.js | sha256:dc5248430f47
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/auth/login.html | sha256:4408261b7938
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/auth/qa.html | sha256:17b8b57088e8
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/auth/signup.html | sha256:d6693d4cd339
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/biz/check-in/index.html | sha256:99368dc02e1a
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/biz/check-in/kiosk/index.html | sha256:53a40e713f12
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/biz/check-in/live/index.html | sha256:b133f099a808
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/biz/index.html | sha256:9f02c30db8b9
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/biz/schedule/index.html | sha256:516ace7c6a74
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/biz/settings/index.html | sha256:4cb820fd1e61
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/favicon.ico | sha256:f658a5dc9b40
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/index.html | sha256:d1b8d74ea671
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/site/manifest.webmanifest | sha256:56b5b0c1bc6a
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/start-preview.bat | sha256:78e2800ab8a5
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/start-preview.command | sha256:2b7703e7e14b
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/start-preview.sh | sha256:695a90b85423
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/start-real-login.bat | sha256:cf650e6aa43c
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/supabase/migrations/2026-03-04_000000_NDYRA_BIZGYM_Checkin_Core_v0.1.sql | sha256:52bf62f01539
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/supabase/migrations/2026-03-04_000001_NDYRA_BIZGYM_Overrides_RPC_v0.2.sql | sha256:3e064cd40e2c
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/supabase/migrations/2026-03-05_000002_NDYRA_BIZGYM_Schedule_And_Digest_v0.3.sql | sha256:842a8e7e49c8
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/tools/qa_smoke_bizgym.mjs | sha256:ddaf6655056c
+- 02_QA_PACK/NDYRA_BizGym_QA_Pack_v0.3.0_BIZ03/tools/static_server.cjs | sha256:a4ab7e067730
+
+[03_BLUEPRINT_AND_HANDOFF]
+- 03_BLUEPRINT_AND_HANDOFF/Aelric_Architect_Handoff_BizGym_BIZ03_2026-03-05.docx | sha256:a43df4cfb5f4
+- 03_BLUEPRINT_AND_HANDOFF/Aelric_Architect_Handoff_BizGym_BIZ03_2026-03-05.pdf | sha256:a7efee04c9e0
+- 03_BLUEPRINT_AND_HANDOFF/NDYRA_Business_for_Gyms_Blueprint_v0.2_2026-03-04.docx | sha256:9000738bbb69
+- 03_BLUEPRINT_AND_HANDOFF/NDYRA_Business_for_Gyms_Blueprint_v0.2_2026-03-04.pdf | sha256:b91beac632a6
+
+[04_SUPPORTING_DOCS]
+- 04_SUPPORTING_DOCS/BIZGYM_ASSETS_NEEDED_NEXT_BIZ04.md | sha256:6328ba9b5a90
+- 04_SUPPORTING_DOCS/BIZGYM_BUILD_STATUS_v0.3_2026-03-05_BIZ03.md | sha256:8a00aa468d41
+- 04_SUPPORTING_DOCS/BIZGYM_LOCAL_QA_RUNBOOK_v0.3_2026-03-05_BIZ03.md | sha256:15b600447cfe
+- 04_SUPPORTING_DOCS/BIZGYM_MODULE_CONTRACT_v0.3_2026-03-05_BIZ03.md | sha256:c1693156ba46
+- 04_SUPPORTING_DOCS/BIZGYM_QA_REPORT_v0.3_2026-03-05_BIZ03.txt | sha256:75008a60da06
+
+[05_ORIGINAL_PACKAGES]
+- 05_ORIGINAL_PACKAGES/NDYRA_BizGym_Module_v0.3.0_2026-03-05_BIZ03.zip | sha256:ea559efaf2ab
+- 05_ORIGINAL_PACKAGES/NDYRA_BizGym_QA_Pack_v0.3.0_2026-03-05_BIZ03.zip | sha256:812a74db3c33

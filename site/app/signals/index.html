@@ -1,51 +1,29 @@
-<!doctype html>
-<html lang="en">
+<!doctype html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDYRA — Signals</title>
-  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-02-26_53" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
-  <link rel="icon" href="/assets/branding/ndyra-icon-192.png" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signals</title>
+  <link rel="icon" href="/assets/branding/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-03-16_122">
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-03-16_122">
 </head>
-<body data-page="ndyra-signals">
-  <header class="ndyra-top" data-ndyra-topnav></header>
-
-  <main class="container ndyra-page">
-    <div class="ndyra-kicker">Signals</div>
-    <h1 class="ndyra-h1">Disciplined Stories</h1>
-    <p class="ndyra-sub">
-      Muted by default — tap to hear. This is a QA-facing preview that matches the CP36 addendum constraints.
-    </p>
-
-    <section class="ndyra-signal-strip" data-signal-strip aria-label="Signals"></section>
-
-    <section class="ndyra-card" style="margin-top: 14px;">
-      <h2 class="ndyra-h2">Capture (native smoothing)</h2>
-      <p class="ndyra-sub" style="margin-top: 6px;">
-        We use browser-native audio capture smoothing (echo cancellation / noise suppression / auto gain).
-      </p>
-
-      <div class="join-actions" style="margin-top: 10px;">
-        <button class="btn" data-signal-rec-start type="button">Start recording</button>
-        <button class="btn" data-signal-rec-stop type="button" disabled>Stop</button>
-      </div>
-
-      <div style="margin-top: 12px; display: grid; gap: 10px;">
-        <div class="ndyra-sub">Preview (tap to hear)</div>
-        <audio data-signal-rec-preview controls muted style="width: 100%;"></audio>
-      </div>
-
-      <div class="join-note" style="margin-top: 12px;">
-        No AI voice (Amendment v3). Audio is native capture only — muted by default, tap to hear.
-      </div>
-    </section>
-
-    <div class="footer" style="margin-top: 22px;">NDYRA — build preview (<span data-build-label>CP??</span>).</div>
-  </main>
-
-  <nav class="ndyra-bottom" data-ndyra-bottomnav></nav>
-
-  <script type="module" src="/assets/js/ndyra/boot.mjs"></script>
+<body class="ndyra-bg" data-page="ndyra-signals"><a class="skip-link" href="#main-content">Skip to content</a>
+<header class="header"><div class="brand"><strong>NDYRA</strong></div><nav class="nav" aria-label="Primary navigation"><a href="/workouts/">Workouts</a><a class="primary" href="/app/">App</a><a href="/biz/">Business</a><a href="/admin/">Admin</a></nav></header>
+<main id="main-content" class="page container">
+  <div class="ndyra-row" style="justify-content:space-between;align-items:flex-end;gap:12px;">
+    <div>
+      <h1>Signals</h1>
+      <div class="muted">Signals are alerts and prompts. Stories are content.</div>
+      <div class="small" data-signals-mode>Loading…</div>
+    </div>
+    <div class="ndyra-card" style="padding:10px 14px;">
+      <div class="muted" style="font-size:12px;">Active signals</div>
+      <div class="ndyra-h2" data-signals-count>0</div>
+    </div>
+  </div>
+  <div class="ndyra-mt-4" data-signals-feed></div>
+</main>
+<div class="footer">NDYRA build preview (<span data-build-label>CP122</span>)</div>
+<script src="/assets/js/site.js?v=2026-03-16_122"></script>
+<script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-03-16_122"></script>
 </body>
 </html>

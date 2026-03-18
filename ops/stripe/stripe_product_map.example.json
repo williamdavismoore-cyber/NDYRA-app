@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "key": "member_monthly",
+      "label": "NDYRA Member Monthly",
+      "env": "PRICE_ID_MEMBER_MONTHLY",
+      "mode": "test/live",
+      "notes": "Core member subscription"
+    },
+    {
+      "key": "member_annual",
+      "label": "NDYRA Member Annual",
+      "env": "PRICE_ID_MEMBER_ANNUAL",
+      "mode": "optional",
+      "notes": "Optional annual member plan"
+    },
+    {
+      "key": "biz_starter_monthly",
+      "label": "NDYRA Biz Starter Monthly",
+      "env": "PRICE_ID_BIZ_STARTER_MONTHLY",
+      "mode": "test/live",
+      "notes": "Starter gym subscription"
+    },
+    {
+      "key": "biz_starter_annual",
+      "label": "NDYRA Biz Starter Annual",
+      "env": "PRICE_ID_BIZ_STARTER_ANNUAL",
+      "mode": "test/live",
+      "notes": "Starter annual discount plan"
+    },
+    {
+      "key": "biz_pro_monthly",
+      "label": "NDYRA Biz Pro Monthly",
+      "env": "PRICE_ID_BIZ_PRO_MONTHLY",
+      "mode": "test/live",
+      "notes": "Pro gym subscription"
+    },
+    {
+      "key": "biz_pro_annual",
+      "label": "NDYRA Biz Pro Annual",
+      "env": "PRICE_ID_BIZ_PRO_ANNUAL",
+      "mode": "test/live",
+      "notes": "Pro annual discount plan"
+    },
+    {
+      "key": "token_pack_100",
+      "label": "NDYRA Tokens - 100",
+      "env": "PRICE_ID_TOKEN_PACK_100",
+      "mode": "test/live",
+      "notes": "Closed-loop token top-up"
+    },
+    {
+      "key": "token_pack_250",
+      "label": "NDYRA Tokens - 250",
+      "env": "PRICE_ID_TOKEN_PACK_250",
+      "mode": "test/live",
+      "notes": "Closed-loop token top-up"
+    },
+    {
+      "key": "token_pack_500",
+      "label": "NDYRA Tokens - 500",
+      "env": "PRICE_ID_TOKEN_PACK_500",
+      "mode": "test/live",
+      "notes": "Closed-loop token top-up"
+    }
+  ]
+}

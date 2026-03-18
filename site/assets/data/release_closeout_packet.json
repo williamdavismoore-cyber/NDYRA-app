@@ -1,0 +1,147 @@
+{
+  "version": "cp122",
+  "label": "NDYRA Live Release Closeout Packet",
+  "summary": "Final operator packet for credentialed live execution. This does not claim deployment happened; it defines the evidence that must be captured before announcement.",
+  "ops_copy_path": "ops/env/live_release_closeout.example.json",
+  "groups": [
+    {
+      "key": "deployment_identity",
+      "label": "Deployment identity",
+      "items": [
+        {
+          "label": "Capture the live target identity",
+          "fields": [
+            "site_url",
+            "deploy_id",
+            "build_label",
+            "build_id",
+            "git_commit_or_archive_hash"
+          ],
+          "notes": [
+            "Match the live target to /assets/build.json and the visible footer label before announcement.",
+            "Record the exact deployed URL and Netlify deploy identifier used for verification."
+          ]
+        },
+        {
+          "label": "Record environment scope",
+          "fields": [
+            "netlify_context",
+            "supabase_project_ref",
+            "stripe_mode"
+          ],
+          "notes": [
+            "These values must match the environment that actually ran checkout, portal, webhook, and entitlement verification."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "schema_runtime_truth",
+      "label": "Schema + runtime truth",
+      "items": [
+        {
+          "label": "Prove schema truth is current",
+          "fields": [
+            "cp115_entitlement_migration_applied",
+            "stripe_events_table_present",
+            "portal_config_present"
+          ],
+          "notes": [
+            "The CP115 entitlement lifecycle migration must be present in the real database before runtime claims are trusted."
+          ]
+        },
+        {
+          "label": "Capture deployed runtime truth",
+          "fields": [
+            "api_health_snapshot",
+            "public_config_snapshot",
+            "admin_status_snapshot",
+            "admin_execute_snapshot"
+          ],
+          "notes": [
+            "Capture outputs/screenshots only after real values replace placeholders and blockers clear."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "billing_entitlements",
+      "label": "Billing + entitlement verification",
+      "items": [
+        {
+          "label": "Verify member + business checkout",
+          "fields": [
+            "member_checkout_result",
+            "business_checkout_result",
+            "portal_return_result"
+          ],
+          "notes": [
+            "Use the live verification matrix and confirm checkout/portal flows return to valid origins."
+          ]
+        },
+        {
+          "label": "Verify token + entitlement flows",
+          "fields": [
+            "token_top_up_result",
+            "timer_pack_entitlement_result",
+            "plan_swap_cleanup_result"
+          ],
+          "notes": [
+            "Plan swaps must leave only the current sibling plan entitlement active.",
+            "Token top-up and purchased timer access must be reflected in wallet/purchases/library surfaces."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "browser_device",
+      "label": "Browser + device evidence",
+      "items": [
+        {
+          "label": "Run the final browser/device matrix",
+          "fields": [
+            "desktop_chromium",
+            "mobile_safari",
+            "ios_pwa_or_home_screen",
+            "android_chrome"
+          ],
+          "notes": [
+            "Cover public pricing/join, member app shell, inbox/notifications unread sync, wallet/purchases, and admin status/execute."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "performance_release_decision",
+      "label": "Performance + release decision",
+      "items": [
+        {
+          "label": "Capture performance confidence",
+          "fields": [
+            "lighthouse_or_perf_summary",
+            "blocking_perf_issues"
+          ],
+          "notes": [
+            "Record the final performance sweep against the live target."
+          ]
+        },
+        {
+          "label": "Record the release decision",
+          "fields": [
+            "release_status",
+            "remaining_blockers",
+            "operator_notes"
+          ],
+          "notes": [
+            "Do not mark release_status as announce_ready until all blocking items are complete with real evidence."
+          ]
+        }
+      ]
+    }
+  ],
+  "decision_rule": [
+    "Do not announce NDYRA Core as live until all blocking items in this packet are filled with real values and the live verification matrix is complete.",
+    "If any blocker remains, keep the deployment in preview/staging status and record the blocker explicitly.",
+    "A finished packet requires deployment identity, schema/runtime truth, billing/entitlement verification, browser/device evidence, and performance evidence."
+  ]
+}

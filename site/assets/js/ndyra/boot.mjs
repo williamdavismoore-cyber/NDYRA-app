@@ -1,68 +1,34 @@
-async function loadBuild(){
-  try{
-    const r = await fetch('/assets/build.json', { cache:'no-store' });
-    if(!r.ok) return null;
-    return await r.json();
-  }catch(_){
-    return null;
-  }
-}
+const pageMap = {
+  'ndyra-fyp': '/assets/js/ndyra/pages/fyp.mjs',
+  'ndyra-profile': '/assets/js/ndyra/pages/profile.mjs',
+  'ndyra-following': '/assets/js/ndyra/pages/following.mjs',
+  'ndyra-signals': '/assets/js/ndyra/pages/signals.mjs',
+  'ndyra-stories': '/assets/js/ndyra/pages/stories.mjs',
+  'ndyra-performance': '/assets/js/ndyra/pages/performance.mjs',
+  'ndyra-post': '/assets/js/ndyra/pages/post.mjs',
+  'ndyra-wallet': '/assets/js/ndyra/pages/wallet.mjs',
+  'ndyra-purchases': '/assets/js/ndyra/pages/purchases.mjs',
+  'ndyra-library-timers': '/assets/js/ndyra/pages/libraryTimers.mjs',
+  'ndyra-shop': '/assets/js/ndyra/pages/shop.mjs',
+  'ndyra-aftermath': '/assets/js/ndyra/pages/aftermath.mjs',
+  'ndyra-notifications': '/assets/js/ndyra/pages/notifications.mjs',
+  'ndyra-inbox': '/assets/js/ndyra/pages/inbox.mjs',
+  'ndyra-app-home': '/assets/js/ndyra/pages/appHome.mjs',
+  'ndyra-app-launch': '/assets/js/ndyra/pages/appLaunch.mjs',
+  'ndyra-app-more': '/assets/js/ndyra/pages/appMore.mjs',
+  'ndyra-settings': '/assets/js/ndyra/pages/settings.mjs',
+  'ndyra-members': '/assets/js/ndyra/pages/members.mjs',
+};
 
-function applyBuildLabel(label, buildId){
-  if(!label) return;
-  try{
-    document.querySelectorAll('.footer').forEach(f=>{
-      f.innerHTML = f.innerHTML.replace(/build preview \(CP\d+\)/g, `build preview (${label})`);
-    });
-    document.querySelectorAll('[data-build-label]').forEach(el=>{
-      el.textContent = label;
-    });
-  }catch(_){}
-}
-
-async function boot(){
-  document.body.classList.add('ndyra');
-
-  const build = await loadBuild();
-  if(build?.label){
-    window.__NDYRA_BUILD_INFO__ = build;
-    applyBuildLabel(build.label, build.build_id);
-  }
-
-  const page = document.body?.dataset?.page || '';
-  const map = {
-    // Member app
-    'ndyra-fyp': './pages/fyp.mjs',
-    'ndyra-following': './pages/following.mjs',
-    'ndyra-create': './pages/create.mjs',
-    'ndyra-notifications': './pages/notifications.mjs',
-    'ndyra-profile': './pages/profile.mjs',
-    'ndyra-post': './pages/post.mjs',
-
-    // Public flows
-    'ndyra-gym-join': './pages/gymJoin.mjs',
-
-    // Booking
-    'ndyra-book-class': './pages/bookClass.mjs',
-
-    // Business portal
-    'ndyra-biz-migrate': './pages/bizMigrate.mjs',
-    'ndyra-biz-checkin': './pages/bizCheckin.mjs',
-  };
-
-  const modPath = map[page];
+document.addEventListener('DOMContentLoaded', async()=>{
+  const page = document.body.dataset.page || 'none';
+  document.documentElement.setAttribute('data-page', page);
+  const modPath = pageMap[page];
   if(!modPath) return;
-
   try{
-    const mod = await import(modPath);
-    if(typeof mod.init === 'function'){
-      await mod.init();
-    }
+    const mod = await import(modPath + '?v=2026-03-16_122');
+    if(typeof mod.init === 'function') await mod.init();
   }catch(err){
-    console.error('[NDYRA] boot failed', err);
-    const s = document.querySelector('[data-ndyra-status]');
-    if(s) s.textContent = 'Something went wrong loading this page.';
+    console.error('NDYRA boot failed for page', page, err);
   }
-}
-
-boot();
+});

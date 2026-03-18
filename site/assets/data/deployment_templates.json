@@ -1,0 +1,102 @@
+{
+  "version": 3,
+  "updated_at": "2026-03-16T18:40:00Z",
+  "templates": [
+    {
+      "key": "local_netlify_dev",
+      "label": "Local Netlify Dev",
+      "notes": [
+        "Use netlify dev so pretty /api routes resolve exactly like deploy.",
+        "Copy only public-safe values into local files that are not committed.",
+        "For local/static preview, /assets/ndyra.config.json is also supported as a safe public fallback."
+      ],
+      "env_block": "SUPABASE_URL=<your-supabase-url>\nSUPABASE_ANON_KEY=<your-supabase-anon-key>\nSUPABASE_SERVICE_ROLE_KEY=<your-supabase-service-role-key>\nSTRIPE_PUBLISHABLE_KEY=<your-stripe-publishable-key>\nSTRIPE_SECRET_KEY=<your-stripe-secret-key>\nSTRIPE_WEBHOOK_SIGNING_SECRET=<your-stripe-webhook-secret>\nPRICE_ID_MEMBER_MONTHLY=<price_member_monthly>\nPRICE_ID_BIZ_STARTER_MONTHLY=<price_biz_starter_monthly>\nPRICE_ID_BIZ_STARTER_ANNUAL=<price_biz_starter_annual>\nPRICE_ID_BIZ_PRO_MONTHLY=<price_biz_pro_monthly>\nPRICE_ID_BIZ_PRO_ANNUAL=<price_biz_pro_annual>\nPRICE_ID_TOKEN_PACK_100=<price_token_pack_100>\nPRICE_ID_TOKEN_PACK_250=<price_token_pack_250>\nPRICE_ID_TOKEN_PACK_500=<price_token_pack_500>"
+    },
+    {
+      "key": "netlify_staging",
+      "label": "Netlify Staging",
+      "notes": [
+        "Use Stripe sandbox/test mode only.",
+        "Point Supabase URLs and keys at staging project.",
+        "For local/static preview, /assets/ndyra.config.json is also supported as a safe public fallback."
+      ],
+      "env_block": "CONTEXT=deploy-preview\nSUPABASE_URL=<staging-supabase-url>\nSUPABASE_ANON_KEY=<staging-anon-key>\nSUPABASE_SERVICE_ROLE_KEY=<staging-service-role-key>\nSTRIPE_PUBLISHABLE_KEY=<stripe-test-publishable-key>\nSTRIPE_SECRET_KEY=<stripe-test-secret-key>\nSTRIPE_WEBHOOK_SIGNING_SECRET=<stripe-test-webhook-secret>\nSTRIPE_PORTAL_CONFIGURATION_ID=<optional-test-portal-config-id>\nPRICE_ID_MEMBER_MONTHLY=<test_member_monthly>\nPRICE_ID_MEMBER_ANNUAL=<optional_test_member_annual>\nPRICE_ID_BIZ_STARTER_MONTHLY=<test_biz_starter_monthly>\nPRICE_ID_BIZ_STARTER_ANNUAL=<test_biz_starter_annual>\nPRICE_ID_BIZ_PRO_MONTHLY=<test_biz_pro_monthly>\nPRICE_ID_BIZ_PRO_ANNUAL=<test_biz_pro_annual>\nPRICE_ID_TOKEN_PACK_100=<test_token_pack_100>\nPRICE_ID_TOKEN_PACK_250=<test_token_pack_250>\nPRICE_ID_TOKEN_PACK_500=<test_token_pack_500>\nTELEMETRY_WEBHOOK_URL=<optional-staging-telemetry-url>"
+    },
+    {
+      "key": "netlify_production",
+      "label": "Netlify Production",
+      "notes": [
+        "Prelaunch production stays on Stripe sandbox/test values until NDYRA actually launches.",
+        "Do not reuse staging Supabase service role or webhook secrets.",
+        "Inventory live-mode products, prices, and webhook endpoints separately for launch day, but do not cut over now.",
+        "For local/static preview, /assets/ndyra.config.json is also supported as a safe public fallback."
+      ],
+      "env_block": "CONTEXT=production\nSUPABASE_URL=<prod-supabase-url>\nSUPABASE_ANON_KEY=<prod-anon-key>\nSUPABASE_SERVICE_ROLE_KEY=<prod-service-role-key>\nSTRIPE_PUBLISHABLE_KEY=<stripe-test-publishable-key>\nSTRIPE_SECRET_KEY=<stripe-test-secret-key>\nSTRIPE_WEBHOOK_SIGNING_SECRET=<stripe-test-webhook-secret-for-production-endpoint>\nSTRIPE_PORTAL_CONFIGURATION_ID=<optional-test-portal-config-id-for-production-endpoint>\nPRICE_ID_MEMBER_MONTHLY=<test_member_monthly>\nPRICE_ID_MEMBER_ANNUAL=<optional_test_member_annual>\nPRICE_ID_BIZ_STARTER_MONTHLY=<test_biz_starter_monthly>\nPRICE_ID_BIZ_STARTER_ANNUAL=<test_biz_starter_annual>\nPRICE_ID_BIZ_PRO_MONTHLY=<test_biz_pro_monthly>\nPRICE_ID_BIZ_PRO_ANNUAL=<test_biz_pro_annual>\nPRICE_ID_TOKEN_PACK_100=<test_token_pack_100>\nPRICE_ID_TOKEN_PACK_250=<test_token_pack_250>\nPRICE_ID_TOKEN_PACK_500=<test_token_pack_500>\nTELEMETRY_WEBHOOK_URL=<optional-prod-telemetry-url>"
+    }
+  ],
+  "stripe_products": [
+    {
+      "key": "member_monthly",
+      "label": "NDYRA Member Monthly",
+      "env": "PRICE_ID_MEMBER_MONTHLY",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Core member subscription"
+    },
+    {
+      "key": "member_annual",
+      "label": "NDYRA Member Annual",
+      "env": "PRICE_ID_MEMBER_ANNUAL",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Optional annual member plan"
+    },
+    {
+      "key": "biz_starter_monthly",
+      "label": "NDYRA Biz Starter Monthly",
+      "env": "PRICE_ID_BIZ_STARTER_MONTHLY",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Starter gym subscription"
+    },
+    {
+      "key": "biz_starter_annual",
+      "label": "NDYRA Biz Starter Annual",
+      "env": "PRICE_ID_BIZ_STARTER_ANNUAL",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Starter annual discount plan"
+    },
+    {
+      "key": "biz_pro_monthly",
+      "label": "NDYRA Biz Pro Monthly",
+      "env": "PRICE_ID_BIZ_PRO_MONTHLY",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Pro gym subscription"
+    },
+    {
+      "key": "biz_pro_annual",
+      "label": "NDYRA Biz Pro Annual",
+      "env": "PRICE_ID_BIZ_PRO_ANNUAL",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Pro annual discount plan"
+    },
+    {
+      "key": "token_pack_100",
+      "label": "NDYRA Tokens - 100",
+      "env": "PRICE_ID_TOKEN_PACK_100",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Closed-loop token top-up"
+    },
+    {
+      "key": "token_pack_250",
+      "label": "NDYRA Tokens - 250",
+      "env": "PRICE_ID_TOKEN_PACK_250",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Closed-loop token top-up"
+    },
+    {
+      "key": "token_pack_500",
+      "label": "NDYRA Tokens - 500",
+      "env": "PRICE_ID_TOKEN_PACK_500",
+      "mode": "sandbox_prelaunch/live_at_launch",
+      "notes": "Closed-loop token top-up"
+    }
+  ]
+}

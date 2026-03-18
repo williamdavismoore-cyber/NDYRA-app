@@ -1,0 +1,33 @@
+NDYRA MASTER MANIFEST — CP115
+Build ID: 2026-03-10_115
+Kit Version: v10.3
+Date: 2026-03-10
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP115_2026-03-10_115.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP115_CoreBuild_2026-03-10_115.zip
+  Core app package with site, tools, netlify functions, supabase migrations, and supporting docs.
+
+- NDYRA_QA_PREVIEW_site_CP115_2026-03-10_115.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook + QA
+- NDYRA_Buildbook_Kit_CP115_v10.3_CHECKPOINT_2026-03-10_115.zip
+- NDYRA_Buildbook_MemoryPack_CP115_2026-03-10_115.docx
+- NDYRA_Buildbook_MemoryPack_CP115_2026-03-10_115.pdf
+- NDYRA_QA_REPORT_CP115_2026-03-10_115.txt
+- NDYRA_QA_RUNBOOK_CP115_2026-03-10_115.md
+- MASTER_MANIFEST_CP115_2026-03-10_115.txt
+
+Notes
+- CP115 is the live execution truth + entitlement verification hardening checkpoint.
+- QA-first was honored: CP114 was re-QAed before new work continued.
+- No generated graphics were added in this checkpoint.
+- Build completion estimate: ~99.5% complete / ~0.5% remaining.
+
+Master split deliverables
+- NDYRA_MASTER_DELIVERABLES_CP115_2026-03-10_115_PART1_REPO.zip
+- NDYRA_MASTER_DELIVERABLES_CP115_2026-03-10_115_PART2_BUILDBOOK.zip
+- NDYRA_MASTER_DELIVERABLES_CP115_2026-03-10_115_PART3_EVERYTHING_ELSE.zip

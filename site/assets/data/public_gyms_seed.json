@@ -1,0 +1,161 @@
+{
+  "updated_at": "2026-03-10T11:40:00Z",
+  "gyms": [
+    {
+      "id": "seed-gym-001",
+      "slug": "redline-athletica",
+      "name": "Redline Athletica",
+      "city": "Boca Raton",
+      "headline": "Intervals, strength, and community that actually shows up.",
+      "summary": "A high-accountability training floor built for members who want intensity without ego and structure without dead time.",
+      "about": "Redline Athletica blends threshold intervals, strength blocks, and recovery coaching into one connected member journey. NDYRA powers the gym's public signals, event loop, member social layer, and token-aware timer experiences.",
+      "hero_badges": ["Coach-led intervals", "Token-ready timers", "Community challenges"],
+      "focus": ["Threshold + power intervals", "Strength circuits with coached transitions", "Open gym templates that still feel guided"],
+      "amenities": ["Showers + recovery corner", "Small-group coaching", "Community run club", "Event recaps and member shoutouts"],
+      "membership_options": [
+        {
+          "label": "Drop-in",
+          "price": "$24",
+          "details": "One coached class or open-gym session."
+        },
+        {
+          "label": "Monthly access",
+          "price": "See live checkout",
+          "details": "Best for members who want events, challenges, and ongoing recaps inside NDYRA."
+        },
+        {
+          "label": "Token-friendly add-ons",
+          "price": "Wallet powered",
+          "details": "Timer packs, specialty programs, and event unlocks can ride the same NDYRA wallet."
+        }
+      ],
+      "class_highlights": [
+        {
+          "name": "Race Pace Reset",
+          "schedule": "Tue / Thu • 6:00 AM",
+          "details": "Threshold intervals, loaded carries, and a calm mobility finish."
+        },
+        {
+          "name": "Engine Room",
+          "schedule": "Mon / Wed • 6:15 PM",
+          "details": "Strength-first conditioning with guided effort targets."
+        },
+        {
+          "name": "Saturday Crew",
+          "schedule": "Sat • 8:30 AM",
+          "details": "Longer mixed-modality block with community recap shareouts."
+        }
+      ],
+      "upcoming_events": [
+        {
+          "title": "Community Run + Breathwork",
+          "date": "2026-03-16T14:00:00Z",
+          "summary": "Easy effort group run followed by guided down-regulation and recovery notes."
+        },
+        {
+          "title": "Spring Consistency League",
+          "date": "2026-03-20T22:00:00Z",
+          "summary": "30-day challenge season with streak shield support and shareable recaps."
+        }
+      ],
+      "public_signals": [
+        {
+          "author_name": "Morgan Hale",
+          "author_handle": "morganhale",
+          "content_text": "Open gym tonight. Keep it crisp, keep it kind.",
+          "created_at": "2026-03-09T21:00:00Z"
+        },
+        {
+          "author_name": "Jordan Vale",
+          "author_handle": "jordanvale",
+          "content_text": "Saturday race sim starts at 9. Bring water, bring patience.",
+          "created_at": "2026-03-09T18:20:00Z"
+        }
+      ],
+      "stats": {
+        "member_count": 184,
+        "upcoming_events": 2,
+        "active_challenges": 2,
+        "community_rating": "4.9 / 5"
+      }
+    },
+    {
+      "id": "seed-gym-002",
+      "slug": "atlas-social-club",
+      "name": "Atlas Social Club",
+      "city": "Fort Lauderdale",
+      "headline": "Strength, socials, and a members directory that feels alive.",
+      "summary": "A premium small-group strength club where the social graph, announcements, events, and recovery routines stay connected inside NDYRA.",
+      "about": "Atlas Social Club uses NDYRA to keep class context, social follow loops, event RSVPs, and post-session recaps moving together. Public surfaces stay clean while member surfaces deepen once you sign in.",
+      "hero_badges": ["Verified member events", "Announcements inbox", "Premium strength formats"],
+      "focus": ["Foundational strength", "Weekend events + mixers", "Recovery and habit consistency"],
+      "amenities": ["Members lounge", "Coach programming notes", "Event RSVP flow", "Premium locker area"],
+      "membership_options": [
+        {
+          "label": "Visitor weekend pass",
+          "price": "$39",
+          "details": "Best for event weekends or trial visits."
+        },
+        {
+          "label": "Core member access",
+          "price": "See live checkout",
+          "details": "Ongoing strength access plus challenge and event visibility in-app."
+        },
+        {
+          "label": "Program add-ons",
+          "price": "Wallet powered",
+          "details": "Use NDYRA tokens for specialty blocks and timer-driven packs."
+        }
+      ],
+      "class_highlights": [
+        {
+          "name": "Foundations Lift",
+          "schedule": "Mon / Wed / Fri • 7:00 AM",
+          "details": "Tempo strength, coached setup, and recap-ready effort notes."
+        },
+        {
+          "name": "Atlas After Dark",
+          "schedule": "Thu • 7:15 PM",
+          "details": "Strength + social hour with event posting and follow-friendly recaps."
+        },
+        {
+          "name": "Restore Circuit",
+          "schedule": "Sun • 10:00 AM",
+          "details": "Mobility, easy cardio, and nervous-system reset work."
+        }
+      ],
+      "upcoming_events": [
+        {
+          "title": "Member Mixer + Coach Q&A",
+          "date": "2026-03-18T23:30:00Z",
+          "summary": "An evening social with structured intros for new members."
+        },
+        {
+          "title": "Strength Benchmark Week",
+          "date": "2026-03-25T11:00:00Z",
+          "summary": "In-gym benchmark week with recap cards and challenge tie-ins."
+        }
+      ],
+      "public_signals": [
+        {
+          "author_name": "Sage Monroe",
+          "author_handle": "sagemonroe",
+          "content_text": "Tonight is a clean heavy session. Save one gear for the finish.",
+          "created_at": "2026-03-09T23:15:00Z"
+        },
+        {
+          "author_name": "Priya Nandakumar",
+          "author_handle": "priya.nd",
+          "content_text": "Mixer guests: park upstairs, bring a water bottle, stay after to meet the crew.",
+          "created_at": "2026-03-09T17:05:00Z"
+        }
+      ],
+      "stats": {
+        "member_count": 126,
+        "upcoming_events": 2,
+        "active_challenges": 1,
+        "community_rating": "4.8 / 5"
+      }
+    }
+  ]
+}

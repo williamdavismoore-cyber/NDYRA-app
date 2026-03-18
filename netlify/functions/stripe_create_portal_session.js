@@ -1,22 +1,6 @@
 const Stripe = require('stripe');
-
-function json(statusCode, obj){
-  return {
-    statusCode,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(obj),
-  };
-}
-
-function getOrigin(headers){
-  const origin = headers?.origin;
-  if(origin) return origin;
-  const ref = headers?.referer || headers?.referrer;
-  if(ref){
-    try{ return new URL(ref).origin; }catch(e){}
-  }
-  return process.env.URL || process.env.DEPLOY_PRIME_URL || 'http://localhost:4173';
-}
+const { getStripeEnv } = require('./_lib/env');
+const { json, looksPlaceholder, getOriginFromHeaders, sanitizeSameOriginUrl } = require('./_lib/runtime');
 
 async function resolveCustomerId(stripe, {customer_id, session_id}){
   if(customer_id) return customer_id;
@@ -36,8 +20,8 @@ exports.handler = async (event) => {
     return json(405, {error: 'Method not allowed'});
   }
 
-  const secret = process.env.STRIPE_SECRET_KEY;
-  if(!secret){
+  const { secretKey: secret, portalConfigurationId: defaultPortalConfig, apiVersion } = getStripeEnv();
+  if(!secret || looksPlaceholder(secret)){
     return json(500, {error: 'Missing STRIPE_SECRET_KEY env var.'});
   }
 
@@ -49,11 +33,13 @@ exports.handler = async (event) => {
   const customer_id = String(payload.customer_id || '').trim();
   const session_id = String(payload.session_id || payload.checkout_session_id || '').trim();
 
-  const origin = getOrigin(event.headers);
-  const return_url = String(payload.return_url || `${origin}/login.html`).trim();
-  const config = (process.env.STRIPE_PORTAL_CONFIGURATION_ID || payload.portal_configuration_id || 'bpc_1Syhh0LuJBXNyJuKlfodpUJp').trim();
+  const origin = getOriginFromHeaders(event.headers);
+  const return_url = sanitizeSameOriginUrl(payload.return_url, origin) || `${origin}/login.html`;
+  // Portal configuration is optional in Stripe.
+  // Prefer env var; if unset, Stripe uses the account default portal configuration.
+  const config = (defaultPortalConfig || payload.portal_configuration_id || '').trim();
 
-  const stripe = Stripe(secret, { apiVersion: process.env.STRIPE_API_VERSION || undefined });
+  const stripe = Stripe(secret, { apiVersion: apiVersion || undefined });
 
   let customer = '';
   try{
@@ -71,11 +57,10 @@ exports.handler = async (event) => {
   }
 
   try{
-    const session = await stripe.billingPortal.sessions.create({
-      customer,
-      return_url,
-      configuration: config,
-    });
+    const params = { customer, return_url };
+    if(config && !looksPlaceholder(config)) params.configuration = config;
+
+    const session = await stripe.billingPortal.sessions.create(params);
     return json(200, { url: session.url, customer_id: customer });
   }catch(err){
     console.error('Stripe create-portal-session error:', err);

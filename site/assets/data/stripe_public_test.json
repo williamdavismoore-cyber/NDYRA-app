@@ -38,5 +38,25 @@
     "webhook": "/api/stripe/webhook",
     "health": "/api/health"
   },
-  "notes": "Public test-mode config (safe fields only). Secrets must be set as Netlify env vars. Business Starter price IDs are placeholders until provided."
+  "notes": "Public test-mode config (safe fields only). Secrets must be set as Netlify env vars. Business Starter price IDs are placeholders until provided. Token pack price IDs can also be set via env vars.",
+  "token_packs": {
+    "pack_100": {
+      "label": "100 Tokens",
+      "tokens": 100,
+      "display_price": "$9.99",
+      "price_id": null
+    },
+    "pack_250": {
+      "label": "250 Tokens",
+      "tokens": 250,
+      "display_price": "$19.99",
+      "price_id": null
+    },
+    "pack_500": {
+      "label": "500 Tokens",
+      "tokens": 500,
+      "display_price": "$34.99",
+      "price_id": null
+    }
+  }
 }

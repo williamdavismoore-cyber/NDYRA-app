@@ -1,0 +1,75 @@
+{
+  "direct": [
+    {
+      "thread_id": "thread_seed_001",
+      "other_user_id": "user_seed_001",
+      "other_handle": "leo",
+      "other_display_name": "Leo Varga",
+      "other_avatar_url": "",
+      "last_message": "Let’s go after that consistency badge this week.",
+      "last_message_at": "2026-03-07T14:12:00Z",
+      "unread_count": 2,
+      "thread_status": "active",
+      "is_outgoing_request": false
+    },
+    {
+      "thread_id": "thread_seed_002",
+      "other_user_id": "user_seed_002",
+      "other_handle": "mara",
+      "other_display_name": "Coach Mara",
+      "other_avatar_url": "",
+      "last_message": "Great work. Keep the heart rate smooth tomorrow.",
+      "last_message_at": "2026-03-06T19:42:00Z",
+      "unread_count": 0,
+      "thread_status": "active",
+      "is_outgoing_request": false
+    }
+  ],
+  "requests": [
+    {
+      "thread_id": "thread_seed_req_001",
+      "other_user_id": "user_seed_003",
+      "other_handle": "jules",
+      "other_display_name": "Jules Bennett",
+      "other_avatar_url": "",
+      "last_message": "Want to sync on the challenge strategy?",
+      "last_message_at": "2026-03-07T10:08:00Z",
+      "unread_count": 1,
+      "thread_status": "requested",
+      "is_outgoing_request": false
+    }
+  ],
+  "announcements": [
+    {
+      "id": "ann_seed_001",
+      "tenant_id": "tenant_seed_001",
+      "kind": "event_created",
+      "title": "Saturday community class is live",
+      "body": "RSVP is open now. Bring a friend if the gym allows guest access.",
+      "pinned": true,
+      "created_at": "2026-03-07T08:00:00Z"
+    },
+    {
+      "id": "ann_seed_002",
+      "tenant_id": "tenant_seed_001",
+      "kind": "manual",
+      "title": "New timer pack in the shop",
+      "body": "A fresh interval pack just landed in Shop. Use your NDYRA tokens if you’ve got them.",
+      "pinned": false,
+      "created_at": "2026-03-06T17:00:00Z"
+    }
+  ],
+  "messages": {
+    "thread_seed_001": [
+      {"id":"m_seed_001","thread_id":"thread_seed_001","sender_id":"user_seed_003","body":"Want to sync on the challenge strategy?","created_at":"2026-03-07T10:08:00Z"},
+      {"id":"m_seed_002","thread_id":"thread_seed_001","sender_id":"viewer","body":"Absolutely. I’m trying to protect the streak first.","created_at":"2026-03-07T10:24:00Z"},
+      {"id":"m_seed_003","thread_id":"thread_seed_001","sender_id":"user_seed_001","body":"Let’s go after that consistency badge this week.","created_at":"2026-03-07T14:12:00Z"}
+    ],
+    "thread_seed_002": [
+      {"id":"m_seed_004","thread_id":"thread_seed_002","sender_id":"user_seed_002","body":"Great work. Keep the heart rate smooth tomorrow.","created_at":"2026-03-06T19:42:00Z"}
+    ],
+    "thread_seed_req_001": [
+      {"id":"m_seed_005","thread_id":"thread_seed_req_001","sender_id":"user_seed_003","body":"Want to sync on the challenge strategy?","created_at":"2026-03-07T10:08:00Z"}
+    ]
+  }
+}

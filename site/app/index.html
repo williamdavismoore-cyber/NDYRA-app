@@ -1,37 +1,28 @@
-<!doctype html>
-<html lang="en">
+<!doctype html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDYRA — App</title>
-
-  <!-- NDYRA UI -->
-  <link rel="icon" href="/assets/branding/NDYRA_Icon_DarkCircle_512.png" />
-  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-02-26_53" />
-
-  <!-- Redirect to the social default (For You) -->
-  <meta http-equiv="refresh" content="0; url=./fyp/" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NDYRA</title>
+  <link rel="icon" href="/assets/branding/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-03-16_122">
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-03-16_122">
 </head>
-<body class="ndyra-page">
-  <main class="ndyra-main">
-    <div class="inner">
-      <div class="ndyra-card">
-        <span class="badge">Redirect</span>
-        <h1 style="margin:10px 0 6px;">Opening NDYRA…</h1>
-        <p class="muted" style="margin:0 0 14px;">
-          Taking you to the <strong>For You</strong> feed.
-        </p>
-        <div class="row" style="justify-content:flex-start; gap:10px;">
-          <a class="btn primary" href="./fyp/">Continue</a>
-          <a class="btn ghost" href="/workouts/">Fitness previews</a>
+<body class="ndyra-bg" data-page="ndyra-app-launch"><a class="skip-link" href="#main-content">Skip to content</a>
+<header class="header"><div class="brand"><strong>NDYRA</strong></div><nav class="nav" aria-label="Primary navigation"><a href="/app/fyp/">For You</a><a href="/app/inbox/" data-app-link="inbox">Messages</a><a href="/app/notifications/" data-app-link="notifications">Alerts</a><a href="/app/profile/">Profile</a><a href="/app/more/">More</a></nav></header>
+<main id="main-content" class="page container">
+  <div data-app-launch-root>
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="badge">NDYRA member launch</span>
+          <h1 style="margin-top:10px;">Opening your default member view…</h1>
+          <p class="muted">For You is the familiar default. Simple Home stays available as the calmer backup.</p>
         </div>
       </div>
-    </div>
-  </main>
-
-  <script>
-    // deterministic redirect (static hosting friendly)
-    try { window.location.replace('./fyp/'); } catch (e) {}
-  </script>
+    </section>
+  </div>
+</main>
+<div class="footer">NDYRA build preview (<span data-build-label>CP122</span>)</div>
+<script src="/assets/js/site.js?v=2026-03-16_122"></script>
+<script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-03-16_122"></script>
 </body>
 </html>

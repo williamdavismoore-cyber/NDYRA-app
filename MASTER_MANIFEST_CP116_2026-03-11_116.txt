@@ -1,0 +1,34 @@
+NDYRA MASTER MANIFEST — CP116
+Build ID: 2026-03-11_116
+Kit Version: v10.3
+Date: 2026-03-11
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP116_2026-03-11_116.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP116_CoreBuild_2026-03-11_116.zip
+  Core app package with site, tools, Netlify functions, Supabase migrations, ops templates, and supporting docs.
+
+- NDYRA_QA_PREVIEW_site_CP116_2026-03-11_116.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook + QA
+- NDYRA_Buildbook_Kit_CP116_v10.3_CHECKPOINT_2026-03-11_116.zip
+- NDYRA_Buildbook_MemoryPack_CP116_2026-03-11_116.docx
+- NDYRA_Buildbook_MemoryPack_CP116_2026-03-11_116.pdf
+- NDYRA_QA_REPORT_CP116_2026-03-11_116.txt
+- NDYRA_QA_RUNBOOK_CP116_2026-03-11_116.md
+- MASTER_MANIFEST_CP116_2026-03-11_116.txt
+
+Notes
+- CP116 is the final code-side release-closeout checkpoint for NDYRA Core.
+- QA-first was honored: CP115 was re-QAed from the actual extracted repo tree before CP116 work began.
+- No generated graphics were added in this checkpoint.
+- Build completion estimate: 100% code-side complete / ~99.9% overall including external credentialed live verification.
+- Remaining work is external-only: real env values, deployed checkout/webhook/portal verification, browser/device evidence, performance evidence, and the final release decision recorded in the closeout packet.
+
+Master split deliverables
+- NDYRA_MASTER_DELIVERABLES_CP116_2026-03-11_116_PART1_REPO.zip
+- NDYRA_MASTER_DELIVERABLES_CP116_2026-03-11_116_PART2_BUILDBOOK.zip
+- NDYRA_MASTER_DELIVERABLES_CP116_2026-03-11_116_PART3_EVERYTHING_ELSE.zip

@@ -1,8 +1,8 @@
 {
-  "label": "CP53",
-  "cp": "CP53",
-  "build_id": "2026-02-26_53",
-  "build_date": "2026-02-26",
-  "kit_version": "v4.8",
-  "notes": "CP53 Core Build checkpoint: removed demo/sim mode from core build, added UI Emulation + Constellation Rating amendments to blueprint docs, integrated Prestige IconPack into /assets/iconpack, corrected Supabase public config endpoint and added /api Netlify redirect."
+  "label": "CP122",
+  "cp": 122,
+  "build_id": "2026-03-16_122",
+  "kit_version": "v10.3",
+  "notes": "CP122 aligns Core to the module starter packs: adds the paused member Check-In boundary shell, hardens prelaunch Stripe templates to stay sandbox-only, introduces explicit Gym/Challenges-Events/Check-In Core contract stubs, and adds a host-level module kill-switch layer.",
+  "build_date_iso": "2026-03-16T18:40:00Z"
 }

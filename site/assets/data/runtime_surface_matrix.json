@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-09T23:15:00Z",
+  "surfaces": [
+    {
+      "key": "app_shop",
+      "label": "Member Shop",
+      "path": "/app/shop/",
+      "requirements": [
+        "supabaseReady",
+        "marketplaceReady",
+        "priceMatrixReady"
+      ],
+      "notes": [
+        "Browsing still works in preview.",
+        "Buying also requires sign-in and a connected gym wallet."
+      ]
+    },
+    {
+      "key": "app_wallet",
+      "label": "Wallet",
+      "path": "/app/wallet/",
+      "requirements": [
+        "supabaseReady",
+        "billingReady",
+        "priceMatrixReady",
+        "webhookReady"
+      ],
+      "notes": [
+        "Top-ups also require sign-in and a connected gym."
+      ]
+    },
+    {
+      "key": "app_purchases",
+      "label": "Purchases",
+      "path": "/app/purchases/",
+      "requirements": [
+        "supabaseReady",
+        "billingReady",
+        "marketplaceReady"
+      ],
+      "notes": [
+        "Shows marketplace receipts and token top-ups."
+      ]
+    },
+    {
+      "key": "app_library_timers",
+      "label": "Timer Library",
+      "path": "/app/library/timers/",
+      "requirements": [
+        "supabaseReady",
+        "marketplaceReady"
+      ],
+      "notes": [
+        "Owned timer packs can be viewed here.",
+        "Import/remix also requires a member plan or the feature:premium_timers unlock."
+      ]
+    },
+    {
+      "key": "app_account",
+      "label": "Member Account Billing",
+      "path": "/app/account/",
+      "requirements": [
+        "supabaseReady",
+        "billingReady"
+      ],
+      "optional_requirements": [
+        "portalReady"
+      ],
+      "notes": [
+        "Portal launch also needs a Stripe customer mirror or a recent session id."
+      ]
+    },
+    {
+      "key": "biz_account",
+      "label": "Business Billing",
+      "path": "/biz/account/",
+      "requirements": [
+        "supabaseReady",
+        "billingReady",
+        "priceMatrixReady"
+      ],
+      "optional_requirements": [
+        "portalReady"
+      ],
+      "notes": [
+        "Portal launch also needs a tenant selection and mirrored customer id."
+      ]
+    },
+    {
+      "key": "admin_status",
+      "label": "Admin Status",
+      "path": "/admin/status/",
+      "requirements": [
+        "supabaseReady",
+        "priceMatrixReady",
+        "webhookReady"
+      ],
+      "notes": [
+        "This page should go fully green before announcing a real deploy."
+      ]
+    },
+    {
+      "key": "admin_execute",
+      "label": "Admin Execute",
+      "path": "/admin/execute/",
+      "requirements": [
+        "supabaseReady",
+        "priceMatrixReady",
+        "webhookReady"
+      ],
+      "notes": [
+        "Use together with /admin/wiring/ during staging and production cutover."
+      ]
+    },
+    {
+      "key": "public_pricing_member",
+      "label": "Public Member Pricing",
+      "path": "/pricing.html",
+      "requirements": [
+        "billingReady",
+        "priceMatrixReady"
+      ],
+      "optional_requirements": [
+        "supabaseReady"
+      ],
+      "notes": [
+        "Public page can render without auth, but direct checkout only becomes live when billing and price ids are ready."
+      ]
+    },
+    {
+      "key": "public_pricing_business",
+      "label": "Public Business Pricing",
+      "path": "/for-gyms/pricing.html",
+      "requirements": [
+        "billingReady",
+        "priceMatrixReady"
+      ],
+      "optional_requirements": [
+        "supabaseReady"
+      ],
+      "notes": [
+        "Business pricing now routes into setup instead of staying a dead brochure page."
+      ]
+    },
+    {
+      "key": "public_business_start",
+      "label": "Public Business Start Flow",
+      "path": "/for-gyms/start.html",
+      "requirements": [
+        "billingReady",
+        "priceMatrixReady"
+      ],
+      "optional_requirements": [
+        "supabaseReady"
+      ],
+      "notes": [
+        "Start flow collects tenant slug/name and can hand signed-in admins into checkout when runtime is safe."
+      ]
+    }
+  ]
+}

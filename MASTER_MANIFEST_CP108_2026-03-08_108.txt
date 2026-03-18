@@ -1,0 +1,34 @@
+MASTER MANIFEST — CP108
+Build ID: 2026-03-08_108
+Kit Version: v9.9
+Date: 2026-03-08
+
+Master split
+- Part 1: Repo
+- Part 2: Buildbook
+- Part 3: Everything Else
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP108_2026-03-08_108.zip
+- NDYRA_CP108_CoreBuild_2026-03-08_108.zip
+- NDYRA_QA_PREVIEW_site_CP108_2026-03-08_108.zip
+
+Buildbook deliverables
+- NDYRA_Buildbook_Kit_CP108_v9.9_CHECKPOINT_2026-03-08_108.zip
+- NDYRA_Buildbook_MemoryPack_CP108_2026-03-08_108.docx
+- NDYRA_Buildbook_MemoryPack_CP108_2026-03-08_108.pdf
+
+Everything else
+- NDYRA_QA_REPORT_CP108_2026-03-08_108.txt
+- NDYRA_QA_RUNBOOK_CP108_2026-03-08_108.md
+- MASTER_MANIFEST_CP108_2026-03-08_108.txt
+- NDYRA_ASSETS_NEEDED_NEXT_CP109.md
+
+Checkpoint summary
+- Follow graph surfaced in Members, Profile, and Gyms.
+- Members can now follow/unfollow people from directory and profile surfaces.
+- Members can now follow/unfollow gyms from the Gyms directory.
+- Following feed now has real user-facing graph controls behind it.
+
+Completion estimate
+- ~93% complete / ~7% remaining

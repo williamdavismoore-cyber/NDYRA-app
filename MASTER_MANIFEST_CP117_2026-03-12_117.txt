@@ -1,0 +1,34 @@
+NDYRA MASTER MANIFEST - CP117
+Build ID: 2026-03-12_117
+Kit Version: v10.3
+Date: 2026-03-12
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP117_2026-03-12_117.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP117_CoreBuild_2026-03-12_117.zip
+  Core app package with site, tools, Netlify functions, Supabase migrations, ops templates, and supporting docs.
+
+- NDYRA_QA_PREVIEW_site_CP117_2026-03-12_117.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook + QA
+- NDYRA_Buildbook_Kit_CP117_v10.3_CHECKPOINT_2026-03-12_117.zip
+- NDYRA_Buildbook_MemoryPack_CP117_2026-03-12_117.docx
+- NDYRA_Buildbook_MemoryPack_CP117_2026-03-12_117.pdf
+- NDYRA_QA_REPORT_CP117_2026-03-12_117.txt
+- NDYRA_QA_RUNBOOK_CP117_2026-03-12_117.md
+- MASTER_MANIFEST_CP117_2026-03-12_117.txt
+
+Notes
+- CP117 is the modularization kickoff checkpoint for NDYRA Core after the code-side closeout state reached in CP116.
+- QA-first was honored: CP116 was re-QAed from the actual extracted repo tree before CP117 work began.
+- No generated graphics were added in this checkpoint.
+- Overall build completion: 100% code-side complete / ~99.9% overall including external credentialed live verification.
+- Modularization status: workout library extracted and wired; user-profile/preferences and token-system interfaces scaffolded for the next migration steps.
+
+Master split deliverables
+- NDYRA_MASTER_DELIVERABLES_CP117_2026-03-12_117_PART1_REPO.zip
+- NDYRA_MASTER_DELIVERABLES_CP117_2026-03-12_117_PART2_BUILDBOOK.zip
+- NDYRA_MASTER_DELIVERABLES_CP117_2026-03-12_117_PART3_EVERYTHING_ELSE.zip

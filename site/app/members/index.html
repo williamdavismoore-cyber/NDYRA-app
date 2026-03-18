@@ -1,0 +1,46 @@
+<!doctype html><html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Members</title>
+  <link rel="icon" href="/assets/branding/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-03-16_122">
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-03-16_122">
+</head>
+<body class="ndyra-bg" data-page="ndyra-members"><a class="skip-link" href="#main-content">Skip to content</a>
+<header class="header"><div class="brand"><strong>NDYRA</strong></div><nav class="nav" aria-label="Primary navigation"><a href="/workouts/">Workouts</a><a class="primary" href="/app/">App</a><a href="/biz/">Business</a><a href="/admin/">Admin</a></nav></header>
+<main id="main-content" class="page container">
+  <h1>Members</h1>
+  <div class="muted">Directory scoped to your connected gym. Privacy-respecting and message-aware.</div>
+  <div class="ndyra-grid ndyra-mt-4" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start;">
+    <section class="ndyra-card" style="padding:16px;">
+      <div class="ndyra-h2">Scope</div>
+      <div class="muted ndyra-mt-2" data-members-scope>Loading scope…</div>
+      <div class="ndyra-mt-3" style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="ndyra-btn" href="/app/gyms/">Change connected gym</a>
+        <a class="ndyra-btn ndyra-btn-ghost" href="/app/inbox/">Inbox</a>
+      </div>
+    </section>
+
+    <section class="ndyra-card" style="padding:16px;">
+      <div class="ndyra-h2">Filters</div>
+      <div class="ndyra-mt-3" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <input class="ndyra-input" placeholder="Search members" data-members-filter style="flex:1;min-width:220px;">
+        <select class="ndyra-input" data-members-mode style="min-width:160px;">
+          <option value="all">All</option>
+          <option value="message">Can message</option>
+          <option value="staff">Staff only</option>
+          <option value="following">Following</option>
+        </select>
+      </div>
+    </section>
+  </div>
+
+  <div class="ndyra-grid ndyra-mt-4" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;" data-members-root>
+    <div class="ndyra-card" style="padding:16px;"><div class="ndyra-h2">Loading…</div><div class="muted ndyra-mt-2">If this hangs, make sure you're running via a local server (not file://).</div></div>
+  </div>
+</main>
+<div class="footer">NDYRA build preview (<span data-build-label>CP122</span>)</div>
+<script src="/assets/js/site.js?v=2026-03-16_122"></script>
+<script type="module" src="/assets/js/ndyra/boot.mjs?v=2026-03-16_122"></script>
+</body>
+</html>

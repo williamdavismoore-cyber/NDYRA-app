@@ -1,0 +1,49 @@
+<!doctype html><html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NDYRA Admin Wiring</title>
+  <link rel="icon" href="/assets/branding/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-03-16_122">
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-03-16_122">
+  <style>
+    .wiring-wrap{display:grid;gap:16px}
+    .wiring-card{padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .wiring-card h2{margin:0 0 10px 0;font-size:1.05rem}
+    .wiring-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .small{color:var(--muted)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .wiring-list{margin:0;padding-left:18px}
+    .wiring-list li{margin:6px 0}
+    .wiring-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .wiring-pre{padding:12px;border-radius:12px;background:#08090d;border:1px solid rgba(255,255,255,.08);overflow:auto}
+    .status-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;font-size:.82rem;font-weight:700;border:1px solid rgba(255,255,255,.10)}
+    .status-pill.ok{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35)}
+    .status-pill.bad{background:rgba(225,6,0,.14);border-color:rgba(225,6,0,.45)}
+    .status-pill.warn{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35)}
+    .matrix-table{width:100%;border-collapse:collapse}
+    .matrix-table th,.matrix-table td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top;text-align:left}
+    .matrix-table th{font-size:.82rem;color:var(--muted);font-weight:700}
+  </style>
+</head>
+<body class="ndyra-bg"><a class="skip-link" href="#main-content">Skip to content</a>
+<header class="header">
+  <div class="brand"><strong>NDYRA</strong></div>
+  <nav class="nav" aria-label="Primary navigation"><a href="/workouts/">Workouts</a><a href="/app/">App</a><a href="/biz/">Business</a><a class="primary" href="/admin/wiring/">Admin Wiring</a><a href="/admin/execute/">Admin Execute</a></nav>
+</header>
+<main id="main-content" class="page container">
+  <h1>Admin Wiring Control Center</h1>
+  <p class="small">Step-by-step execution panel for local preview, staging, and production. Use this before and during live wiring.</p>
+  <div class="wiring-wrap">
+    <section class="wiring-card"><h2>Build + Config Source</h2><div id="wiring-build"></div></section>
+    <section class="wiring-card"><h2>Execution Steps</h2><div id="wiring-steps"></div></section>
+    <section class="wiring-card"><h2>Webhook Events</h2><div id="wiring-webhooks"></div></section>
+    <section class="wiring-card"><h2>Environment Templates</h2><div id="wiring-templates"></div></section>
+    <section class="wiring-card"><h2>Quick Actions</h2><div id="wiring-actions"></div></section>
+  </div>
+</main>
+<div class="footer">NDYRA build preview (<span data-build-label>CP122</span>)</div>
+<script src="/assets/js/site.js?v=2026-03-16_122"></script>
+<script type="module" src="/assets/js/admin_wiring.mjs?v=2026-03-16_122"></script>
+</body>
+</html>

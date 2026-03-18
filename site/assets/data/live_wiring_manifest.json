@@ -1,0 +1,185 @@
+{
+  "version": 7,
+  "updated_at": "2026-03-16T18:40:00Z",
+  "environments": {
+    "netlify": [
+      {
+        "name": "SUPABASE_URL",
+        "group": "supabase",
+        "required": true,
+        "secret": false,
+        "notes": "Public project URL"
+      },
+      {
+        "name": "SUPABASE_ANON_KEY",
+        "group": "supabase",
+        "required": true,
+        "secret": false,
+        "notes": "Public anon/publishable key"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "group": "supabase",
+        "required": true,
+        "secret": true,
+        "notes": "Server-only service role key"
+      },
+      {
+        "name": "STRIPE_PUBLISHABLE_KEY",
+        "group": "stripe",
+        "required": true,
+        "secret": false,
+        "notes": "Browser-safe Stripe key"
+      },
+      {
+        "name": "STRIPE_SECRET_KEY",
+        "group": "stripe",
+        "required": true,
+        "secret": true,
+        "notes": "Server-only Stripe secret"
+      },
+      {
+        "name": "STRIPE_WEBHOOK_SIGNING_SECRET",
+        "group": "stripe",
+        "required": true,
+        "secret": true,
+        "notes": "Webhook endpoint signing secret"
+      },
+      {
+        "name": "STRIPE_PORTAL_CONFIGURATION_ID",
+        "group": "stripe",
+        "required": false,
+        "secret": false,
+        "notes": "Optional portal configuration"
+      },
+      {
+        "name": "PRICE_ID_MEMBER_MONTHLY",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "Member monthly Stripe Price ID"
+      },
+      {
+        "name": "PRICE_ID_MEMBER_ANNUAL",
+        "group": "prices",
+        "required": false,
+        "secret": false,
+        "notes": "Optional member annual price"
+      },
+      {
+        "name": "PRICE_ID_BIZ_STARTER_MONTHLY",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "Biz Starter monthly price"
+      },
+      {
+        "name": "PRICE_ID_BIZ_STARTER_ANNUAL",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "Biz Starter annual price"
+      },
+      {
+        "name": "PRICE_ID_BIZ_PRO_MONTHLY",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "Biz Pro monthly price"
+      },
+      {
+        "name": "PRICE_ID_BIZ_PRO_ANNUAL",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "Biz Pro annual price"
+      },
+      {
+        "name": "PRICE_ID_TOKEN_PACK_100",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "100 token pack price"
+      },
+      {
+        "name": "PRICE_ID_TOKEN_PACK_250",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "250 token pack price"
+      },
+      {
+        "name": "PRICE_ID_TOKEN_PACK_500",
+        "group": "prices",
+        "required": true,
+        "secret": false,
+        "notes": "500 token pack price"
+      },
+      {
+        "name": "TELEMETRY_WEBHOOK_URL",
+        "group": "telemetry",
+        "required": false,
+        "secret": true,
+        "notes": "Optional telemetry sink"
+      }
+    ]
+  },
+  "migration_order": [
+    "NDYRA_CP27_SocialCore_Migrations_v7.sql",
+    "2026-02-20_000000_NDYRA_CP33_SystemOfRecord_Waivers_v7.3.1.sql",
+    "2026-02-21_000000_NDYRA_CP35_Migrate_Checkin_Tokens_v7.3.1.sql",
+    "2026-02-22_000000_NDYRA_CP38_Booking_Scale_v7.3.1.sql",
+    "2026-02-27_000000_NDYRA_CP54_Constellation_GymRatings_v7.5.sql",
+    "2026-02-27_000001_NDYRA_CP56_Constellation_Rating_Amendment_v1.sql",
+    "2026-02-27_000002_NDYRA_CP57_ConnectedGym_Presence_Members_v7.6.sql",
+    "2026-02-27_000003_NDYRA_CP59_Challenges_Seasons_v7.7.sql",
+    "2026-02-28_000000_NDYRA_CP60_BizPicker_ChallengeBuilder_v7.8.sql",
+    "2026-02-28_000001_NDYRA_CP61_ChallengeRewards_Badges_v7.9.sql",
+    "2026-02-28_000002_NDYRA_CP62_StatusShareRetention_v8.0.sql",
+    "2026-03-01_000000_NDYRA_CP63_Events_MVP_v8.1.sql",
+    "2026-03-01_000001_NDYRA_CP64_Inbox_Announcements_And_MembershipBooking_v8.2.sql",
+    "2026-03-01_000002_NDYRA_CP65_DirectMessages_v8.3.sql",
+    "2026-03-01_000003_NDYRA_CP66_DM_Privacy_Safety_v8.4.sql",
+    "2026-03-01_000004_NDYRA_CP67_DMRequests_Attachments_v8.5.sql",
+    "2026-03-02_000000_NDYRA_CP72_Aftermath_NotificationShare_v8.6.sql",
+    "2026-03-02_000001_NDYRA_CP74_StreakShield_Podium_v8.7.sql",
+    "2026-03-02_000002_NDYRA_CP75_TimezoneFriendlyStreaks_v8.8.sql",
+    "2026-03-03_000001_NDYRA_CP76_TimezoneControls_ShieldUI_v8.9.sql",
+    "2026-03-03_000002_NDYRA_CP79_Stripe_Subscriptions_Entitlements_v9.0.sql",
+    "2026-03-04_000001_NDYRA_CP83_Token_Marketplace_v1.sql",
+    "2026-03-04_000002_NDYRA_CP84_TimerPackPayloads_Seeds_v1.sql",
+    "2026-03-05_000001_NDYRA_CP85_TokenTopups_Alignment_v1.sql",
+    "2026-03-05_000002_NDYRA_CP92_CompMembership_AdminTools_v1.sql",
+    "2026-03-06_000001_NDYRA_CP95_Aftermath_Persistence_v9.6.sql",
+    "2026-03-06_000002_NDYRA_CP96_Aftermath_Visibility_Share_v9.7.sql",
+    "2026-03-06_000003_NDYRA_CP97_Aftermath_Social_Feed_v9.8.sql",
+    "2026-03-08_000001_NDYRA_CP103_Following_Signals_Feed_v10.4.sql",
+    "2026-03-10_000001_NDYRA_CP115_Entitlement_Lifecycle_and_Verification_v1.sql"
+  ],
+  "deployment_checks": [
+    "Apply the migration order on staging Supabase first, including CP92, the CP95-CP103 social/runtime additions, and the CP115 entitlement lifecycle migration.",
+    "Populate Netlify env vars using the staging template block; replace placeholders only with staging values.",
+    "Register the Stripe webhook endpoint and confirm stripe_events records are being written.",
+    "Open /admin/status/ and confirm deployment badge, exact price-matrix truth, webhook readiness, billing readiness, and marketplace readiness are all green.",
+    "Open /admin/execute/ and confirm the runtime surface matrix plus live verification matrix are unblocked for the flows you intend to announce.",
+    "Run qa_smoke.py + qa_super.py + wiring_consistency_check.py + live_verification_check.py before promoting to production.",
+    "Repeat on the prelaunch production environment using sandbox/test Stripe values only. Prepare a separate launch-day cutover checklist for live-mode keys, prices, portal config, and webhook secrets."
+  ],
+  "generated_graphics_this_checkpoint": [],
+  "template_files": {
+    "local": "netlify/env/netlify.local.example",
+    "staging": "netlify/env/netlify.staging.example",
+    "production": "netlify/env/netlify.production.example",
+    "config_example": "site/assets/ndyra.config.example.json",
+    "webhook_events": "site/assets/data/stripe_webhook_events.json",
+    "runtime_surface_matrix": "site/assets/data/runtime_surface_matrix.json"
+  },
+  "migrations": [
+    "2026-03-06_000001_NDYRA_CP95_Aftermath_Persistence_v9.6.sql",
+    "2026-03-06_000002_NDYRA_CP96_Aftermath_Visibility_Share_v9.7.sql",
+    "2026-03-06_000003_NDYRA_CP97_Aftermath_Social_Feed_v9.8.sql",
+    "2026-03-08_000001_NDYRA_CP103_Following_Signals_Feed_v10.4.sql",
+    "2026-03-10_000001_NDYRA_CP115_Entitlement_Lifecycle_and_Verification_v1.sql"
+  ],
+  "env_reference_version": "cp122"
+}

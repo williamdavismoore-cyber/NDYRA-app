@@ -1,0 +1,26 @@
+NDYRA MASTER MANIFEST — CP110
+Build ID: 2026-03-09_110
+Kit Version: v10.1
+Date: 2026-03-09
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP110_2026-03-09_110.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP110_CoreBuild_2026-03-09_110.zip
+  Core repo snapshot for side-by-side storage.
+
+- NDYRA_QA_PREVIEW_site_CP110_2026-03-09_110.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook
+- NDYRA_Buildbook_MemoryPack_CP110_2026-03-09_110.docx
+- NDYRA_Buildbook_MemoryPack_CP110_2026-03-09_110.pdf
+- NDYRA_QA_REPORT_CP110_2026-03-09_110.txt
+- NDYRA_QA_RUNBOOK_CP110_2026-03-09_110.md
+- MASTER_MANIFEST_CP110_2026-03-09_110.txt
+- NDYRA_ASSETS_NEEDED_NEXT_CP111.md
+
+Notes
+- CP110 adds app-wide Inbox + Notifications unread badges through a shared unread-count helper and header injection on /app/* routes.
+- Live mode uses Supabase counts; local preview uses deterministic seed counts.

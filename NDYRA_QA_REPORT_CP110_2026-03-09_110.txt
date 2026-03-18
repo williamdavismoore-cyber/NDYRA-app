@@ -1,0 +1,32 @@
+NDYRA QA REPORT — CP110
+Build ID: 2026-03-09_110
+Kit Version: v10.1
+Date: 2026-03-09
+
+Scope QA order
+1) Re-QA previous build (CP109) before changes
+2) Implement CP110 changes
+3) Re-run full automated gate suite on CP110
+
+What changed in CP110
+- Added shared unread-count helper: site/assets/js/ndyra/lib/unreadCounts.mjs
+- Refactored Member App Home to use the shared unread-count source
+- Upgraded site/assets/js/site.js to inject Inbox + Notifications quick links with unread badges into header nav across /app/* routes
+- Live unread counts use Supabase where configured; local/static preview falls back to deterministic seed counts
+- Updated build/version stamping to 2026-03-09_110
+- Updated docs/implementation log for CP110
+
+Automated gates
+- node tools/build_stamp.cjs ........ PASS
+- python3 tools/qa_smoke.py ........ PASS
+- python3 tools/qa_super.py ........ PASS
+- python3 tools/brand_gate_check.py  PASS
+- python3 tools/ip_gate_check.py .... PASS
+
+Notes
+- No new generated graphics were created in CP110.
+- Unread badges are intentionally app-scoped (/app/*) and do not alter the public marketing/business header chrome.
+- This checkpoint is a UX/polish + engagement step, not a DB migration checkpoint.
+
+Result
+CP110 PASS ✅

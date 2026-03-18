@@ -123,6 +123,25 @@ def main():
       ok("bookClass.mjs demo fork sets token-path visibility")
 
 
+
+
+  # Wiring preflight artifacts must exist
+  wiring = ROOT / 'tools' / 'wiring_preflight.py'
+  if not wiring.exists():
+    fail('Missing tools/wiring_preflight.py')
+  else:
+    ok('tools/wiring_preflight.py present')
+
+  admin_status = SITE / 'admin' / 'status' / 'index.html'
+  if admin_status.exists():
+    html = read_text(admin_status)
+    required_tokens = ['id="local-config-status"','id="config-warnings"','id="runtime-surfaces"']
+    missing = [token for token in required_tokens if token not in html]
+    if missing:
+      fail('admin/status missing required sections: ' + ', '.join(missing))
+    else:
+      ok('admin/status local-config + runtime sections present')
+
   # No legacy hardcoded HIIT56 domain fallbacks in serverless (redirects back to old site)
   legacy_domain = 'hiit56online.com'
   fn_dir = ROOT / 'netlify' / 'functions'
@@ -130,6 +149,30 @@ def main():
     for fn in fn_dir.glob('*.js'):
       if legacy_domain in read_text(fn):
         fail(f'Legacy domain {legacy_domain} found in {fn.name}. Use env URL/DEPLOY_PRIME_URL instead.')
+
+  wiring_consistency = ROOT / 'tools' / 'wiring_consistency_check.py'
+  if not wiring_consistency.exists():
+    fail('Missing tools/wiring_consistency_check.py')
+  else:
+    ok('tools/wiring_consistency_check.py present')
+
+  admin_wiring = SITE / 'admin' / 'wiring' / 'index.html'
+  if admin_wiring.exists():
+    html = read_text(admin_wiring)
+    if 'wiring-build' not in html or 'wiring-webhooks' not in html:
+      fail('admin/wiring missing core sections')
+    else:
+      ok('admin/wiring core sections present')
+
+  admin_execute = SITE / 'admin' / 'execute' / 'index.html'
+  if admin_execute.exists():
+    html = read_text(admin_execute)
+    required_tokens = ['exec-summary','exec-steps','exec-confidence','exec-live-blockers','exec-closeout','exec-templates','exec-surfaces','exec-warnings','exec-actions']
+    missing = [token for token in required_tokens if token not in html]
+    if missing:
+      fail('admin/execute missing core sections: ' + ', '.join(missing))
+    else:
+      ok('admin/execute core sections present')
 
   if FAILS:
     print("")

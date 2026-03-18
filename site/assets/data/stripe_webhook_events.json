@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-08T21:15:00Z",
+  "endpoint_path": "/api/stripe/webhook",
+  "events": [
+    {
+      "name": "checkout.session.completed",
+      "required": true,
+      "why": "Subscription + token top-up completion entry point"
+    },
+    {
+      "name": "customer.subscription.created",
+      "required": true,
+      "why": "Create local subscription mirror"
+    },
+    {
+      "name": "customer.subscription.updated",
+      "required": true,
+      "why": "Update status / renewal / tier"
+    },
+    {
+      "name": "customer.subscription.deleted",
+      "required": true,
+      "why": "End local subscription mirror"
+    },
+    {
+      "name": "invoice.paid",
+      "required": true,
+      "why": "Confirm billing success"
+    },
+    {
+      "name": "invoice.payment_failed",
+      "required": true,
+      "why": "Surface failed billing state"
+    }
+  ],
+  "notes": [
+    "Use Stripe sandbox/test mode on staging and prelaunch production first.",
+    "Webhook signing secret must be stored only in Netlify env vars.",
+    "Do not expose raw event payloads in the browser.",
+    "Launch-day live cutover uses a different webhook signing secret from sandbox/test."
+  ]
+}

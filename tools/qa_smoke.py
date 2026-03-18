@@ -55,6 +55,7 @@ def main() -> int:
     law_paths = [
         ROOT / "IP_GUARDRAILS.md",
         ROOT / "docs" / "ndyra" / "NDYRA_SoupToNuts_Blueprint_v7.3.1_LOCKED_CORRECTED.pdf",
+        ROOT / "docs" / "ndyra" / "NDYRA_Blueprint_Addendum_Token_Marketplace_v1.0_2026-03-04.pdf",
         ROOT / "docs" / "ndyra" / "GATES_RUNBOOK.md",
     ]
     for p in law_paths:
@@ -65,6 +66,16 @@ def main() -> int:
         SITE / "index.html",
         SITE / "preview" / "index.html",
         SITE / "login.html",
+        SITE / "login" / "index.html",
+        SITE / "signup" / "index.html",
+        SITE / "logout" / "index.html",
+        SITE / "auth" / "login.html",
+        SITE / "auth" / "signup.html",
+        SITE / "forgot" / "index.html",
+        SITE / "reset" / "index.html",
+        SITE / "auth" / "forgot.html",
+        SITE / "auth" / "reset.html",
+        SITE / "auth" / "callback.html",
         SITE / "pricing.html",
         SITE / "join.html",
         SITE / "gym" / "join" / "index.html",
@@ -84,19 +95,40 @@ def main() -> int:
         SITE / "workouts" / "category.html",
         SITE / "workouts" / "workout.html",
         SITE / "app" / "index.html",
+        SITE / "app" / "home" / "index.html",
+        SITE / "app" / "stories" / "index.html",
+        SITE / "app" / "performance" / "index.html",
         SITE / "app" / "workouts" / "index.html",
         SITE / "app" / "workouts" / "category.html",
         SITE / "app" / "workouts" / "workout.html",
         SITE / "app" / "timer" / "index.html",
         SITE / "app" / "timer" / "builder" / "index.html",
         SITE / "app" / "timer" / "my-workouts" / "index.html",
+        SITE / "app" / "wallet" / "index.html",
+        SITE / "app" / "purchases" / "index.html",
+        SITE / "app" / "library" / "timers" / "index.html",
+        SITE / "app" / "account" / "index.html",
+        SITE / "app" / "settings" / "index.html",
+        SITE / "app" / "events" / "index.html",
+        SITE / "app" / "events" / "share" / "index.html",
+        SITE / "app" / "members" / "index.html",
+        SITE / "app" / "aftermath" / "share" / "index.html",
+        SITE / "app" / "aftermath" / "detail.html",
+        SITE / "app" / "aftermath" / "index.html",
+        SITE / "app" / "notifications" / "index.html",
+        SITE / "app" / "inbox" / "index.html",
         SITE / "biz" / "index.html",
         SITE / "biz" / "moves" / "index.html",
         SITE / "biz" / "moves" / "move.html",
         SITE / "biz" / "gym-timer" / "index.html",
         SITE / "biz" / "gym-timer" / "builder" / "index.html",
+        SITE / "biz" / "shop" / "index.html",
+        SITE / "biz" / "timers" / "packs" / "index.html",
+        SITE / "biz" / "account" / "index.html",
         SITE / "admin" / "index.html",
         SITE / "admin" / "status" / "index.html",
+        SITE / "admin" / "wiring" / "index.html",
+        SITE / "admin" / "execute" / "index.html",
     ]
 
     print("\n[1] Page presence")
@@ -132,6 +164,19 @@ def main() -> int:
 
     print("  OK: _redirects dynamic rewrites (app + quick join)")
 
+    # Explicit API route rewrites for pretty endpoints
+    explicit_api_rewrites = [
+        ("/api/health", "/.netlify/functions/health"),
+        ("/api/public_config", "/.netlify/functions/public_config"),
+        ("/api/stripe/create-checkout-session", "/.netlify/functions/stripe_create_checkout_session"),
+        ("/api/stripe/create-portal-session", "/.netlify/functions/stripe_create_portal_session"),
+        ("/api/stripe/webhook", "/.netlify/functions/stripe_webhook"),
+        ("/api/telemetry/ingest", "/.netlify/functions/telemetry_ingest"),
+    ]
+    for src, dst in explicit_api_rewrites:
+        assert_(src in redirects_txt and dst in redirects_txt, f"_redirects missing explicit API rewrite: {src} -> {dst}")
+    print("  OK: _redirects explicit API rewrites")
+
     server_path = ROOT / "tools" / "static_server.cjs"
     assert_(server_path.exists(), f"Missing static server: {server_path}")
     server_txt = server_path.read_text(encoding="utf-8", errors="replace")
@@ -153,6 +198,61 @@ def main() -> int:
 
     print("  OK: static_server route map (app + quick join)")
 
+    wiring_consistency = ROOT / 'tools' / 'wiring_consistency_check.py'
+    confidence_check = ROOT / 'tools' / 'deployment_confidence_check.py'
+    a11y_check = ROOT / 'tools' / 'qa_accessibility.py'
+    verification_check = ROOT / 'tools' / 'live_verification_check.py'
+    boundary_check = ROOT / 'tools' / 'module_boundary_surface_check.py'
+    closeout_check = ROOT / 'tools' / 'release_closeout_check.py'
+    module_contract_check = ROOT / 'tools' / 'core_module_contract_check.py'
+    future_alignment_check = ROOT / 'tools' / 'core_future_module_alignment_check.py'
+    assert_(wiring_consistency.exists(), f"Missing wiring consistency checker: {wiring_consistency}")
+    assert_(confidence_check.exists(), f"Missing deployment confidence checker: {confidence_check}")
+    assert_(a11y_check.exists(), f"Missing accessibility checker: {a11y_check}")
+    assert_(verification_check.exists(), f"Missing live verification checker: {verification_check}")
+    assert_(boundary_check.exists(), f"Missing module boundary checker: {boundary_check}")
+    assert_(closeout_check.exists(), f"Missing release closeout checker: {closeout_check}")
+    assert_(module_contract_check.exists(), f"Missing core module contract checker: {module_contract_check}")
+    assert_(future_alignment_check.exists(), f"Missing future alignment checker: {future_alignment_check}")
+    print("  OK: tools/wiring_consistency_check.py present")
+
+    # Verify data-root attributes are real HTML attrs (not bracketed leftovers).
+    bad_root_tokens = [
+        '[data-wallet-root]',
+        '[data-purchases-root]',
+        '[data-library-timers-root]',
+        '[data-account-root]',
+        '[data-biz-account-root]',
+    ]
+    for rel in [
+        SITE / 'app' / 'wallet' / 'index.html',
+        SITE / 'app' / 'purchases' / 'index.html',
+        SITE / 'app' / 'library' / 'timers' / 'index.html',
+        SITE / 'app' / 'account' / 'index.html',
+        SITE / 'biz' / 'account' / 'index.html',
+    ]:
+        html = rel.read_text(encoding='utf-8', errors='replace')
+        for token in bad_root_tokens:
+            assert_(token not in html, f'Bracketed data-root token left in HTML: {rel.relative_to(ROOT)} -> {token}')
+
+
+    app_more = SITE / 'app' / 'more' / 'index.html'
+    assert_(app_more.exists(), f"Missing module hub route: {app_more}")
+    app_more_html = app_more.read_text(encoding='utf-8', errors='replace')
+    assert_('data-app-more-root' in app_more_html, 'site/app/more/index.html missing data-app-more-root')
+    assert_('ndyra-app-more' in app_more_html, 'site/app/more/index.html missing ndyra-app-more data-page')
+    print("  OK: module hub route (/app/more/)")
+
+
+
+    print("\n[1c] Local config + env templates")
+    local_cfg = SITE / "assets" / "ndyra.config.example.json"
+    assert_(local_cfg.exists(), f"Missing local config example: {local_cfg}")
+    for env_name in ["netlify.local.example", "netlify.staging.example", "netlify.production.example"]:
+        env_path = ROOT / "netlify" / "env" / env_name
+        assert_(env_path.exists(), f"Missing env template: {env_path}")
+        print(f"  OK: {env_path.relative_to(ROOT)}")
+
     print("\n[2] Data manifest presence")
     required_data = [
         DATA / "categories_v1.json",
@@ -164,6 +264,27 @@ def main() -> int:
         DATA / "videos_category_samples.json",
         DATA / "timer_demos.json",
         DATA / "stripe_public_test.json",
+        DATA / "live_wiring_manifest.json",
+        DATA / "deployment_templates.json",
+        DATA / "live_wiring_examples.json",
+        DATA / "stripe_webhook_events.json",
+        DATA / "live_execution_steps.json",
+        DATA / "runtime_surface_matrix.json",
+        DATA / "deployment_confidence_checklist.json",
+        DATA / "live_verification_matrix.json",
+        DATA / "biz_boundary_surfaces.json",
+        DATA / "release_closeout_packet.json",
+        DATA / "core_module_contracts.json",
+        DATA / "module_host_registry.json",
+        SITE / "assets" / "ndyra.config.example.json",
+        DATA / "aftermath_seed_public.json",
+        DATA / "notifications_seed_public.json",
+        DATA / "inbox_seed_public.json",
+        DATA / "members_seed_public.json",
+        DATA / "following_seed_public.json",
+        DATA / "signals_seed_public.json",
+        DATA / "post_seed_public.json",
+        DATA / "public_gyms_seed.json",
     ]
     for p in required_data:
         assert_(p.exists(), f"Missing data: {p}")
@@ -230,7 +351,10 @@ def main() -> int:
     js = SITE / "assets" / "js" / "site.js"
     assert_(css.exists(), "Missing styles.css")
     assert_(js.exists(), "Missing site.js")
-    assert_("#ff2b4a" in css.read_text(encoding="utf-8"), "NDYRA accent color not found in CSS")
+    # Brand gate: NDYRA accent is the locked red used across the shell.
+    # CP58+ aligns CTAs to NDYRA red (#E10600).
+    css_text = css.read_text(encoding="utf-8").lower()
+    assert_("#e10600" in css_text, "NDYRA accent color not found in CSS (expected #E10600)")
     print("  OK")
 
 
@@ -238,6 +362,82 @@ def main() -> int:
     import subprocess
     res = subprocess.run(["node", "--check", str(js)], capture_output=True, text=True)
     assert_(res.returncode == 0, f"JS syntax error in site.js:\n{res.stderr or res.stdout}")
+    print("  OK")
+
+    print("\n[7c] Key module presence")
+    required_modules = [
+        SITE / "assets" / "js" / "admin_status.mjs",
+        SITE / "assets" / "js" / "ndyra" / "lib" / "entitlements.mjs",
+        SITE / "assets" / "js" / "ndyra" / "lib" / "entitlementState.mjs",
+        SITE / "assets" / "js" / "ndyra" / "components" / "planGate.mjs",
+        SITE / "assets" / "js" / "ndyra" / "lib" / "publicGyms.mjs",
+        SITE / "assets" / "js" / "ndyra" / "pages" / "pricingPublic.mjs",
+        SITE / "assets" / "js" / "ndyra" / "pages" / "joinPublic.mjs",
+        SITE / "assets" / "js" / "ndyra" / "pages" / "forGymsLanding.mjs",
+        SITE / "assets" / "js" / "ndyra" / "pages" / "forGymsStart.mjs",
+        SITE / "assets" / "js" / "ndyra" / "pages" / "publicGymProfile.mjs",
+        SITE / "assets" / "js" / "ndyra" / "pages" / "gymJoinPublic.mjs",
+        SITE / "assets" / "js" / "ndyra" / "pages" / "bizBoundary.mjs",
+    ]
+    for mp in required_modules:
+        assert_(mp.exists(), f"Missing required module: {mp.relative_to(ROOT)}")
+        print(f"  OK: {mp.relative_to(ROOT)}")
+
+
+    print("\n[7e] Admin status truth panel sections")
+    admin_status = SITE / "admin" / "status" / "index.html"
+    admin_html = admin_status.read_text(encoding="utf-8")
+    for required_id in ["deployment-badge", "env-matrix", "env-templates", "stripe-product-matrix", "migration-order"]:
+        assert_(required_id in admin_html, f"Admin status page missing section id: {required_id}")
+    print("  OK")
+
+    print("\n[7d] Netlify plan gate helper presence")
+    plan_gate = ROOT / "netlify" / "functions" / "_lib" / "planGate.mjs"
+    assert_(plan_gate.exists(), f"Missing plan gate helper: {plan_gate.relative_to(ROOT)}")
+
+    plan_gate_targets = [
+        ROOT / "netlify" / "functions" / "checkin-override.mjs",
+        ROOT / "netlify" / "functions" / "tenant-migration-import.mjs",
+        ROOT / "netlify" / "functions" / "waiver-template-update.mjs",
+    ]
+
+    for fp in plan_gate_targets:
+        assert_(fp.exists(), f"Missing Netlify function: {fp.relative_to(ROOT)}")
+        body = fp.read_text(encoding="utf-8", errors="replace")
+        assert_("enforceTenantBusinessPlan" in body, f"{fp.relative_to(ROOT)} missing enforceTenantBusinessPlan")
+        assert_("plan_required" in body, f"{fp.relative_to(ROOT)} missing plan_required response")
+
+    print("  OK")
+
+    print("\n[7f] Env helper + template files")
+    env_helper_js = ROOT / "netlify" / "functions" / "_lib" / "env.js"
+    env_helper_mjs = ROOT / "netlify" / "functions" / "_lib" / "env.mjs"
+    assert_(env_helper_js.exists(), f"Missing env helper: {env_helper_js.relative_to(ROOT)}")
+    assert_(env_helper_mjs.exists(), f"Missing env helper: {env_helper_mjs.relative_to(ROOT)}")
+
+    example_files = [
+        ROOT / "netlify" / "env" / "netlify.local.example",
+        ROOT / "netlify" / "env" / "netlify.staging.example",
+        ROOT / "netlify" / "env" / "netlify.production.example",
+        ROOT / "ops" / "env" / "live_release_closeout.example.json",
+    ]
+    for fp in example_files:
+        assert_(fp.exists(), f"Missing env example file: {fp.relative_to(ROOT)}")
+
+    env_targets = [
+        ROOT / "netlify" / "functions" / "health.js",
+        ROOT / "netlify" / "functions" / "public_config.js",
+        ROOT / "netlify" / "functions" / "stripe_create_checkout_session.js",
+        ROOT / "netlify" / "functions" / "stripe_create_portal_session.js",
+        ROOT / "netlify" / "functions" / "stripe_webhook.js",
+        ROOT / "netlify" / "functions" / "checkin-override.mjs",
+        ROOT / "netlify" / "functions" / "tenant-migration-import.mjs",
+        ROOT / "netlify" / "functions" / "waiver-template-update.mjs",
+    ]
+    for fp in env_targets:
+        body = fp.read_text(encoding="utf-8", errors="replace")
+        assert_("./_lib/env" in body, f"{fp.relative_to(ROOT)} missing shared env helper usage")
+
     print("  OK")
 
     print("\n[8] CP string consistency")

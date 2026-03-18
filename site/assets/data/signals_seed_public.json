@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "sig_001",
+      "created_at": "2026-03-07T08:00:00Z",
+      "expires_at": "2026-03-08T08:00:00Z",
+      "visibility": "public",
+      "author_user_id": "seed-signal-001",
+      "content_text": "Open gym tonight. Keep it crisp, keep it kind.",
+      "signal_font_key": "display",
+      "author_name": "Morgan Hale",
+      "author_handle": "morganhale",
+      "author_avatar_url": "",
+      "tenant_context_id": "seed-gym-001",
+      "post_media": []
+    },
+    {
+      "id": "sig_002",
+      "created_at": "2026-03-07T06:20:00Z",
+      "expires_at": "2026-03-08T06:20:00Z",
+      "visibility": "followers",
+      "author_user_id": "seed-signal-002",
+      "content_text": "Saturday race sim starts at 9. Bring water, bring patience.",
+      "signal_font_key": "serif",
+      "author_name": "Jordan Vale",
+      "author_handle": "jordanvale",
+      "author_avatar_url": "",
+      "tenant_context_id": "seed-gym-001",
+      "post_media": []
+    }
+  ]
+}

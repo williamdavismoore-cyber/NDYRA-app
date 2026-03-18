@@ -1,0 +1,233 @@
+NDYRA QA REPORT — CP114
+Build ID: 2026-03-10_114
+Kit Version: v10.3
+
+Process:
+1) Re-QA previous clean build state (CP113) before new work
+2) Implement CP114 public acquisition + gym profile reality pass inside NDYRA Core boundaries
+3) Re-run full automated gate suite on CP114 from the actual working repo tree
+
+Notes:
+- QA-first rule was honored before any CP114 build work started.
+- CP114 stays inside NDYRA Core: no BizGym runtime duplication, no Timer runtime duplication, and no Check-In buildout.
+- No generated graphics were added in CP114.
+
+What changed in CP114
+- Replaced placeholder public acquisition pages with real member pricing, join, gym pricing, and gym start flows
+- Added seeded/live-ready public gym profile data and library helpers for gym profile + gym join surfaces
+- Added follow/connect behavior on public gym profiles when signed in and live data is available
+- Added business setup capture with slug, locations, and fail-closed checkout start logic
+- Added public_surface_check.py and folded it into qa:all so these public entry surfaces cannot quietly regress
+- Updated home + preview entry points so the new public routes are discoverable
+- Restamped the full active site to CP114 so cache/version drift cannot leak old checkpoint labels
+
+QA Gates
+[build_stamp] OK: build.json validated + normalized
+NDYRA QA SMOKE — CP114
+Root: /mnt/data/ndyra_cp114_work/repo
+Site: /mnt/data/ndyra_cp114_work/repo/site
+
+[0] Law files presence
+  OK: IP_GUARDRAILS.md
+  OK: docs/ndyra/NDYRA_SoupToNuts_Blueprint_v7.3.1_LOCKED_CORRECTED.pdf
+  OK: docs/ndyra/NDYRA_Blueprint_Addendum_Token_Marketplace_v1.0_2026-03-04.pdf
+  OK: docs/ndyra/GATES_RUNBOOK.md
+
+[1] Page presence
+  OK: site/index.html
+  OK: site/preview/index.html
+  OK: site/login.html
+  OK: site/login/index.html
+  OK: site/signup/index.html
+  OK: site/logout/index.html
+  OK: site/auth/login.html
+  OK: site/auth/signup.html
+  OK: site/forgot/index.html
+  OK: site/reset/index.html
+  OK: site/auth/forgot.html
+  OK: site/auth/reset.html
+  OK: site/auth/callback.html
+  OK: site/pricing.html
+  OK: site/join.html
+  OK: site/gym/join/index.html
+  OK: site/gym/profile/index.html
+  OK: site/app/book/class/index.html
+  OK: site/biz/check-in/index.html
+  OK: site/biz/migrate/index.html
+  OK: site/biz/migrate/members/index.html
+  OK: site/biz/migrate/schedule/index.html
+  OK: site/biz/migrate/verify/index.html
+  OK: site/biz/migrate/commit/index.html
+  OK: site/biz/migrate/cutover/index.html
+  OK: site/for-gyms/index.html
+  OK: site/for-gyms/pricing.html
+  OK: site/for-gyms/start.html
+  OK: site/workouts/index.html
+  OK: site/workouts/category.html
+  OK: site/workouts/workout.html
+  OK: site/app/index.html
+  OK: site/app/workouts/index.html
+  OK: site/app/workouts/category.html
+  OK: site/app/workouts/workout.html
+  OK: site/app/timer/index.html
+  OK: site/app/timer/builder/index.html
+  OK: site/app/timer/my-workouts/index.html
+  OK: site/app/wallet/index.html
+  OK: site/app/purchases/index.html
+  OK: site/app/library/timers/index.html
+  OK: site/app/account/index.html
+  OK: site/app/settings/index.html
+  OK: site/app/events/index.html
+  OK: site/app/events/share/index.html
+  OK: site/app/members/index.html
+  OK: site/app/aftermath/share/index.html
+  OK: site/app/aftermath/detail.html
+  OK: site/app/aftermath/index.html
+  OK: site/app/notifications/index.html
+  OK: site/app/inbox/index.html
+  OK: site/biz/index.html
+  OK: site/biz/moves/index.html
+  OK: site/biz/moves/move.html
+  OK: site/biz/gym-timer/index.html
+  OK: site/biz/gym-timer/builder/index.html
+  OK: site/biz/shop/index.html
+  OK: site/biz/timers/packs/index.html
+  OK: site/biz/account/index.html
+  OK: site/admin/index.html
+  OK: site/admin/status/index.html
+  OK: site/admin/wiring/index.html
+  OK: site/admin/execute/index.html
+
+[1b] Route rewrites + QA guardrails
+  OK: _redirects dynamic rewrites (app + quick join)
+  OK: _redirects explicit API rewrites
+  OK: static_server route map (app + quick join)
+  OK: tools/wiring_consistency_check.py present
+
+[1c] Local config + env templates
+  OK: netlify/env/netlify.local.example
+  OK: netlify/env/netlify.staging.example
+  OK: netlify/env/netlify.production.example
+
+[2] Data manifest presence
+  OK: site/assets/data/categories_v1.json
+  OK: site/assets/data/categories_draft.json
+  OK: site/assets/data/videos_classes.json
+  OK: site/assets/data/videos_moves.json
+  OK: site/assets/data/videos_all.json
+  OK: site/assets/data/videos_marketing.json
+  OK: site/assets/data/videos_category_samples.json
+  OK: site/assets/data/timer_demos.json
+  OK: site/assets/data/stripe_public_test.json
+  OK: site/assets/data/live_wiring_manifest.json
+  OK: site/assets/data/deployment_templates.json
+  OK: site/assets/data/live_wiring_examples.json
+  OK: site/assets/data/stripe_webhook_events.json
+  OK: site/assets/data/live_execution_steps.json
+  OK: site/assets/data/runtime_surface_matrix.json
+  OK: site/assets/data/deployment_confidence_checklist.json
+  OK: site/assets/ndyra.config.example.json
+  OK: site/assets/data/aftermath_seed_public.json
+  OK: site/assets/data/notifications_seed_public.json
+  OK: site/assets/data/inbox_seed_public.json
+  OK: site/assets/data/members_seed_public.json
+  OK: site/assets/data/following_seed_public.json
+  OK: site/assets/data/signals_seed_public.json
+  OK: site/assets/data/post_seed_public.json
+  OK: site/assets/data/public_gyms_seed.json
+
+[3] JSON parsing
+  OK: categories=2, classes=2, moves=1
+
+[3b] Timer demos sanity
+  OK: demos=2
+
+[4] Category slugs + posters
+  OK: 2 categories, 2 total teaser IDs
+
+[5] Classes reference known category slugs
+  OK
+
+[6] Teaser IDs exist in class list
+  OK
+
+[7] Basic internal asset refs
+  OK
+
+[7b] JS syntax check (node --check)
+  OK
+
+[7c] Key module presence
+  OK: site/assets/js/admin_status.mjs
+  OK: site/assets/js/ndyra/lib/entitlements.mjs
+  OK: site/assets/js/ndyra/lib/entitlementState.mjs
+  OK: site/assets/js/ndyra/components/planGate.mjs
+  OK: site/assets/js/ndyra/lib/publicGyms.mjs
+  OK: site/assets/js/ndyra/pages/pricingPublic.mjs
+  OK: site/assets/js/ndyra/pages/joinPublic.mjs
+  OK: site/assets/js/ndyra/pages/forGymsLanding.mjs
+  OK: site/assets/js/ndyra/pages/forGymsStart.mjs
+  OK: site/assets/js/ndyra/pages/publicGymProfile.mjs
+  OK: site/assets/js/ndyra/pages/gymJoinPublic.mjs
+
+[7e] Admin status truth panel sections
+  OK
+
+[7d] Netlify plan gate helper presence
+  OK
+
+[7f] Env helper + template files
+  OK
+
+[8] CP string consistency
+  OK
+
+PASS ✅
+NDYRA QA SUPER
+Root: /mnt/data/ndyra_cp114_work/repo
+  OK: build.json parsed: CP114 (2026-03-10_114)
+  OK: All HTML ?v= cache-bust params match build_id
+  OK: sw.js references current build_id
+  OK: sw.js CACHE_NAME versioned with build_id
+  OK: site/app/fyp/index.html boot.mjs present
+  OK: site/app/following/index.html boot.mjs present
+  OK: site/app/signals/index.html boot.mjs present
+  OK: site/app/profile/index.html boot.mjs present
+  OK: bookClass.mjs demo fork sets token-path visibility
+  OK: tools/wiring_preflight.py present
+  OK: admin/status local-config + runtime sections present
+  OK: tools/wiring_consistency_check.py present
+  OK: admin/wiring core sections present
+  OK: admin/execute core sections present
+
+SUPER QA PASS ✅
+BRAND GATE PASS ✅
+IP GATE PASS ✅
+OK: stripe webhook event matrix complete
+OK: manifest env vars represented in templates
+OK: explicit api rewrites present
+OK: admin wiring page sections present
+WIRING CONSISTENCY PASS
+OK: admin execute page sections present
+OK: deployment confidence checklist present
+OK: runtime surface matrix present
+OK: live execution steps present
+OK: html files found: 76
+OK: skip-link styles present
+OK: focus-visible styles present
+OK: reduced-motion styles present
+ACCESSIBILITY QA PASS
+OK: deployment confidence checklist groups present
+OK: admin execute confidence sections present
+OK: admin execute JS references confidence checklist
+OK: runtimeReady confidence helpers present
+DEPLOYMENT CONFIDENCE CHECK PASS
+NDYRA PUBLIC SURFACE CHECK
+OK: site/pricing.html
+OK: site/join.html
+OK: site/for-gyms/index.html
+OK: site/for-gyms/pricing.html
+OK: site/for-gyms/start.html
+OK: site/gym/profile/index.html
+OK: site/gym/join/index.html
+PUBLIC SURFACE CHECK PASS

@@ -1,0 +1,91 @@
+{
+  "items": [
+    {
+      "id": "post_seed_101",
+      "author": {
+        "id": "seed-user-1",
+        "full_name": "Jules Bennett",
+        "handle": "jules.bennett",
+        "avatar_url": ""
+      },
+      "created_at": "2026-03-06T14:18:00Z",
+      "content_text": "Crisp splits. Zero excuses. Shared from Aftermath.",
+      "stats": {
+        "reactions_total": 14,
+        "reactions_fire": 9,
+        "reactions_clap": 3,
+        "reactions_flex": 2,
+        "reactions_heart": 0,
+        "reactions_check": 0
+      },
+      "viewer_reaction": null,
+      "comments": [
+        {
+          "id": "c_seed_101",
+          "user": {
+            "id": "seed-user-2",
+            "full_name": "Mara Keene",
+            "handle": "mara.keene",
+            "avatar_url": ""
+          },
+          "body": "That pacing was mean. In a good way.",
+          "created_at": "2026-03-06T14:32:00Z"
+        },
+        {
+          "id": "c_seed_102",
+          "user": {
+            "id": "seed-user-4",
+            "full_name": "Cam Nguyen",
+            "handle": "cam.nguyen",
+            "avatar_url": ""
+          },
+          "body": "Those HR stats tell the story.",
+          "created_at": "2026-03-06T15:01:00Z"
+        }
+      ],
+      "aftermath": {
+        "entry_id": "af_seed_101",
+        "kind": "workout",
+        "title": "Morning Speed Session"
+      }
+    },
+    {
+      "id": "post_seed_102",
+      "author": {
+        "id": "seed-user-2",
+        "full_name": "Mara Keene",
+        "handle": "mara.keene",
+        "avatar_url": ""
+      },
+      "created_at": "2026-03-06T12:08:00Z",
+      "content_text": "Another point banked. Staying with it.",
+      "stats": {
+        "reactions_total": 8,
+        "reactions_fire": 3,
+        "reactions_clap": 2,
+        "reactions_flex": 1,
+        "reactions_heart": 2,
+        "reactions_check": 0
+      },
+      "viewer_reaction": "clap",
+      "comments": [
+        {
+          "id": "c_seed_201",
+          "user": {
+            "id": "seed-user-1",
+            "full_name": "Jules Bennett",
+            "handle": "jules.bennett",
+            "avatar_url": ""
+          },
+          "body": "Quiet work. Loud results.",
+          "created_at": "2026-03-06T12:34:00Z"
+        }
+      ],
+      "aftermath": {
+        "entry_id": "af_seed_102",
+        "kind": "challenge",
+        "title": "Consistency check-in"
+      }
+    }
+  ]
+}

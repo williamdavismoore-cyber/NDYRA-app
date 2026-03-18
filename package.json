@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "NDYRA App (static site + Netlify Functions + Supabase)",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
@@ -20,12 +20,22 @@
     "qa:load": "node ./tools/load_harness.mjs",
     "qa:lighthouse": "lhci autorun",
     "qa:vimeo:allowlist": "node tools/vimeo_allowlist_check.mjs --domain localhost --domain 127.0.0.1",
-    "qa:all": "npm run qa:smoke && npm run qa:super && npm run qa:brand && npm run qa:ip && npm run qa:e2e && npm run qa:load && npm run qa:lighthouse",
+    "qa:all": "npm run qa:smoke && npm run qa:super && npm run qa:brand && npm run qa:ip && npm run qa:a11y && npm run qa:confidence && npm run qa:verification && npm run qa:public && npm run qa:modules:core && npm run qa:module-host && npm run qa:future-alignment && npm run qa:hygiene && npm run qa:boundaries && npm run qa:closeout && npm run qa:e2e && npm run qa:load && npm run qa:lighthouse",
+    "qa:verification": "python tools/live_verification_check.py",
     "qa:e2e:desktop": "playwright test --project=\"Desktop Chromium\"",
     "qa:e2e:mobile": "playwright test --project=\"Mobile Safari\"",
     "qa:super": "python tools/qa_super.py",
     "qa:ip": "python tools/ip_gate_check.py",
-    "qa:brand": "python tools/brand_gate_check.py"
+    "qa:brand": "python tools/brand_gate_check.py",
+    "qa:a11y": "python tools/qa_accessibility.py",
+    "qa:confidence": "python tools/deployment_confidence_check.py",
+    "qa:public": "python tools/public_surface_check.py",
+    "qa:boundaries": "python tools/module_boundary_surface_check.py",
+    "qa:closeout": "python tools/release_closeout_check.py",
+    "qa:modules:core": "python tools/core_module_contract_check.py",
+    "qa:module-host": "python tools/module_host_experience_check.py",
+    "qa:future-alignment": "python tools/core_future_module_alignment_check.py",
+    "qa:hygiene": "python tools/code_hygiene_check.py"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",

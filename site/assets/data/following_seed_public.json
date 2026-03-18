@@ -1,0 +1,72 @@
+{
+  "items": [
+    {
+      "id": "af_follow_001",
+      "user_id": "seed-follow-001",
+      "tenant_id": "seed-gym-001",
+      "kind": "workout",
+      "source_type": "workout",
+      "source_id": null,
+      "title": "Followed Member Interval Session",
+      "subtitle": "Clean transitions. Strong finish.",
+      "note": null,
+      "rating": 5,
+      "occurred_at": "2026-03-07T09:15:00Z",
+      "stats": [
+        {
+          "label": "Total time",
+          "value": "32:40"
+        },
+        {
+          "label": "Rounds",
+          "value": "6"
+        },
+        {
+          "label": "Avg HR",
+          "value": "149"
+        }
+      ],
+      "visibility": "followers",
+      "created_at": "2026-03-07T09:15:00Z",
+      "updated_at": "2026-03-07T09:15:00Z",
+      "shared_post_id": null,
+      "author_name": "Avery Cross",
+      "author_handle": "averycross",
+      "author_avatar_url": ""
+    },
+    {
+      "id": "af_follow_002",
+      "user_id": "seed-follow-002",
+      "tenant_id": "seed-gym-001",
+      "kind": "challenge",
+      "source_type": "challenge",
+      "source_id": null,
+      "title": "Consistency Chain Alive",
+      "subtitle": "Day 9 logged. Still climbing.",
+      "note": null,
+      "rating": 4,
+      "occurred_at": "2026-03-07T07:45:00Z",
+      "stats": [
+        {
+          "label": "Day",
+          "value": "9 / 30"
+        },
+        {
+          "label": "Rank",
+          "value": "#14"
+        },
+        {
+          "label": "Points",
+          "value": "+5"
+        }
+      ],
+      "visibility": "followers",
+      "created_at": "2026-03-07T07:45:00Z",
+      "updated_at": "2026-03-07T07:45:00Z",
+      "shared_post_id": null,
+      "author_name": "Riley Stone",
+      "author_handle": "rileystone",
+      "author_avatar_url": ""
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+NDYRA MASTER MANIFEST — CP113
+Build ID: 2026-03-09_113
+Kit Version: v10.3
+Date: 2026-03-09
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP113_2026-03-09_113.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP113_CoreBuild_2026-03-09_113.zip
+  Core app package with site, tools, netlify functions, supabase migrations, and supporting docs.
+
+- NDYRA_QA_PREVIEW_site_CP113_2026-03-09_113.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook + QA
+- NDYRA_Buildbook_Kit_CP113_v10.3_CHECKPOINT_2026-03-09_113.zip
+- NDYRA_Buildbook_MemoryPack_CP113_2026-03-09_113.docx
+- NDYRA_Buildbook_MemoryPack_CP113_2026-03-09_113.pdf
+- NDYRA_QA_REPORT_CP113_2026-03-09_113.txt
+- NDYRA_QA_RUNBOOK_CP113_2026-03-09_113.md
+- MASTER_MANIFEST_CP113_2026-03-09_113.txt
+
+Notes
+- CP113 is the deployment-confidence, checkout safety, entitlement-state, and shared-accessibility hardening checkpoint.
+- QA-first was honored: CP112 was re-QAed before new work continued.
+- No generated graphics were added in this checkpoint.
+- Build completion estimate: ~98% complete / ~2% remaining.
+
+Master split deliverables
+- NDYRA_MASTER_DELIVERABLES_CP113_2026-03-09_113_PART1_REPO.zip
+- NDYRA_MASTER_DELIVERABLES_CP113_2026-03-09_113_PART2_BUILDBOOK.zip
+- NDYRA_MASTER_DELIVERABLES_CP113_2026-03-09_113_PART3_EVERYTHING_ELSE.zip

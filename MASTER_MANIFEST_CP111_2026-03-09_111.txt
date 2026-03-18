@@ -1,0 +1,28 @@
+NDYRA MASTER MANIFEST — CP111
+Build ID: 2026-03-09_111
+Kit Version: v10.2
+Date: 2026-03-09
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP111_2026-03-09_111.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP111_CoreBuild_2026-03-09_111.zip
+  Site-focused core build package.
+
+- NDYRA_QA_PREVIEW_site_CP111_2026-03-09_111.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook + QA
+- NDYRA_Buildbook_Kit_CP111_v10.2_CHECKPOINT_2026-03-09_111.zip
+- NDYRA_Buildbook_MemoryPack_CP111_2026-03-09_111.docx
+- NDYRA_Buildbook_MemoryPack_CP111_2026-03-09_111.pdf
+- NDYRA_QA_REPORT_CP111_2026-03-09_111.txt
+- NDYRA_QA_RUNBOOK_CP111_2026-03-09_111.md
+- MASTER_MANIFEST_CP111_2026-03-09_111.txt
+
+Notes
+- CP111 is a messenger-coherence checkpoint.
+- Unread counts now update immediately across app chrome, Member App Home, Inbox, and Notifications.
+- Inbox no longer auto-opens the first thread by default.
+- No generated graphics were added in this checkpoint.

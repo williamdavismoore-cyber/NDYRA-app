@@ -1,30 +1,13 @@
-# ----------------------------------------------
-# NDYRA redirects (Blueprint v7.3.1)
-# - Keep these aligned with tools/static_server.cjs
-# - Order matters: specific dynamic rewrites first
-# ----------------------------------------------
-
-# API (Netlify Functions)
+/gym/*/join /gym/join/index.html 200
+/gym/* /gym/profile/index.html 200
+/app/book/class/* /app/book/class/index.html 200
+/app/post/* /app/post/index.html 200
+/app/profile/* /app/profile/index.html 200
+/app/signals/* /app/signals/index.html 200
+/api/health /.netlify/functions/health 200
+/api/public_config /.netlify/functions/public_config 200
+/api/stripe/create-checkout-session /.netlify/functions/stripe_create_checkout_session 200
+/api/stripe/create-portal-session /.netlify/functions/stripe_create_portal_session 200
+/api/stripe/webhook /.netlify/functions/stripe_webhook 200
+/api/telemetry/ingest /.netlify/functions/telemetry_ingest 200
 /api/* /.netlify/functions/:splat 200
-
-# App dynamic routes
-/app/book/class/*     /app/book/class/index.html   200
-/app/post/*           /app/post/index.html         200
-/app/profile/*        /app/profile/index.html      200
-/app/signals/*        /app/signals/index.html      200
-
-# Quick Join (canonical)
-/gym/*/join            /gym/join/index.html        200
-
-# Gym Profile
-/gym/*                /gym/profile/index.html      200
-
-
-# Soft fallbacks
-/workouts/*            /workouts/index.html        200
-/app/*                 /app/index.html             200
-/biz/*                 /biz/index.html             200
-/admin/*               /admin/index.html           200
-
-# Site fallback
-/*                     /index.html                 200

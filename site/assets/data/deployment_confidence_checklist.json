@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-16T18:40:00Z",
+  "groups": [
+    {
+      "key": "deploy_truth",
+      "label": "1. Deploy truth",
+      "items": [
+        {
+          "label": "Public config is coming from the deploy API, not preview fallback files.",
+          "requirements": [
+            "apiConfigReady"
+          ],
+          "notes": [
+            "Non-local hosts now refuse silent fallback to ndyra.config.json or stripe_public_test.json when /api/public_config is unavailable."
+          ]
+        },
+        {
+          "label": "Deployed public config values are real and not placeholder-like.",
+          "requirements": [
+            "deployedConfigReady"
+          ]
+        },
+        {
+          "label": "Stripe price matrix is fully configured for the active prelaunch environment.",
+          "requirements": [
+            "priceMatrixReady"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "billing_loop",
+      "label": "2. Billing loop",
+      "items": [
+        {
+          "label": "Subscription checkout surfaces are live.",
+          "requirements": [
+            "billingReady",
+            "apiConfigReady"
+          ]
+        },
+        {
+          "label": "Billing portal is wired.",
+          "requirements": [
+            "portalReady"
+          ]
+        },
+        {
+          "label": "Webhook and idempotency mirror are ready.",
+          "requirements": [
+            "webhookReady"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "marketplace_entitlements",
+      "label": "3. Marketplace + entitlements",
+      "items": [
+        {
+          "label": "Wallet, Shop, Purchases, and Timer Library runtime is ready.",
+          "requirements": [
+            "marketplaceReady",
+            "priceMatrixReady"
+          ]
+        },
+        {
+          "label": "Entitlements can refresh from live billing events.",
+          "requirements": [
+            "billingReady",
+            "webhookReady"
+          ]
+        },
+        {
+          "label": "Execution path is strong enough to announce the release.",
+          "requirements": [
+            "executionReady"
+          ],
+          "notes": [
+            "If this line is blocked, finish Status + Wiring + Execute before calling the environment live."
+          ]
+        }
+      ]
+    }
+  ]
+}

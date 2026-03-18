@@ -1,0 +1,39 @@
+{
+  "demos": [
+    {
+      "id": "online_quick",
+      "title": "Online Quick Demo",
+      "mode": "member",
+      "segments": [
+        {
+          "type": "WORK",
+          "duration_sec": 20
+        },
+        {
+          "type": "REST",
+          "duration_sec": 10
+        }
+      ]
+    },
+    {
+      "id": "gym_quick",
+      "title": "Gym Quick Demo",
+      "mode": "gym",
+      "stations": [
+        {
+          "name": "Station 1"
+        }
+      ],
+      "segments": [
+        {
+          "type": "WORK",
+          "duration_sec": 30
+        },
+        {
+          "type": "REST",
+          "duration_sec": 15
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+<!doctype html><html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event Share</title>
+  <link rel="icon" href="/assets/branding/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=2026-03-16_122">
+  <link rel="stylesheet" href="/assets/css/ndyra.css?v=2026-03-16_122">
+  <style>
+    body{background:#050607;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;}
+    .story-wrap{display:grid;gap:14px;align-items:center;justify-items:center;width:100%;}
+    .story{
+      width:min(420px, 92vw);
+      aspect-ratio: 9 / 16;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(225,6,0,.28), transparent 50%),
+        radial-gradient(900px 600px at 90% 80%, rgba(255,255,255,.10), transparent 55%),
+        linear-gradient(180deg, rgba(10,10,12,.92), rgba(6,6,8,.96));
+      position:relative;
+      overflow:hidden;
+      box-shadow: 0 22px 70px rgba(0,0,0,.45);
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .brand-row{display:flex;align-items:center;gap:10px;}
+    .brand-row img{width:34px;height:34px;border-radius:999px;border:1px solid rgba(255,255,255,.16)}
+    .brand-row .word{font-weight:900;letter-spacing:.08em}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      font-size:12px;
+    }
+    .title{font-weight:950;font-size:24px;line-height:1.05;margin-top:10px;}
+    .meta{color:rgba(255,255,255,.72);font-size:13px;line-height:1.35;margin-top:10px;}
+    .cta{font-size:12px;color:rgba(255,255,255,.75);}
+    .cta strong{color:#fff;}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  </style>
+</head>
+<body><a class="skip-link" href="#main-content">Skip to content</a>
+  <main id="main-content" class="story-wrap" data-share-root>
+    <div class="story" aria-label="Event share card">
+      <div>
+        <div class="brand-row">
+          <img src="/assets/branding/NDYRA_Icon_DarkCircle_512.png" alt="NDYRA" />
+          <div class="word">NDYRA</div>
+        </div>
+        <div class="title">Loading…</div>
+        <div class="meta">Fetching event details…</div>
+      </div>
+      <div style="display:grid;gap:10px;">
+        <div class="badge">Tap to RSVP in NDYRA</div>
+        <div class="cta">Screenshot this for IG Story • Tag your gym • <strong>#NDYRA</strong></div>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="ndyra-btn ndyra-btn-ghost" href="/app/events/">Back to Events</a>
+    </div>
+  </main>
+
+<script src="/assets/js/site.js?v=2026-03-16_122"></script>
+<script type="module">import { init } from '/assets/js/ndyra/pages/eventShare.mjs?v=2026-03-16_122'; init();</script>
+</body>
+</html>

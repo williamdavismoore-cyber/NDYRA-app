@@ -1,0 +1,19 @@
+Aelric Architect,
+
+This package is a BizGym module handoff for planning and controlled integration work.
+It is NOT the finished build.
+
+Current included build:
+- BizGym Module v0.3.0
+- Build ID: 2026-03-05_BIZ03
+
+Please do not build duplicate waivers, duplicate check-in systems, or parallel business route families in NDYRA Core.
+Please use the included blueprint, handoff memo, and module contract as the current boundary documents.
+
+Use this package to:
+- understand current BizGym scope
+- see what is already built
+- see what is still missing
+- plan clean route/schema integration points without overlapping code paths
+
+Use the README and build status file first.

@@ -1,0 +1,13 @@
+{
+  "connected_gym": {
+    "id": "seed-gym-1",
+    "name": "Connected Gym",
+    "city": "Boca Raton"
+  },
+  "items": [
+    {"user_id":"seed-user-1","handle":"talia.reyes","display_name":"Talia Reyes","avatar_url":"","is_staff":false,"is_following":true,"can_message":true},
+    {"user_id":"seed-user-2","handle":"owen.pierce","display_name":"Owen Pierce","avatar_url":"","is_staff":false,"is_following":false,"can_message":true},
+    {"user_id":"seed-user-3","handle":"sage.monroe","display_name":"Sage Monroe","avatar_url":"","is_staff":true,"is_following":false,"can_message":true},
+    {"user_id":"seed-user-4","handle":"priya.nd","display_name":"Priya Nandakumar","avatar_url":"","is_staff":false,"is_following":true,"can_message":false}
+  ]
+}

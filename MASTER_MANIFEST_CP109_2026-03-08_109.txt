@@ -1,0 +1,27 @@
+NDYRA MASTER MANIFEST — CP109
+Build ID: 2026-03-08_109
+Kit Version: v10.0
+Date: 2026-03-08
+
+Primary deliverables
+- NDYRA_FULL_REPO_REPLACE_CP109_2026-03-08_109.zip
+  Full repo snapshot (drop-in replacement).
+
+- NDYRA_CP109_CoreBuild_2026-03-08_109.zip
+  Core repo snapshot wrapped for safe side-by-side storage.
+
+- NDYRA_QA_PREVIEW_site_CP109_2026-03-08_109.zip
+  Standalone /site folder for static hosting preview.
+
+Buildbook
+- NDYRA_Buildbook_MemoryPack_CP109_2026-03-08_109.docx
+- NDYRA_Buildbook_MemoryPack_CP109_2026-03-08_109.pdf
+- NDYRA_QA_REPORT_CP109_2026-03-08_109.txt
+- NDYRA_QA_RUNBOOK_CP109_2026-03-08_109.md
+- MASTER_MANIFEST_CP109_2026-03-08_109.txt
+- NDYRA_ASSETS_NEEDED_NEXT_CP110.md
+
+Notes
+- CP109 turns /app/post/ into a real social detail surface.
+- Shared Aftermath recaps now open the social post when `shared_post_id` exists.
+- Comments and reactions are live in Supabase mode, with deterministic seed fallback in local preview.

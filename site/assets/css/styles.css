@@ -2,11 +2,11 @@
 :root{
   --bg:#000000;
   --fg:#ffffff;
-  --accent: #ff2b4a;
+  --accent: #E10600;
   --muted:#b7b7b7;
   --card:#0b0b0b;
   --card2:#111111;
-  --border:rgba(255,43,74,.55);
+  --border:rgba(225,6,0,.55);
   --max:1200px;
   --radius:18px;
 }
@@ -64,24 +64,24 @@ a:hover{opacity:.9}
   font-size:.92rem;
 }
 .nav a.primary{
-  border-color:rgba(255,43,74,.85);
-  background:rgba(255,43,74,.12);
+  border-color:rgba(225,6,0,.85);
+  background:rgba(225,6,0,.12);
 }
 .badge{
   display:inline-block;
   font-size:.72rem;
   padding:4px 8px;
-  border:1px solid rgba(255,43,74,.75);
+  border:1px solid rgba(225,6,0,.75);
   border-radius:999px;
   color:var(--fg);
-  background:rgba(255,43,74,.10);
+  background:rgba(225,6,0,.10);
 }
 
 .hero{
   border:1px solid rgba(255,255,255,.10);
   border-radius:var(--radius);
   overflow:hidden;
-  background:linear-gradient(160deg, rgba(255,43,74,.18), rgba(255,255,255,0) 60%);
+  background:linear-gradient(160deg, rgba(225,6,0,.18), rgba(255,255,255,0) 60%);
 }
 .hero-grid{
   display:grid; gap:18px;
@@ -104,8 +104,8 @@ a:hover{opacity:.9}
   cursor:pointer;
 }
 .btn.primary{
-  border-color:rgba(255,43,74,.85);
-  background:rgba(255,43,74,.18);
+  border-color:rgba(225,6,0,.85);
+  background:rgba(225,6,0,.18);
 }
 .btn:active{transform:translateY(1px)}
 .btn-row{display:flex; gap:10px; flex-wrap:wrap}
@@ -198,8 +198,8 @@ a:hover{opacity:.9}
 }
 
 .banner{
-  border:1px solid rgba(255,43,74,.55);
-  background:rgba(255,43,74,.10);
+  border:1px solid rgba(225,6,0,.55);
+  background:rgba(225,6,0,.10);
   border-radius:14px;
   padding:12px 14px;
   margin:16px 0;
@@ -445,15 +445,15 @@ select option{ color:#000; background:#fff; }
   background:rgba(0,0,0,.25);
 }
 .timeline-item.active{
-  border-color:rgba(255,43,74,.75);
-  background:rgba(255,43,74,.08);
+  border-color:rgba(225,6,0,.75);
+  background:rgba(225,6,0,.08);
 }
 .timeline-item .left{display:flex; gap:10px; align-items:center; min-width:0}
 .timeline-item .name{font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .timeline-item .right{white-space:nowrap; color:rgba(255,255,255,.7)}
 
 .kind-work{border-color:rgba(46,204,113,.75) !important; background:rgba(46,204,113,.12) !important;}
-.kind-rest{border-color:rgba(255,43,74,.75) !important; background:rgba(255,43,74,.12) !important;}
+.kind-rest{border-color:rgba(225,6,0,.75) !important; background:rgba(225,6,0,.12) !important;}
 .kind-move-a{border-color:rgba(241,196,15,.80) !important; background:rgba(241,196,15,.12) !important;}
 .kind-move-b{border-color:rgba(255,205,90,.80) !important; background:rgba(255,205,90,.12) !important;}
 .kind-station{border-color:rgba(128,0,32,.80) !important; background:rgba(128,0,32,.16) !important;}
@@ -490,8 +490,8 @@ select option{ color:#000; background:#fff; }
 .station-tile .station-title{font-weight:850; margin-bottom:6px}
 .station-tile .move{color:rgba(255,255,255,.85)}
 .station-tile.active{
-  border-color:rgba(255,43,74,.75);
-  background:rgba(255,43,74,.08);
+  border-color:rgba(225,6,0,.75);
+  background:rgba(225,6,0,.08);
 }
 
 .badge-row{
@@ -515,8 +515,8 @@ select option{ color:#000; background:#fff; }
 }
 .select:focus, .input:focus{
   outline:none;
-  border-color:rgba(255,43,74,.75);
-  box-shadow:0 0 0 3px rgba(255,43,74,.12);
+  border-color:rgba(225,6,0,.75);
+  box-shadow:0 0 0 3px rgba(225,6,0,.12);
 }
 .mono{
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -763,3 +763,40 @@ body[data-page="biz-gym-timer-builder"] .card .title{
 
 .timer-video.mode-work .timer-video-inner.is-active,
 .timer-video.mode-transition .timer-video-inner.is-active{opacity:1;}
+
+.skip-link{
+  position:absolute;
+  left:12px;
+  top:12px;
+  transform:translateY(-220%);
+  padding:10px 14px;
+  border-radius:999px;
+  background:#ffffff;
+  color:#05060a;
+  font-weight:700;
+  z-index:9999;
+  transition:transform .18s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+.skip-link:focus,
+.skip-link:focus-visible{
+  transform:translateY(0);
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible{
+  outline:3px solid rgba(225,6,0,.85);
+  outline-offset:2px;
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}

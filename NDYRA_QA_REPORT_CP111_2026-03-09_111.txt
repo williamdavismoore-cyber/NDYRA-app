@@ -1,0 +1,187 @@
+NDYRA QA REPORT — CP111
+Build ID: 2026-03-09_111
+Kit Version: v10.2
+
+Process:
+1) QA previous stable build (CP110)
+2) Implement CP111 changes
+3) Re-run full automated gate suite on CP111
+
+What changed in CP111
+- Unread counts now publish/subscribe through a shared event helper
+- App header badges update immediately when inbox/notification state changes
+- Member App Home badges stay synced without reload
+- Notifications sync unread state in both live mode and local preview
+- Inbox no longer auto-opens the first thread, preventing accidental read-state clearing
+
+QA Gates
+[build_stamp] OK: build.json validated + normalized
+NDYRA QA SMOKE — CP111
+Root: /mnt/data/work_cp111
+Site: /mnt/data/work_cp111/site
+
+[0] Law files presence
+  OK: IP_GUARDRAILS.md
+  OK: docs/ndyra/NDYRA_SoupToNuts_Blueprint_v7.3.1_LOCKED_CORRECTED.pdf
+  OK: docs/ndyra/NDYRA_Blueprint_Addendum_Token_Marketplace_v1.0_2026-03-04.pdf
+  OK: docs/ndyra/GATES_RUNBOOK.md
+
+[1] Page presence
+  OK: site/index.html
+  OK: site/preview/index.html
+  OK: site/login.html
+  OK: site/login/index.html
+  OK: site/signup/index.html
+  OK: site/logout/index.html
+  OK: site/auth/login.html
+  OK: site/auth/signup.html
+  OK: site/forgot/index.html
+  OK: site/reset/index.html
+  OK: site/auth/forgot.html
+  OK: site/auth/reset.html
+  OK: site/auth/callback.html
+  OK: site/pricing.html
+  OK: site/join.html
+  OK: site/gym/join/index.html
+  OK: site/gym/profile/index.html
+  OK: site/app/book/class/index.html
+  OK: site/biz/check-in/index.html
+  OK: site/biz/migrate/index.html
+  OK: site/biz/migrate/members/index.html
+  OK: site/biz/migrate/schedule/index.html
+  OK: site/biz/migrate/verify/index.html
+  OK: site/biz/migrate/commit/index.html
+  OK: site/biz/migrate/cutover/index.html
+  OK: site/for-gyms/index.html
+  OK: site/for-gyms/pricing.html
+  OK: site/for-gyms/start.html
+  OK: site/workouts/index.html
+  OK: site/workouts/category.html
+  OK: site/workouts/workout.html
+  OK: site/app/index.html
+  OK: site/app/workouts/index.html
+  OK: site/app/workouts/category.html
+  OK: site/app/workouts/workout.html
+  OK: site/app/timer/index.html
+  OK: site/app/timer/builder/index.html
+  OK: site/app/timer/my-workouts/index.html
+  OK: site/app/wallet/index.html
+  OK: site/app/purchases/index.html
+  OK: site/app/library/timers/index.html
+  OK: site/app/account/index.html
+  OK: site/app/settings/index.html
+  OK: site/app/events/index.html
+  OK: site/app/events/share/index.html
+  OK: site/app/members/index.html
+  OK: site/app/aftermath/share/index.html
+  OK: site/app/aftermath/detail.html
+  OK: site/app/aftermath/index.html
+  OK: site/app/notifications/index.html
+  OK: site/app/inbox/index.html
+  OK: site/biz/index.html
+  OK: site/biz/moves/index.html
+  OK: site/biz/moves/move.html
+  OK: site/biz/gym-timer/index.html
+  OK: site/biz/gym-timer/builder/index.html
+  OK: site/biz/shop/index.html
+  OK: site/biz/timers/packs/index.html
+  OK: site/biz/account/index.html
+  OK: site/admin/index.html
+  OK: site/admin/status/index.html
+  OK: site/admin/wiring/index.html
+  OK: site/admin/execute/index.html
+
+[1b] Route rewrites + QA guardrails
+  OK: _redirects dynamic rewrites (app + quick join)
+  OK: _redirects explicit API rewrites
+  OK: static_server route map (app + quick join)
+  OK: tools/wiring_consistency_check.py present
+
+[1c] Local config + env templates
+  OK: netlify/env/netlify.local.example
+  OK: netlify/env/netlify.staging.example
+  OK: netlify/env/netlify.production.example
+
+[2] Data manifest presence
+  OK: site/assets/data/categories_v1.json
+  OK: site/assets/data/categories_draft.json
+  OK: site/assets/data/videos_classes.json
+  OK: site/assets/data/videos_moves.json
+  OK: site/assets/data/videos_all.json
+  OK: site/assets/data/videos_marketing.json
+  OK: site/assets/data/videos_category_samples.json
+  OK: site/assets/data/timer_demos.json
+  OK: site/assets/data/stripe_public_test.json
+  OK: site/assets/data/live_wiring_manifest.json
+  OK: site/assets/data/deployment_templates.json
+  OK: site/assets/data/live_wiring_examples.json
+  OK: site/assets/data/stripe_webhook_events.json
+  OK: site/assets/data/live_execution_steps.json
+  OK: site/assets/ndyra.config.example.json
+  OK: site/assets/data/aftermath_seed_public.json
+  OK: site/assets/data/notifications_seed_public.json
+  OK: site/assets/data/inbox_seed_public.json
+  OK: site/assets/data/members_seed_public.json
+  OK: site/assets/data/following_seed_public.json
+  OK: site/assets/data/signals_seed_public.json
+  OK: site/assets/data/post_seed_public.json
+
+[3] JSON parsing
+  OK: categories=2, classes=2, moves=1
+
+[3b] Timer demos sanity
+  OK: demos=2
+
+[4] Category slugs + posters
+  OK: 2 categories, 2 total teaser IDs
+
+[5] Classes reference known category slugs
+  OK
+
+[6] Teaser IDs exist in class list
+  OK
+
+[7] Basic internal asset refs
+  OK
+
+[7b] JS syntax check (node --check)
+  OK
+
+[7c] Key module presence
+  OK: site/assets/js/admin_status.mjs
+  OK: site/assets/js/ndyra/lib/entitlements.mjs
+  OK: site/assets/js/ndyra/components/planGate.mjs
+
+[7e] Admin status truth panel sections
+  OK
+
+[7d] Netlify plan gate helper presence
+  OK
+
+[7f] Env helper + template files
+  OK
+
+[8] CP string consistency
+  OK
+
+PASS ✅
+NDYRA QA SUPER
+Root: /mnt/data/work_cp111
+  OK: build.json parsed: CP111 (2026-03-09_111)
+  OK: All HTML ?v= cache-bust params match build_id
+  OK: sw.js references current build_id
+  OK: sw.js CACHE_NAME versioned with build_id
+  OK: site/app/fyp/index.html boot.mjs present
+  OK: site/app/following/index.html boot.mjs present
+  OK: site/app/signals/index.html boot.mjs present
+  OK: site/app/profile/index.html boot.mjs present
+  OK: bookClass.mjs demo fork sets token-path visibility
+  OK: tools/wiring_preflight.py present
+  OK: admin/status local-config section present
+  OK: tools/wiring_consistency_check.py present
+  OK: admin/wiring core sections present
+  OK: admin/execute core sections present
+
+SUPER QA PASS ✅
+BRAND GATE PASS ✅
+IP GATE PASS ✅

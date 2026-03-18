@@ -1,0 +1,36 @@
+BIZGYM QA REPORT
+Build: 2026-03-05_BIZ03
+Version: 0.3.0
+
+1) Previous build smoke (BIZ02) before continuing
+- / -> 200
+- /biz/ -> 200
+- /biz/check-in/ -> 200
+- /biz/check-in/live/ -> 200
+- /biz/check-in/kiosk/ -> 200
+- /biz/settings/ -> 200
+- /app/check-in/ -> 200
+- /auth/qa.html -> 200
+
+2) Current build smoke (BIZ03)
+- / -> 200
+- /biz/ -> 200
+- /biz/schedule/ -> 200
+- /biz/check-in/ -> 200
+- /biz/check-in/live/ -> 200
+- /biz/check-in/kiosk/ -> 200
+- /biz/settings/ -> 200
+- /app/check-in/ -> 200
+- /auth/qa.html -> 200
+- /auth/login.html -> 200
+- /manifest.webmanifest -> 200
+
+3) Parser / module sanity
+- node --check passed for boot.mjs
+- node --check passed for page modules
+- node --check passed for lib modules
+- npm run qa:smoke -> PASS
+
+Known limits of this QA package
+- Local QA mode is UI preview only and intentionally blocks writes / RPCs.
+- Real end-to-end schedule + check-in testing still requires Supabase config + migrations.

@@ -1,0 +1,55 @@
+{
+  "build_label": "CP122",
+  "build_id": "2026-03-16_122",
+  "default_state": "enabled",
+  "modules": {
+    "gym_network_public": {
+      "enabled": true,
+      "reason": ""
+    },
+    "messaging_notifications": {
+      "enabled": true,
+      "reason": ""
+    },
+    "profile_preferences_identity": {
+      "enabled": true,
+      "reason": ""
+    },
+    "workouts_timer_boundary": {
+      "enabled": true,
+      "reason": ""
+    },
+    "social_core_aftermath": {
+      "enabled": true,
+      "reason": ""
+    },
+    "challenges_events": {
+      "enabled": true,
+      "reason": ""
+    },
+    "biometrics_performance": {
+      "enabled": true,
+      "reason": ""
+    },
+    "commerce_tokens_entitlements": {
+      "enabled": true,
+      "reason": ""
+    },
+    "timer_boundary": {
+      "enabled": true,
+      "reason": ""
+    },
+    "bizgym_boundary": {
+      "enabled": true,
+      "reason": ""
+    },
+    "live_ops_admin": {
+      "enabled": true,
+      "reason": ""
+    },
+    "checkin_spine": {
+      "enabled": true,
+      "reason": "Paused lane. Kept enabled at the host layer so boundary shells remain visible when explicitly routed, while normal member home visibility still stays hidden until resumed."
+    }
+  }
+}

@@ -10,6 +10,8 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { enforceTenantBusinessPlan } from './_lib/planGate.mjs';
+import { getSupabaseEnv, requireAny } from './_lib/env.mjs';
 
 const json = (statusCode, body) => ({
   statusCode,
@@ -39,11 +41,6 @@ const bearerToken = (event) => {
   return m ? m[1] : null;
 };
 
-const requireEnv = (name) => {
-  const v = process.env[name];
-  if (!v) throw new Error(`Missing env var: ${name}`);
-  return v;
-};
 
 const isMembershipEligible = (status) => status === 'active' || status === 'comp';
 
@@ -57,8 +54,8 @@ export const handler = async (event) => {
       });
     }
 
-    const SUPABASE_URL = requireEnv('SUPABASE_URL');
-    const SUPABASE_SECRET_KEY = requireEnv('SUPABASE_SECRET_KEY');
+    const SUPABASE_URL = requireAny('SUPABASE_URL', 'VITE_SUPABASE_URL');
+    const SUPABASE_SECRET_KEY = requireAny('SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_SECRET_KEY');
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET_KEY, {
       auth: { persistSession: false, autoRefreshToken: false },
@@ -143,6 +140,29 @@ export const handler = async (event) => {
       });
 
       return json(409, { ok: false, error: 'checkin_disabled' });
+    }
+
+    // CP82: Hard gate — active Business plan required (Gym Starter/Pro)
+    const planGate = await enforceTenantBusinessPlan({ supabase, tenantId: tenant_id });
+    if (!planGate.ok) {
+      await supabase.from('audit_log').insert({
+        tenant_id,
+        actor_user_id: actorId,
+        action: 'checkin_blocked',
+        entity_type: 'tenant',
+        entity_id: tenant_id,
+        details: { reason: 'plan_required', required_plans: planGate.required_plans, gate_errors: planGate.errors || [] },
+      });
+
+      return json(402, {
+        ok: false,
+        error: 'plan_required',
+        required_plans: planGate.required_plans,
+        hint: 'Activate Gym Starter or Gym Pro to use Check-in Override.',
+        subscription: planGate.subscription || null,
+        entitlements: planGate.entitlements || [],
+        gate_errors: planGate.errors || [],
+      });
     }
 
     // Insert override (server-side write)

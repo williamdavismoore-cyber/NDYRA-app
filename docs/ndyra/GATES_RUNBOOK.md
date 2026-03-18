@@ -6,6 +6,10 @@ Blueprint v7.3.1 (LOCKED + Corrected):
 
 `docs/ndyra/NDYRA_SoupToNuts_Blueprint_v7.3.1_LOCKED_CORRECTED.pdf`
 
+Locked Addendum (Token Marketplace):
+
+`docs/ndyra/NDYRA_Blueprint_Addendum_Token_Marketplace_v1.0_2026-03-04.pdf`
+
 ---
 
 ## 0) Prereqs (one-time)
@@ -106,6 +110,21 @@ If it fails, treat it as a **hard fail**.
 
 
 ---
+
+
+
+## 3.6) Boundary + Release Closeout Gates
+
+These two static gates keep NDYRA Core honest at the finish line:
+
+```bash
+npm run qa:boundaries
+npm run qa:closeout
+```
+
+- `qa:boundaries` ensures remaining business routes are explicit handoff shells instead of raw placeholder pages.
+- `qa:closeout` ensures `/admin/execute/` and the release-closeout packet stay wired so live announcement evidence is captured deterministically.
+
 
 ## 4) Supabase Gate A — Anti‑Drift Audit
 

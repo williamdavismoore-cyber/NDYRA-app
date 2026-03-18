@@ -1,6 +1,0 @@
-node_modules/
-.netlify/
-.env
-.DS_Store
-.playwright/
-test-results/

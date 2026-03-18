@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-16T18:40:00Z",
+  "environments": [
+    {
+      "key": "local",
+      "label": "Local / netlify dev",
+      "notes": "Safe placeholders for local wiring. Replace with staging test values only.",
+      "variables": [
+        {
+          "name": "SUPABASE_URL",
+          "value": "https://your-staging-project.supabase.co",
+          "secret": false
+        },
+        {
+          "name": "SUPABASE_ANON_KEY",
+          "value": "sb_publishable_xxx",
+          "secret": false
+        },
+        {
+          "name": "SUPABASE_SERVICE_ROLE_KEY",
+          "value": "sb_service_role_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_PUBLISHABLE_KEY",
+          "value": "pk_test_xxx",
+          "secret": false
+        },
+        {
+          "name": "STRIPE_SECRET_KEY",
+          "value": "sk_test_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_WEBHOOK_SIGNING_SECRET",
+          "value": "whsec_xxx",
+          "secret": true
+        },
+        {
+          "name": "PRICE_ID_MEMBER_MONTHLY",
+          "value": "price_member_monthly_test",
+          "secret": false
+        },
+        {
+          "name": "PRICE_ID_BIZ_STARTER_MONTHLY",
+          "value": "price_biz_starter_monthly_test",
+          "secret": false
+        },
+        {
+          "name": "PRICE_ID_BIZ_STARTER_ANNUAL",
+          "value": "price_biz_starter_annual_test",
+          "secret": false
+        },
+        {
+          "name": "PRICE_ID_BIZ_PRO_MONTHLY",
+          "value": "price_biz_pro_monthly_test",
+          "secret": false
+        },
+        {
+          "name": "PRICE_ID_BIZ_PRO_ANNUAL",
+          "value": "price_biz_pro_annual_test",
+          "secret": false
+        },
+        {
+          "name": "PRICE_ID_TOKEN_PACK_100",
+          "value": "price_token_pack_100_test",
+          "secret": false
+        },
+        {
+          "name": "PRICE_ID_TOKEN_PACK_250",
+          "value": "price_token_pack_250_test",
+          "secret": false
+        },
+        {
+          "name": "PRICE_ID_TOKEN_PACK_500",
+          "value": "price_token_pack_500_test",
+          "secret": false
+        }
+      ]
+    },
+    {
+      "key": "staging",
+      "label": "Netlify Staging",
+      "notes": "Use Stripe test mode and the staging Supabase project.",
+      "variables": [
+        {
+          "name": "SUPABASE_URL",
+          "value": "https://your-staging-project.supabase.co",
+          "secret": false
+        },
+        {
+          "name": "SUPABASE_ANON_KEY",
+          "value": "sb_publishable_xxx",
+          "secret": false
+        },
+        {
+          "name": "SUPABASE_SERVICE_ROLE_KEY",
+          "value": "sb_service_role_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_PUBLISHABLE_KEY",
+          "value": "pk_test_xxx",
+          "secret": false
+        },
+        {
+          "name": "STRIPE_SECRET_KEY",
+          "value": "sk_test_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_WEBHOOK_SIGNING_SECRET",
+          "value": "whsec_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_PORTAL_CONFIGURATION_ID",
+          "value": "bpc_test_xxx",
+          "secret": false
+        },
+        {
+          "name": "TELEMETRY_WEBHOOK_URL",
+          "value": "https://hooks.example.test/ndyra",
+          "secret": true
+        }
+      ]
+    },
+    {
+      "key": "production",
+      "label": "Netlify Production (prelaunch sandbox)",
+      "notes": "Use production Netlify + production Supabase if needed, but keep Stripe on sandbox/test values until launch day.",
+      "variables": [
+        {
+          "name": "SUPABASE_URL",
+          "value": "https://your-prod-project.supabase.co",
+          "secret": false
+        },
+        {
+          "name": "SUPABASE_ANON_KEY",
+          "value": "sb_publishable_prod_xxx",
+          "secret": false
+        },
+        {
+          "name": "SUPABASE_SERVICE_ROLE_KEY",
+          "value": "sb_service_role_prod_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_PUBLISHABLE_KEY",
+          "value": "pk_test_xxx",
+          "secret": false
+        },
+        {
+          "name": "STRIPE_SECRET_KEY",
+          "value": "sk_test_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_WEBHOOK_SIGNING_SECRET",
+          "value": "whsec_test_prod_endpoint_xxx",
+          "secret": true
+        },
+        {
+          "name": "STRIPE_PORTAL_CONFIGURATION_ID",
+          "value": "bpc_test_xxx",
+          "secret": false
+        },
+        {
+          "name": "TELEMETRY_WEBHOOK_URL",
+          "value": "https://hooks.example.com/ndyra",
+          "secret": true
+        }
+      ]
+    }
+  ],
+  "cli_steps": [
+    "Apply Supabase migrations in the manifest order on staging before setting any Stripe keys.",
+    "Populate Netlify environment variables from the staging example block.",
+    "Create Stripe sandbox/test products, prices, and portal configuration and copy the price ids into staging.",
+    "Register the Stripe webhook endpoint for staging and paste the signing secret into Netlify.",
+    "Open /admin/status on staging and confirm the deployment badge is green before promoting to the prelaunch production environment.",
+    "Repeat on prelaunch production using sandbox/test Stripe values only. Inventory live-mode objects separately for launch day; do not cut over yet."
+  ]
+}

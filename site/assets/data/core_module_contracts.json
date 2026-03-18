@@ -1,0 +1,270 @@
+{
+  "build_label": "CP122",
+  "build_id": "2026-03-16_122",
+  "modules": [
+    {
+      "key": "timer_module_boundary",
+      "status": "observed_not_integrated",
+      "path": "site/assets/js/ndyra/modules/timerBoundary/index.mjs",
+      "owner": "Timer system (external module)",
+      "purpose": "Record the Timer-owned workout-library, saved-timer, session-history, and profile-tab seams so NDYRA Core can integrate later without re-implementing Timer runtime here.",
+      "owns": [
+        "Video workout library",
+        "Saved timer/workout preset bodies",
+        "Recent timer sessions",
+        "Profile timer tab seam",
+        "Timer-local perk token adapter"
+      ],
+      "does_not_own": [
+        "NDYRA Core profile workout refs",
+        "Core wallet ledger or token top-ups",
+        "BizGym runtime"
+      ],
+      "interface": [
+        "getTimerBoundaryStatus",
+        "listTimerOwnedCapabilities",
+        "listTimerIntegrationInterfaces",
+        "describeProfileTimerSeam",
+        "getTimerBridgeNotice"
+      ],
+      "current_consumers": [
+        "site/assets/js/ndyra/pages/libraryTimers.mjs"
+      ]
+    },
+    {
+      "key": "user_profile_prefs",
+      "status": "expanded_for_bio_mounts_planned",
+      "path": "site/assets/js/ndyra/modules/userProfilePrefs/index.mjs",
+      "owner": "NDYRA Core",
+      "purpose": "Centralize viewer profile, privacy settings, timezone, connected-gym preferences, and host-ready profile mounts for biometric settings, fitness bio tiles, and workout refs behind one stable module boundary.",
+      "owns": [
+        "Viewer profile snapshot assembly",
+        "Connected-gym preference read/write",
+        "Privacy-settings upserts",
+        "Timezone preference updates",
+        "Profile workout ref summaries + migration from legacy local storage",
+        "Biometric settings UI mounts",
+        "Fitness bio shell mounts"
+      ],
+      "does_not_own": [
+        "Timer preset bodies or video workout library runtime",
+        "Follow graph behavior",
+        "BizGym tenant-staff administration",
+        "Connector sync orchestration",
+        "Raw biometric storage engine",
+        "Stories feed or story creation runtime"
+      ],
+      "interface": [
+        "ensureViewerProfileRecord",
+        "getProfileById",
+        "getViewerProfileSnapshot",
+        "getUserPreferences",
+        "updateConnectedGymPreference",
+        "updatePrivacyPreferences",
+        "updateTimezonePreference",
+        "listWorkoutRefs",
+        "saveWorkoutRef",
+        "removeWorkoutRef",
+        "subscribeToWorkoutRefs",
+        "migrateLegacyWorkoutLibrary"
+      ],
+      "current_consumers": [
+        "site/assets/js/ndyra/pages/settings.mjs",
+        "site/assets/js/ndyra/pages/profile.mjs",
+        "site/assets/js/ndyra/pages/myWorkouts.mjs",
+        "site/assets/js/ndyra/pages/performance.mjs"
+      ]
+    },
+    {
+      "key": "token_system",
+      "status": "phase_1_interface_scaffolded",
+      "path": "site/assets/js/ndyra/modules/tokenSystem/index.mjs",
+      "owner": "NDYRA Core",
+      "purpose": "Expose one stable module for wallet balance checks, transaction history, top-ups, receipts, and token-based redemption while keeping server-side ledger enforcement intact.",
+      "owns": [
+        "Wallet scope resolution",
+        "Balance + transaction reads",
+        "Top-up option discovery and checkout launch",
+        "Catalog redemption wrapper around purchase_with_tokens",
+        "Purchase/top-up history reads"
+      ],
+      "does_not_own": [
+        "Token ledger writes outside approved RPC/function flows",
+        "Stripe webhook fulfillment logic",
+        "BizGym token-rule policy configuration"
+      ],
+      "interface": [
+        "getWalletScope",
+        "listTokenPackOptions",
+        "getWalletBalance",
+        "listTokenTransactions",
+        "startTokenPackCheckout",
+        "redeemCatalogProduct",
+        "listPurchaseHistory",
+        "listTokenTopups",
+        "getReceiptBySession"
+      ],
+      "current_consumers": []
+    },
+    {
+      "key": "biometrics_boundary",
+      "status": "host_ready_waiting_module",
+      "path": "site/assets/js/ndyra/modules/biometricsBoundary/index.mjs",
+      "owner": "BIO01 separate workflow + NDYRA Core host shell",
+      "purpose": "Record the connector roadmap, privacy defaults, metric types, and reserved Core surface mounts for the biometrics and performance system without claiming ingestion is already integrated.",
+      "owns": [
+        "Connector roadmap metadata",
+        "Privacy-default declarations for biometric sharing",
+        "Reserved performance/dashboard surface metadata",
+        "Core-side biometrics host notice"
+      ],
+      "does_not_own": [
+        "HealthKit or Garmin sync execution",
+        "Raw or sampled biometric storage",
+        "Story generation runtime",
+        "Profile shell ownership"
+      ],
+      "interface": [
+        "listConnectorTargets",
+        "listSupportedBiometricMetrics",
+        "listDerivedSurfaceTargets",
+        "getBiometricsPrivacyDefaults",
+        "getBiometricsBoundaryStatus",
+        "getBiometricsBridgeNotice",
+        "getPerformancePreviewModel"
+      ],
+      "current_consumers": [
+        "site/assets/js/ndyra/pages/settings.mjs",
+        "site/assets/js/ndyra/pages/profile.mjs",
+        "site/assets/js/ndyra/pages/performance.mjs"
+      ]
+    },
+    {
+      "key": "timer_aftermath_bridge",
+      "status": "draft_contract_waiting_for_module_handbacks",
+      "path": "site/assets/js/ndyra/modules/timerAftermathBridge/index.mjs",
+      "owner": "NDYRA Core coordination layer",
+      "purpose": "Define one stable session payload that can feed Aftermath, Stories, reuse actions, attribution, and alerts without importing Timer runtime into Core.",
+      "owns": [
+        "Draft session-payload contract",
+        "Minimum viable bridge-field list",
+        "Bridge consumer map"
+      ],
+      "does_not_own": [
+        "Timer runtime or replay mechanics",
+        "Aftermath rendering",
+        "Stories rendering"
+      ],
+      "interface": [
+        "getTimerAftermathBridgeStatus",
+        "getMinimumViableSessionFields",
+        "getTimerAftermathBridgeContract",
+        "listBridgeConsumers",
+        "getTimerAftermathBridgeNotice"
+      ],
+      "current_consumers": []
+    },
+    {
+      "key": "signals_stories_policy",
+      "status": "active_language_guardrail",
+      "path": "site/assets/js/ndyra/modules/signalsStoriesPolicy/index.mjs",
+      "owner": "NDYRA Core product-language guardrail",
+      "purpose": "Keep Signals reserved for alerts and Stories reserved for content so module handbacks do not blur those concepts again.",
+      "owns": [
+        "Signals definition",
+        "Stories definition",
+        "Shared language rule for alerts vs content"
+      ],
+      "does_not_own": [
+        "Notification delivery",
+        "Story feed rendering",
+        "Inbox or unread count state"
+      ],
+      "interface": [
+        "getSignalsStoriesPolicy",
+        "getSignalsDefinition",
+        "getStoriesDefinition",
+        "getSignalsStoriesRule"
+      ],
+      "current_consumers": [
+        "site/assets/js/ndyra/pages/signals.mjs",
+        "site/assets/js/ndyra/pages/stories.mjs"
+      ]
+    },
+    {
+      "key": "gym_network_boundary",
+      "status": "host_surface_contract_stub",
+      "path": "site/assets/js/ndyra/modules/gymNetworkBoundary/index.mjs",
+      "owner": "NDYRA Core host shell + GYM01 separate workflow",
+      "purpose": "Make the member/public gym discovery lane explicit in Core so GYM01 deltas can be absorbed without drifting into BizGym or shell ownership.",
+      "owns": [
+        "Core-side host notice for gym discovery lane",
+        "Declared route/surface scope for /app/gyms/, /gym/:slug, and /gym/:slug/join",
+        "Bridge notice for future GYM01 content mounts"
+      ],
+      "does_not_own": [
+        "BizGym operator runtime",
+        "For Gyms acquisition path",
+        "Timer runtime",
+        "Stories or Signals authority"
+      ],
+      "interface": [
+        "getGymNetworkBoundaryStatus",
+        "listGymNetworkSurfaceTargets",
+        "getGymNetworkBridgeNotice"
+      ],
+      "current_consumers": []
+    },
+    {
+      "key": "challenges_events_boundary",
+      "status": "host_surface_contract_stub",
+      "path": "site/assets/js/ndyra/modules/challengesEventsBoundary/index.mjs",
+      "owner": "NDYRA Core host shell + CE01 separate workflow",
+      "purpose": "Make the challenges/events lane explicit in Core so CE01 deltas can be absorbed without drifting into Stories, Signals, Aftermath, or Check-In runtime.",
+      "owns": [
+        "Core-side host notice for /app/challenges/ and /app/events/",
+        "Declared future contract seams for stories-worthy milestones and alert metadata",
+        "Boundary reminder that CE01 is not Stories or Signals"
+      ],
+      "does_not_own": [
+        "Stories feed/composer/viewer",
+        "Signals/notifications authority",
+        "Aftermath recap hub",
+        "Check-In runtime"
+      ],
+      "interface": [
+        "getChallengesEventsBoundaryStatus",
+        "listChallengeEventSurfaceTargets",
+        "getChallengesEventsBridgeNotice"
+      ],
+      "current_consumers": []
+    },
+    {
+      "key": "checkin_spine_boundary",
+      "status": "paused_boundary_shell_ready",
+      "path": "site/assets/js/ndyra/modules/checkinSpineBoundary/index.mjs",
+      "owner": "NDYRA Core host shell + future CHKIN01 shared spine",
+      "purpose": "Keep the paused Check-In lane honest in Core with explicit member and business boundary shells, while preserving the future shared-spine architecture and BizGym runtime separation.",
+      "owns": [
+        "Paused-lane member boundary shell metadata",
+        "Paused-lane business boundary shell metadata",
+        "Future resume rules and boundary notice"
+      ],
+      "does_not_own": [
+        "Active BizGym kiosk/live runtime",
+        "Attendance enforcement while paused",
+        "Core shell/auth/profile authority",
+        "Wallet/tokens, Stories, Signals, messaging, or Timer runtime"
+      ],
+      "interface": [
+        "getCheckinSpineBoundaryStatus",
+        "listCheckinBoundarySurfaces",
+        "getCheckinResumeRules",
+        "getCheckinBoundaryNotice"
+      ],
+      "current_consumers": [
+        "site/assets/js/ndyra/pages/checkinBoundary.mjs"
+      ]
+    }
+  ]
+}
